@@ -1,0 +1,1041 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0B1220">
+<meta name="description" content="爱的网络 v1——让爱被看见。每个人一颗星，每一次爱的动作点亮一道柔光。零后端·隐私最纯：匿名默认、零追踪、最小数据、导出自由。">
+<title>爱的网络 · 让爱被看见</title>
+<script>
+/* 主题引导：夜（星空）为默认；仅当本机明确存过「日」才换日——防止闪烁 */
+(function(){try{
+  if(localStorage.getItem('lovenet-theme')==='day'){
+    document.documentElement.classList.remove('night');
+    document.documentElement.classList.add('day');
+  }
+}catch(e){}})();
+</script>
+<style>
+  /* ==========================================================
+     爱的网络 v1 设计系统——与《生命之书》同族，但更深空
+     双主题 token：夜 15（默认·星空是这张网的底色）+ 日 14（暖光下的星图变体）
+     隐私铁律映射到视觉：朴素·无徽章·无排行·无积分——爱不可竞争
+     ========================================================== */
+  html.night{
+    color-scheme:dark;
+    /* ---- 深空（夜·默认） ---- */
+    --space:#0B1220;        /* 深空底 · 星字 14.73:1 */
+    --layer1:#111A2B;       /* 星层1 · 13.69:1 */
+    --layer2:#182338;       /* 星层2 · 12.36:1 */
+    --layer3:#1F2D47;
+    --star:#E8E4D8;         /* 星光字（微暖） */
+    --star2:#9FA093;        /* 次要星字 · 7.06:1 */
+    --gold:#D4A94E;         /* 金星金 · 8.55:1 */
+    --gold-dim:#B8933F;     /* 对话态金 · 6.12:1 */
+    --flag:#E07B5A;         /* 绛红·红旗卡 */
+    --border:#2B3A54; --border-strong:#55698F; --selbg:#24354F;
+    --redflag-bg:rgba(224,123,90,.09);
+    --care-bg:rgba(140,194,154,.09);
+    --care-title:#8CC29A;
+    /* 语义层 */
+    --bg:var(--space); --text:var(--star); --text-2:var(--star2);
+    --accent:var(--gold); --accent-deep:var(--gold-dim); --accent-line:var(--gold);
+    --btn-bg:var(--layer1); --panel:rgba(11,18,32,.94);
+    --shadow:0 10px 36px rgba(0,0,0,.45);
+  }
+  html.day{
+    color-scheme:light;
+    /* ---- 暖光下的星图（日·变体） ---- */
+    --paper:#FAF6EF;        /* 纸底 · 墨字 13.94:1 */
+    --layer1:#F3ECDF; --layer2:#EBE1CF; --layer3:#E2D5BD;
+    --ink:#2A2622; --ink2:#6B6154;
+    --cinnabar:#B3452C;     /* 朱砂·大字档 */
+    --cinnabar-deep:#9A3A24;
+    --gold:#9A6B1F;         /* 暖光下的金（藤黄） */
+    --flag:#A03028;
+    --border:#D9CDB9; --border-strong:#99855F; --selbg:#F5E7CE;
+    --redflag-bg:rgba(160,48,40,.06);
+    --care-bg:rgba(62,122,82,.07);
+    --care-title:#2C5C3E;
+    /* 语义层 */
+    --bg:var(--paper); --text:var(--ink); --text-2:var(--ink2);
+    --accent:var(--cinnabar); --accent-deep:var(--cinnabar-deep); --accent-line:var(--gold);
+    --btn-bg:var(--layer1); --panel:rgba(250,246,239,.95);
+    --shadow:0 10px 32px rgba(42,38,34,.16);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:Georgia,'Source Han Serif SC','Noto Serif CJK SC','Songti SC','STSong','SimSun',serif;
+    font-size:17px;line-height:30px;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .7s ease,color .7s ease;
+  }
+  ::selection{background:var(--selbg)}
+  :focus-visible{outline:2px solid var(--border-strong);outline-offset:2px}
+
+  .page{max-width:720px;margin:0 auto;padding:20px 18px 40px}
+
+  /* ---------- 顶栏 ---------- */
+  .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:14px}
+  .topbar h1{margin:0;font-size:30px;line-height:40px;letter-spacing:.12em;color:var(--accent)}
+  .topbar .tagline{margin:2px 0 0;font-size:13px;line-height:20px;color:var(--text-2);letter-spacing:.08em}
+  #theme-btn{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid var(--border-strong);
+    background:var(--btn-bg);cursor:pointer;font-size:18px;line-height:1;padding:0;color:var(--accent);
+    transition:transform .12s cubic-bezier(.4,0,.2,1)}
+  #theme-btn:hover{transform:translateY(-1px)}
+  #theme-btn:active{transform:scale(.96)}
+
+  /* ---------- 金星线（分节的金线） ---------- */
+  .goldline{height:1px;margin:18px 0 14px;border:0;
+    background:linear-gradient(90deg,transparent 0%,var(--accent-line) 16%,var(--accent-line) 84%,transparent 100%)}
+
+  /* ---------- 朴素计数 ---------- */
+  .counter{margin:0 0 14px;font-size:14px;line-height:24px;color:var(--text-2);
+    text-align:center;letter-spacing:.04em;font-variant-numeric:tabular-nums}
+  .counter b{color:var(--accent-deep);font-weight:700}
+
+  /* ---------- 卡片 ---------- */
+  .card{background:var(--layer1);border:1px solid var(--border);border-radius:14px;
+    padding:20px 20px 18px;margin:0 0 22px}
+  .card h2{margin:0 0 6px;font-size:20px;line-height:30px;letter-spacing:.06em}
+  .card h2 .sub{font-size:12.5px;font-weight:400;color:var(--text-2);letter-spacing:.08em;margin-left:8px}
+  .card p{margin:8px 0}
+  .card b{color:var(--accent-deep)}
+
+  /* ---------- 星空 ---------- */
+  .sky-card{padding:0;overflow:hidden;background:var(--bg)}
+  .map-wrap{position:relative;height:clamp(420px,64vh,620px)}
+  #skymap{position:absolute;inset:0;width:100%;height:100%;display:block}
+  #star-labels{position:absolute;inset:0;pointer-events:none}
+  .seed-label{position:absolute;pointer-events:auto;transform:translate(-50%,-100%);
+    background:var(--panel);border:1px solid var(--border);border-radius:999px;
+    font-family:inherit;font-size:11.5px;line-height:16px;color:var(--text-2);
+    padding:3px 9px;cursor:pointer;letter-spacing:.05em;white-space:nowrap;
+    backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+    transition:color .15s ease,border-color .15s ease}
+  .seed-label:hover,.seed-label:focus-visible{color:var(--accent);border-color:var(--border-strong)}
+  .seed-label.below{transform:translate(-50%,6px)}
+  .self-label{position:absolute;transform:translate(-50%,0);text-align:center;pointer-events:none;
+    font-size:12px;line-height:17px;color:var(--text-2);letter-spacing:.1em;white-space:nowrap}
+  .self-label .you{display:block;font-size:10.5px;color:var(--accent);letter-spacing:.3em}
+  .sky-cap{margin:0;padding:10px 18px 14px;font-size:12.5px;line-height:21px;color:var(--text-2);
+    text-align:center;letter-spacing:.03em}
+  .sky-cap b{color:var(--accent-deep)}
+  .whisper{margin:0;padding:10px 16px 16px;font-size:14px;line-height:24px;color:var(--text);
+    text-align:center;min-height:44px;border-top:1px dashed var(--border)}
+  .whisper .w-name{color:var(--accent);letter-spacing:.14em;margin-right:6px}
+
+  /* ---------- 入网三件事 ---------- */
+  .steps{list-style:none;margin:10px 0 0;padding:0;counter-reset:step}
+  .steps>li{counter-increment:step;padding:14px 0 4px;margin:0 0 8px;border-top:1px dashed var(--border)}
+  .steps>li:first-child{border-top:0}
+  .steps h3{margin:0 0 8px;font-size:16px;line-height:24px;letter-spacing:.05em}
+  .steps h3::before{content:counter(step,cjk-ideographic) " · ";color:var(--accent)}
+  .hint{font-size:12.5px;line-height:20px;color:var(--text-2);margin:6px 0}
+  input[type=text]{
+    width:100%;font-family:inherit;font-size:15px;line-height:24px;color:var(--text);
+    background:var(--bg);border:1px solid var(--border-strong);border-radius:10px;
+    padding:10px 12px;min-height:44px}
+  input[type=text]::placeholder{color:var(--text-2);opacity:.75}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 4px}
+  .chip{
+    font-family:inherit;font-size:14px;line-height:20px;color:var(--text-2);
+    background:var(--btn-bg);border:1px solid var(--border-strong);border-radius:999px;
+    padding:8px 14px;min-height:44px;cursor:pointer;letter-spacing:.04em;
+    transition:color .15s ease,border-color .15s ease,background-color .15s ease}
+  .chip:hover{color:var(--text)}
+  .chip[aria-checked="true"],.chip.on{
+    color:var(--bg);background:var(--accent);border-color:var(--accent);font-weight:700}
+  .chip .ic{margin-right:5px}
+
+  /* ---------- 按钮 ---------- */
+  .btn{
+    font-family:inherit;font-size:15px;line-height:22px;letter-spacing:.06em;
+    background:var(--btn-bg);color:var(--text);border:1px solid var(--border-strong);
+    border-radius:10px;padding:11px 18px;min-height:44px;cursor:pointer;
+    transition:transform .12s cubic-bezier(.4,0,.2,1),filter .15s ease}
+  .btn:hover{transform:translateY(-1px)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{color:var(--bg);background:var(--accent);border-color:var(--accent);font-weight:700}
+  .btn.danger{color:var(--flag);border-color:var(--flag)}
+  .btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+  .btn-row{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+  .done-note{font-size:14px;line-height:23px;color:var(--care-title);
+    background:var(--care-bg);border-left:3px solid var(--care-title);
+    border-radius:0 10px 10px 0;padding:10px 14px;margin:10px 0 4px}
+
+  /* ---------- 说明卡 / 铁律 ---------- */
+  .care{background:var(--care-bg);border-left:3px solid var(--care-title);
+    padding:14px 18px 10px;border-radius:0 10px 10px 0;margin:16px 0 12px}
+  .care h4{margin:0 0 8px;color:var(--care-title);font-size:15px}
+  .care ol,.care ul{margin:0 0 8px;padding-left:20px}
+  .care li{margin:4px 0;font-size:14.5px;line-height:24px}
+  .note{font-size:13px;line-height:22px;color:var(--text-2);
+    border-top:1px dashed var(--border);padding-top:12px;margin-top:14px}
+  .note b{color:var(--accent-deep)}
+
+  /* ---------- 我的星 ---------- */
+  dl.stats{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:10px 0 4px;
+    font-size:14.5px;line-height:24px}
+  dl.stats dt{color:var(--text-2);white-space:nowrap}
+  dl.stats dd{margin:0;color:var(--text)}
+  #import-panel{margin:12px 0 4px}
+  #import-text{width:100%;min-height:110px;font-family:Menlo,Consolas,monospace;font-size:12px;
+    line-height:19px;color:var(--text);background:var(--bg);
+    border:1px solid var(--border-strong);border-radius:10px;padding:10px 12px;resize:vertical}
+
+  /* ---------- 红旗卡 / 弹层 ---------- */
+  .modal{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
+    background:rgba(4,7,14,.62);padding:20px}
+  .modal[hidden]{display:none}
+  .modal-box{max-width:520px;width:100%;max-height:84vh;overflow-y:auto;
+    background:var(--layer1);border:1px solid var(--border-strong);border-radius:14px;
+    box-shadow:var(--shadow);padding:22px 22px 18px}
+  .redflag-box h3{margin:0 0 10px;color:var(--flag);font-size:19px;letter-spacing:.08em}
+  .redflag-box p{font-size:15px;line-height:26px}
+  .redflag-box blockquote{
+    margin:12px 0;padding:12px 16px;background:var(--redflag-bg);
+    border-left:3px solid var(--flag);border-radius:0 10px 10px 0;
+    font-size:14.5px;line-height:26px;color:var(--text)}
+  .redflag-box blockquote b{color:var(--flag)}
+  #wipe-modal .modal-box h3{margin:0 0 10px;color:var(--flag);font-size:18px}
+  #wipe-modal p{font-size:14.5px;line-height:25px}
+
+  /* ---------- toast ---------- */
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(16px);
+    z-index:80;max-width:86vw;background:var(--panel);border:1px solid var(--border-strong);
+    border-radius:999px;padding:10px 20px;font-size:13.5px;line-height:21px;color:var(--text);
+    letter-spacing:.04em;box-shadow:var(--shadow);opacity:0;pointer-events:none;
+    transition:opacity .3s ease,transform .3s ease;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  footer.page{border-top:1px solid var(--border);margin-top:44px;padding:26px 10px 20px;
+    text-align:center;font-size:12px;line-height:20px;color:var(--text-2);letter-spacing:.04em}
+
+  noscript p{font-size:14px;color:var(--text-2)}
+
+  /* ---------- 移动自适应 ---------- */
+  @media (max-width:480px){
+    .topbar h1{font-size:25px;line-height:34px}
+    .page{padding:14px 12px 32px}
+    .card{padding:16px 14px 14px}
+    .map-wrap{height:clamp(400px,72vh,560px)}
+    .seed-label{font-size:10.5px;padding:2px 7px}
+    .whisper{font-size:13px;line-height:22px}
+  }
+
+  /* ---------- reduced-motion：信息零丢失的全替代 ---------- */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{transition-duration:.001ms!important;animation-duration:.001ms!important;
+      animation-iteration-count:1!important}
+    #theme-btn:hover,.btn:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div>
+      <h1>爱的网络</h1>
+      <p class="tagline">让爱被看见 · 每个人一颗星</p>
+    </div>
+    <button id="theme-btn" aria-label="切换日夜主题" aria-pressed="true" title="切换日夜主题">☀️</button>
+  </header>
+  <hr class="goldline" aria-hidden="true">
+
+  <p id="counter" class="counter" aria-live="polite">你是这网络上第 <b>9</b> 颗星（本地）· 今天你做了 <b>0</b> 件爱的小事</p>
+
+  <noscript><p>这张网的星光需要 JavaScript 才能点亮——但爱不需要。文明的爱的星座八颗种子星：仁 · 慈悲 · 不害（ahimsa）· Ubuntu · 爱邻如己 · 阿育吠陀 · 希腊-伊斯兰医 · 中国医学。</p></noscript>
+
+  <!-- ================= 星空视图（核心视觉） ================= -->
+  <section id="sky" class="card sky-card" aria-label="星空视图">
+    <div class="map-wrap">
+      <canvas id="skymap" role="img" aria-label="星空图：中央发光的是你的星，周围八颗是文明的爱的星座"></canvas>
+      <div id="star-labels"></div>
+      <div class="self-label" id="self-label"><span class="you">你</span><span id="self-name">一颗星</span></div>
+    </div>
+    <p class="sky-cap">中央发光的是你的星 · 周围八颗，是<b>文明的爱的星座</b>——每颗种子星，代表一种爱了几千年的传统。<br>做出一个爱的动作，会有一道柔光从你的星流向其中一颗。</p>
+    <div class="whisper" id="seed-whisper" aria-live="polite"><span class="w-name">星座</span>点一颗种子星，听它的文明说一句最老的爱。</div>
+  </section>
+
+  <!-- ================= 入网三件事（30 秒流） ================= -->
+  <section id="join" class="card">
+    <h2>入网三件事<span class="sub">约 30 秒 · 做完，你的星就挂上网络</span></h2>
+
+    <ol class="steps">
+      <li>
+        <h3>点亮自己</h3>
+        <label class="hint" for="name-input" style="display:block;margin-top:0">昵称（可留空）</label>
+        <input type="text" id="name-input" placeholder="留空 = 匿名「一颗星」" maxlength="20" autocomplete="off" spellcheck="false">
+        <p class="hint">留空，你就是匿名的一颗星——这是默认，也是被尊重的。输入即存本机，不外传一字。</p>
+      </li>
+      <li>
+        <h3>爱的意向</h3>
+        <p class="hint" style="margin-top:0">你想传递哪种爱？（六选一 · 只存类型，不存内容）</p>
+        <div class="chips" id="intent-chips" role="radiogroup" aria-label="爱的意向类型（六选一）"></div>
+        <label class="hint" for="intent-note">一句话备注（可选）</label>
+        <input type="text" id="intent-note" maxlength="60" autocomplete="off" spellcheck="false" placeholder="例如：想多陪陪妈妈（不会被保存）">
+        <p class="hint">写下的字不会被保存——这是隐私铁律；它只在你眼前存在。</p>
+      </li>
+      <li>
+        <h3>今日一个爱的动作</h3>
+        <p class="hint" style="margin-top:0">今天我做了一件爱的小事（六选一 · 每天一次，是节律不是任务）</p>
+        <div class="chips" id="action-chips" role="radiogroup" aria-label="今日动作类型（六选一）"></div>
+        <label class="hint" for="action-note">动作备注（可选·不保存）</label>
+        <input type="text" id="action-note" maxlength="60" autocomplete="off" spellcheck="false" placeholder="例如：给朋友打了个电话（不会被保存）">
+        <button id="act-btn" class="btn primary" type="button">点亮今天的动作</button>
+        <div id="act-done" class="done-note" hidden></div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ================= 网络说明卡 ================= -->
+  <section id="about" class="card">
+    <h2>这是什么</h2>
+    <p>爱的网络想做的事只有一件：<b>让爱被看见</b>。每个人一颗星；每一次爱的动作——陪伴、照护、倾听、回应、原谅、勇敢地离开伤害——都在星与星之间点亮一道柔光。不是表演，也不是成绩：只是让你亲眼看见，爱确实在发生。这一版（v1）完全离线，你的星挂在你自己的设备上，与任何服务器无关。</p>
+    <div class="care">
+      <h4>隐私铁律（不可谈判）</h4>
+      <ol>
+        <li><b>匿名默认</b>——不留名，你就是「一颗星」；</li>
+        <li><b>零追踪 · 零广告 · 永不做商业</b>——本页无任何外联；</li>
+        <li><b>最小数据</b>——只存 名字/匿名 + 动作类型 + 时间戳；无内容、无位置、无画像；</li>
+        <li><b>数据归属</b>——本地优先，导出自由，删除彻底。</li>
+      </ol>
+    </div>
+    <p class="hint">另有一条安全线：你写下的话若出现伤害自己的信号，这张网会先停下来陪你（见红旗卡）。也没有排行榜、没有积分——<b>爱不可竞争，排行榜是爱的反面</b>。</p>
+    <div class="note"><b>v2 预告（全球显影）</b>：当轻端点上线，这些本地导出的星将自愿汇成一张真的全球星空——「此刻地球上有 N 颗星亮着，今天发生了 M 次爱的动作」。在那一天到来之前，你的星只属于你。</div>
+  </section>
+
+  <!-- ================= 我的星（导出/导入/删除） ================= -->
+  <section id="mine" class="card">
+    <h2>我的星<span class="sub">本地数据 · 归你所有</span></h2>
+    <dl class="stats" id="star-stats"></dl>
+    <div class="btn-row">
+      <button id="export-btn" class="btn" type="button">导出 JSON</button>
+      <button id="import-btn" class="btn" type="button">导入</button>
+      <button id="wipe-btn" class="btn danger" type="button">删除我的星</button>
+    </div>
+    <div id="import-panel" hidden>
+      <textarea id="import-text" placeholder="把导出的 JSON 粘贴到这里，再点「导入并挂上」" aria-label="导入 JSON"></textarea>
+      <div class="btn-row"><button id="import-go" class="btn primary" type="button">导入并挂上</button></div>
+    </div>
+    <p class="hint">数据只存在这台设备的浏览器里：不联网、零追踪、无内容无位置无画像。导出的 JSON 已为 v2 聚合备好格式（与《生命之书》贡献通道同机制）。</p>
+  </section>
+
+  <footer class="page">爱的网络 v1 · 零后端 · 2026 · 与《生命之书》同族（docs/life-book-public-v3.0.html）<br>XYZ 星际疗愈工程 · 爱在哪里流动，哪里就是亮的</footer>
+</div>
+
+<!-- ================= 红旗卡（安全线 · 与主书同文案） ================= -->
+<div id="rf-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="rf-title">
+  <div class="modal-box redflag-box">
+    <h3 id="rf-title">先停一下，好吗</h3>
+    <p>我们注意到你写下的一些字。爱的网络首先是安全的——所以想先说这几句：</p>
+    <blockquote><b>任何自杀念头——即刻求助，这不是坚强与否的问题，是症状。</b>请立即联系信任的人或专业援助热线；关心青少年时，直接问「你有没有想过伤害自己」不会诱发，只会救。</blockquote>
+    <p>如果你此刻很难受：你不需要独自扛着。你写下的字不会被保存、不会被任何人看到——但你的难受，值得被真实的人接住。</p>
+    <button id="rf-close" class="btn primary" type="button">谢谢，我知道了</button>
+  </div>
+</div>
+
+<!-- ================= 删除确认 ================= -->
+<div id="wipe-modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="wipe-title">
+  <div class="modal-box">
+    <h3 id="wipe-title">删除我的星？</h3>
+    <p>这会从这台设备上<b>彻底删除</b>你的星与全部动作记录（隐私铁律：删除彻底）。此操作不可恢复。</p>
+    <p>也可以随时重新点亮——网络一直都在。</p>
+    <div class="btn-row">
+      <button id="wipe-go" class="btn danger" type="button">彻底删除</button>
+      <button id="wipe-cancel" class="btn" type="button">先留着</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" aria-live="polite"></div>
+
+<script>
+/*LOVE-NET-LOGIC-START*/
+/* 爱的网络 v1 · 逻辑核（纯函数·无 DOM——node 可独立自检）
+   数据模型（localStorage key: lovenet-v1）：
+   { name:'', intent_type:null, joined:ts, actions:[{type,ts}] }
+   导出格式（v2 聚合契约）：{ name, anon, intent_type, actions:[{type,ts}] } ——仅此四键 */
+(function(g){
+  'use strict';
+  var KEY='lovenet-v1';
+  var TYPES=['companion','care','listen','respond','forgive','leave'];
+  var TYPE_META={
+    companion:{label:'陪伴',icon:'🤝'},
+    care:     {label:'照护',icon:'🌿'},
+    listen:   {label:'倾听',icon:'👂'},
+    respond:  {label:'回应',icon:'💬'},
+    forgive:  {label:'原谅',icon:'🕊️'},
+    leave:    {label:'离开伤害',icon:'🚪'}
+  };
+  var SEED_NAMES=['仁','慈悲','不害','Ubuntu','爱邻如己','阿育吠陀','希腊-伊斯兰医','中国医学'];
+  /* 自伤类红旗词——与《生命之书》伴读红旗优先律同源词表（自杀条目原词+温和补充） */
+  var REDFLAG_WORDS=['自杀','不想活','轻生','自伤','活不下去','想死','结束生命','伤害自己','活着没意思','不如死了'];
+
+  function pad(n){ return n<10?'0'+n:''+n; }
+  function blankState(){ return {name:'',intent_type:null,joined:Date.now(),actions:[]}; }
+  function validType(t){ return TYPES.indexOf(t)>=0; }
+
+  /* 本地日键（每日一次节律的「一天」按设备本地日算） */
+  function todayKey(ts){
+    var d=new Date(typeof ts==='number'&&isFinite(ts)?ts:Date.now());
+    return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  }
+  function hasToday(s,now){
+    var t=todayKey(now);
+    for(var i=0;i<s.actions.length;i++){ if(todayKey(s.actions[i].ts)===t) return true; }
+    return false;
+  }
+
+  /* 净化：一切入库/导入数据过此关——只放行铁律允许的字段 */
+  function sanitize(s){
+    s=(s&&typeof s==='object')?s:{};
+    var o=blankState();
+    o.name=(typeof s.name==='string')?s.name.slice(0,20):'';
+    o.intent_type=validType(s.intent_type)?s.intent_type:null;
+    o.joined=(typeof s.joined==='number'&&isFinite(s.joined)&&s.joined>0)?Math.round(s.joined):Date.now();
+    if(Object.prototype.toString.call(s.actions)==='[object Array]'){
+      var seen={},arr=[];
+      for(var i=0;i<s.actions.length;i++){
+        var a=s.actions[i];
+        if(a&&validType(a.type)&&typeof a.ts==='number'&&isFinite(a.ts)&&a.ts>0){
+          var k=todayKey(a.ts);
+          if(!seen[k]){ seen[k]=1; arr.push({type:a.type,ts:Math.round(a.ts)}); }  /* 同日去重=节律铁律 */
+        }
+      }
+      arr.sort(function(a,b){ return a.ts-b.ts; });
+      o.actions=arr;
+    }
+    return o;
+  }
+
+  function storageOK(){ try{ return (typeof localStorage!=='undefined'); }catch(e){ return false; } }
+  function loadState(){
+    if(!storageOK()) return blankState();
+    try{ return sanitize(JSON.parse(localStorage.getItem(KEY)||'null')); }
+    catch(e){ return blankState(); }
+  }
+  function saveState(s){
+    if(!storageOK()) return false;
+    try{ localStorage.setItem(KEY,JSON.stringify(sanitize(s))); return true; }
+    catch(e){ return false; }
+  }
+  function wipe(){ if(storageOK()){ try{ localStorage.removeItem(KEY); }catch(e){} } }
+
+  /* 每日一次：今天已有动作则拒（防刷） */
+  function recordAction(s,type,ts){
+    ts=(typeof ts==='number'&&isFinite(ts))?ts:Date.now();
+    if(!validType(type)) return {ok:false,reason:'type'};
+    if(hasToday(s,ts))  return {ok:false,reason:'daily'};
+    s.actions.push({type:type,ts:Math.round(ts)});
+    s.actions.sort(function(a,b){ return a.ts-b.ts; });
+    return {ok:true};
+  }
+
+  /* 动作→种子星的确定性映射（同 ts 永远同一颗——星图跨刷新稳定，且不必存目标=最小数据） */
+  function seedIndexFor(ts){
+    var h=(ts^(ts>>>13))*1274126177;
+    h=(h^(h>>>16))>>>0;
+    return h%SEED_NAMES.length;
+  }
+  function seedCounts(s){
+    var c=[],i;
+    for(i=0;i<SEED_NAMES.length;i++) c.push(0);
+    for(i=0;i<s.actions.length;i++) c[seedIndexFor(s.actions[i].ts)]++;
+    return c;
+  }
+
+  /* 导出：v2 聚合契约格式（严格四键） */
+  function exportJSON(s){
+    s=sanitize(s);
+    return JSON.stringify({
+      name:s.name,
+      anon:!s.name,
+      intent_type:s.intent_type,
+      actions:s.actions.map(function(a){ return {type:a.type,ts:a.ts}; })
+    },null,2);
+  }
+  /* 导入：只认契约格式（宽容多余键·严格类型校验·同日去重） */
+  function importJSON(txt){
+    try{
+      var o=JSON.parse(String(txt));
+      if(typeof o!=='object'||o===null||Array.isArray(o)) return null;
+      if(o.name===undefined&&o.anon===undefined&&o.intent_type===undefined&&o.actions===undefined) return null;
+      if(o.actions!==undefined&&Object.prototype.toString.call(o.actions)!=='[object Array]') return null;
+      return sanitize({name:o.name,intent_type:o.intent_type,joined:o.joined,actions:o.actions});
+    }catch(e){ return null; }
+  }
+
+  /* 红旗检测（输入即扫·与主书 redHit 同法：子串命中） */
+  function redHit(text){
+    if(!text) return false;
+    text=String(text);
+    for(var i=0;i<REDFLAG_WORDS.length;i++){
+      if(text.indexOf(REDFLAG_WORDS[i])>=0) return true;
+    }
+    return false;
+  }
+
+  /* ---------- 自检（node/控制台均可跑） ---------- */
+  function selfTest(){
+    var rs=[],pass=0,fail=0;
+    function t(name,cond){ rs.push({name:name,ok:!!cond}); cond?pass++:fail++; }
+    var s=blankState();
+    t('匿名默认：新星的 name 为空',s.name===''&&s.intent_type===null&&s.actions.length===0);
+    t('本地日键格式 yyyy-mm-dd',/^\d{4}-\d{2}-\d{2}$/.test(todayKey(Date.now())));
+    t('今日无动作时 hasToday=false',hasToday(s)===false);
+    var r1=recordAction(s,'listen');
+    t('记录今日动作成功',r1.ok===true&&s.actions.length===1);
+    var r2=recordAction(s,'care');
+    t('每日一次节律：同日第二条被拒',r2.ok===false&&r2.reason==='daily');
+    var yTs=new Date().setHours(0,0,0,0)-86400000*2+3600000;  /* 前天上午 */
+    var s2=blankState();
+    t('跨天可再记录',recordAction(s2,'forgive',yTs).ok===true&&recordAction(s2,'respond').ok===true&&s2.actions.length===2);
+    var s3=sanitize({actions:[{type:'care',ts:yTs},{type:'care',ts:yTs+3600000},{type:'bogus',ts:Date.now()}]});
+    t('导入净化：同日去重+非法类型剔除',s3.actions.length===1&&s3.actions[0].type==='care');
+    var ex=JSON.parse(exportJSON(s2));
+    var keys=Object.keys(ex).sort().join(',');
+    t('导出格式：严格四键',keys==='actions,anon,intent_type,name');
+    var akeys=Object.keys(ex.actions[0]).sort().join(',');
+    t('导出格式：动作严格 {type,ts}',akeys==='ts,type');
+    t('导出格式：匿名布尔=true（无名时）',ex.anon===true);
+    s2.name='小星';
+    t('导出格式：具名时 anon=false',JSON.parse(exportJSON(s2)).anon===false);
+    var im=importJSON(exportJSON(s3));
+    t('导入往返：round-trip 保动作',im!==null&&im.actions.length===s3.actions.length);
+    t('导入拒绝垃圾串',importJSON('not json')===null);
+    t('导入拒绝缺义对象',importJSON('{"foo":1}')===null);
+    t('红旗词触发：不想活',redHit('我最近不想活了')===true);
+    t('红旗词触发：想死',redHit('有时候想死')===true);
+    t('红旗词触发：自杀',redHit('自杀念头')===true);
+    t('红旗词不误触：陪伴',redHit('今天陪伴了妈妈')===false);
+    var si=seedIndexFor(1770000000000);
+    t('种子映射在 0..7',si>=0&&si<8);
+    t('种子映射确定性',seedIndexFor(1770000000000)===si);
+    t('动作只进合法类型',recordAction(blankState(),'nope').ok===false);
+    return {pass:pass,fail:fail,results:rs};
+  }
+
+  g.LN={
+    KEY:KEY,TYPES:TYPES,TYPE_META:TYPE_META,SEED_NAMES:SEED_NAMES,REDFLAG_WORDS:REDFLAG_WORDS,
+    blankState:blankState,todayKey:todayKey,hasToday:hasToday,sanitize:sanitize,
+    loadState:loadState,saveState:saveState,wipe:wipe,recordAction:recordAction,
+    seedIndexFor:seedIndexFor,seedCounts:seedCounts,
+    exportJSON:exportJSON,importJSON:importJSON,redHit:redHit,selfTest:selfTest
+  };
+})(typeof window!=='undefined'?window:globalThis);
+/*LOVE-NET-LOGIC-END*/
+</script>
+
+<script>
+/* 爱的网络 v1 · 星空与界面（全部本机 · 零外联） */
+(function(){
+'use strict';
+var REDUCE=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var SEEDS=[
+  {name:'仁',        below:false, sub:'儒家',   whisper:'仁者爱人：己欲立而立人，己欲达而达人。'},
+  {name:'慈悲',      below:false, sub:'佛家',   whisper:'慈是予乐，悲是拔苦——愿众生离苦得乐。'},
+  {name:'不害',      below:true,  sub:'ahimsa', whisper:'耆那与印度传统：不伤害任何生命——非暴力，是从心开始的纪律。'},
+  {name:'Ubuntu',    below:true,  sub:'班图',   whisper:'我在，因为我们在——一个人经由他人成为人。'},
+  {name:'爱邻如己',  below:false, sub:'诸教',   whisper:'像爱自己一样，去爱身边具体的人。'},
+  {name:'阿育吠陀',  below:false, sub:'152医',  whisper:'152 医系种子：治病的是关系——疗愈的单位从来不是一个人，是一群人。'},
+  {name:'希腊-伊斯兰医',below:true,sub:'152医', whisper:'152 医系种子：首先，不伤害——医者的第一句誓言，也是爱的底线。'},
+  {name:'中国医学',  below:false, sub:'152医',  whisper:'152 医系种子：通则不痛——连接断了就病，接上就好。'}
+];
+var SEED_ANGLE=[-78,-28,20,66,112,158,206,252];  /* 度·自12点钟·微扰不均=自然 */
+
+/* ---------- 主题（夜=默认星空；日=暖光星图变体） ---------- */
+var PAL={
+  night:{bg:['#060B17','#0B1220','#101B33'],neb:'31,48,86',dust:'232,228,216',
+    starCore:'#E8E4D8',halo:'212,169,78',edge:'212,169,78',selfCore:'#F7F1E3',
+    selfHalo:'212,169,78',venus:'212,169,78',comet:'245,237,215'},
+  day:{bg:['#F9F3E5','#F4EAD3','#EFE2C6'],neb:'179,69,44',dust:'110,95,60',
+    starCore:'#6E4A1F',halo:'154,107,31',edge:'154,107,31',selfCore:'#8C3A26',
+    selfHalo:'179,69,44',venus:'154,107,31',comet:'176,90,50'}
+};
+function isDay(){ return document.documentElement.classList.contains('day'); }
+function pal(){ return isDay()?PAL.day:PAL.night; }
+
+var state=LN.loadState();
+var actionType=null;      /* 今日动作的临时选择（未入库前只在内存） */
+var $=function(id){ return document.getElementById(id); };
+
+/* ---------- toast ---------- */
+var toastTimer=null;
+function toast(msg){
+  var el=$('toast'); el.textContent=msg; el.classList.add('show');
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ el.classList.remove('show'); },2800);
+}
+
+/* ---------- 弹层 ---------- */
+function openModal(m){ m.hidden=false; var b=m.querySelector('button'); if(b) b.focus(); }
+function closeModal(m){ m.hidden=true; }
+function bindModal(m){
+  m.addEventListener('click',function(e){ if(e.target===m) closeModal(m); });
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    [$('rf-modal'),$('wipe-modal')].forEach(function(m){ if(m&&!m.hidden) closeModal(m); });
+  }
+});
+
+/* ---------- 红旗安全线（输入即扫·12 秒节流防打扰） ---------- */
+var rfLast=0;
+function scanSafety(){
+  var el=this;
+  var v=el.value;
+  if(!v) return;
+  if(LN.redHit(v)){
+    var now=Date.now();
+    if(now-rfLast>12000){ rfLast=now; openModal($('rf-modal')); }
+  }
+}
+['intent-note','action-note'].forEach(function(id){
+  var el=$(id),tm=null;
+  el.addEventListener('input',function(){
+    if(tm) clearTimeout(tm);
+    tm=setTimeout(function(){ scanSafety.call(el); },350);
+  });
+});
+$('rf-close').addEventListener('click',function(){ closeModal($('rf-modal')); });
+
+/* ---------- 主题钮 ---------- */
+var themeBtn=$('theme-btn'),themeMeta=document.querySelector('meta[name="theme-color"]');
+function syncThemeBtn(){
+  var day=isDay();
+  themeBtn.setAttribute('aria-pressed',day?'false':'true');
+  themeBtn.textContent=day?'🌙':'☀️';
+  themeBtn.title=day?'让天黑下来（回到星空）':'让天亮起来（暖光星图）';
+  if(themeMeta) themeMeta.setAttribute('content',day?'#FAF6EF':'#0B1220');
+}
+themeBtn.addEventListener('click',function(){
+  var day=!isDay();
+  document.documentElement.classList.toggle('day',day);
+  document.documentElement.classList.toggle('night',!day);
+  try{ localStorage.setItem('lovenet-theme',day?'day':'night'); }catch(e){}
+  syncThemeBtn(); redrawAll();
+});
+syncThemeBtn();
+
+/* ---------- 六型 chips ---------- */
+function buildChips(holder,onPick){
+  holder.innerHTML='';
+  LN.TYPES.forEach(function(t){
+    var m=LN.TYPE_META[t];
+    var b=document.createElement('button');
+    b.type='button'; b.className='chip'; b.setAttribute('role','radio');
+    b.setAttribute('aria-checked','false');
+    b.setAttribute('data-type',t);
+    b.innerHTML='<span class="ic">'+m.icon+'</span>'+m.label;
+    b.addEventListener('click',function(){
+      var bs=holder.querySelectorAll('.chip');
+      for(var i=0;i<bs.length;i++){ bs[i].setAttribute('aria-checked','false'); bs[i].classList.remove('on'); }
+      b.setAttribute('aria-checked','true'); b.classList.add('on');
+      onPick(t);
+    });
+    holder.appendChild(b);
+  });
+}
+function pickChip(holder,t){
+  var bs=holder.querySelectorAll('.chip');
+  for(var i=0;i<bs.length;i++){
+    var on=bs[i].getAttribute('data-type')===t;
+    bs[i].setAttribute('aria-checked',on?'true':'false');
+    bs[i].classList.toggle('on',on);
+  }
+}
+buildChips($('intent-chips'),function(t){
+  state.intent_type=t; LN.saveState(state); renderStats();
+  toast('意向已挂上你的星：'+LN.TYPE_META[t].icon+' '+LN.TYPE_META[t].label);
+});
+buildChips($('action-chips'),function(t){ actionType=t; });
+
+/* ---------- 点亮自己（输入即存） ---------- */
+var nameTimer=null;
+$('name-input').addEventListener('input',function(){
+  var el=this;
+  if(nameTimer) clearTimeout(nameTimer);
+  nameTimer=setTimeout(function(){
+    state.name=el.value.trim().slice(0,20);
+    LN.saveState(state);
+    renderSelfLabel(); renderStats();
+  },300);
+});
+
+/* ---------- 今日动作 ---------- */
+$('act-btn').addEventListener('click',function(){
+  var note=$('action-note').value;
+  if(note&&LN.redHit(note)){ rfLast=Date.now(); openModal($('rf-modal')); return; }
+  if(!actionType){ toast('先选一种类型——今天你做的是哪种爱？'); return; }
+  var r=LN.recordAction(state,actionType);
+  if(!r.ok){
+    if(r.reason==='daily') toast('今天的光已经点亮过了——明天再来');
+    return;
+  }
+  LN.saveState(state);
+  var si=LN.seedIndexFor(state.actions[state.actions.length-1].ts);
+  fireBeam(si);
+  rebuildEdges();
+  renderCounter(); renderStats(); renderActDone();
+  toast('已点亮——一道柔光流向「'+SEEDS[si].name+'」');
+});
+
+function renderActDone(){
+  var done=LN.hasToday(state);
+  var todayType=null;
+  if(done){
+    var tk=LN.todayKey();
+    for(var i=state.actions.length-1;i>=0;i--){
+      if(LN.todayKey(state.actions[i].ts)===tk){ todayType=state.actions[i].type; break; }
+    }
+  }
+  $('act-btn').hidden=done;
+  var d=$('act-done');
+  d.hidden=!done;
+  if(done&&todayType){
+    var m=LN.TYPE_META[todayType];
+    d.textContent='今天的光已经点亮 ✓（'+m.icon+' '+m.label+'）——明天再来。每天一次，是节律不是任务。';
+    pickChip($('action-chips'),todayType);
+  }
+}
+
+/* ---------- 计数 / 统计 / 己星名 ---------- */
+function renderCounter(){
+  var done=LN.hasToday(state);
+  $('counter').innerHTML='你是这网络上第 <b>9</b> 颗星（本地）· 今天你做了 <b>'+(done?1:0)+'</b> 件爱的小事';
+}
+function renderSelfLabel(){
+  $('self-name').textContent=state.name||'一颗星';
+}
+function fmtDate(ts){
+  var d=new Date(ts);
+  return d.getFullYear()+' 年 '+(d.getMonth()+1)+' 月 '+d.getDate()+' 日';
+}
+function renderStats(){
+  var intent=state.intent_type?LN.TYPE_META[state.intent_type]:null;
+  var days=0,seen={},i;
+  for(i=0;i<state.actions.length;i++){
+    var k=LN.todayKey(state.actions[i].ts);
+    if(!seen[k]){ seen[k]=1; days++; }
+  }
+  $('star-stats').innerHTML=
+    '<dt>昵称</dt><dd>'+(state.name||'一颗星（匿名）')+'</dd>'+
+    '<dt>爱的意向</dt><dd>'+(intent?(intent.icon+' '+intent.label):'未选')+'</dd>'+
+    '<dt>入网</dt><dd>'+fmtDate(state.joined)+'</dd>'+
+    '<dt>累计动作</dt><dd>'+state.actions.length+' 次 · '+days+' 天</dd>';
+}
+
+/* ---------- 种子星 whisper ---------- */
+var labelsHolder=$('star-labels');
+function buildLabels(){
+  labelsHolder.innerHTML='';
+  SEEDS.forEach(function(sd,i){
+    var b=document.createElement('button');
+    b.type='button'; b.className='seed-label'+(sd.below?' below':'');
+    b.setAttribute('data-i',i);
+    b.textContent=sd.name;
+    b.addEventListener('click',function(){
+      $('seed-whisper').innerHTML='<span class="w-name">'+sd.name+'</span>'
+        +'<span style="color:var(--text-2)">'+sd.sub+' · </span>'+sd.whisper;
+    });
+    labelsHolder.appendChild(b);
+  });
+}
+buildLabels();
+
+/* ================= 星空画布 ================= */
+var cv=$('skymap'),ctx=cv.getContext('2d');
+var W=0,H=0,CX=0,CY=0,seedPts=[],dust=[],edges=[],seedLit=[],beams=[],glowUntil=[];
+var rafId=null;
+
+function resize(){
+  var box=cv.parentNode;
+  W=box.clientWidth; H=box.clientHeight;
+  var dpr=Math.min(window.devicePixelRatio||1,2);
+  cv.width=Math.round(W*dpr); cv.height=Math.round(H*dpr);
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  CX=W/2; CY=H*0.5;
+  var R=Math.min(W,H)*0.37;
+  seedPts=[];
+  for(var i=0;i<SEEDS.length;i++){
+    var a=SEED_ANGLE[i]*Math.PI/180;
+    var px=CX+Math.sin(a)*R*1.18;
+    var py=CY-Math.cos(a)*R*0.92;
+    px=Math.max(42,Math.min(W-42,px));
+    py=Math.max(56,Math.min(H-64,py));
+    seedPts.push({x:px,y:py});
+  }
+  var labels=labelsHolder.querySelectorAll('.seed-label');
+  for(var j=0;j<labels.length;j++){
+    var p=seedPts[j];
+    labels[j].style.left=p.x+'px';
+    labels[j].style.top=(SEEDS[j].below?p.y+14:p.y-12)+'px';
+  }
+  var self=$('self-label');
+  self.style.left=CX+'px'; self.style.top=(CY+18)+'px';
+  makeDust();
+  if(REDUCE) draw(0);
+}
+function makeDust(){
+  dust=[];
+  var n=Math.max(50,Math.min(120,Math.round(W*H/9000)));
+  for(var i=0;i<n;i++){
+    dust.push({
+      x:Math.random()*W,y:Math.random()*H,
+      r:0.4+Math.random()*0.9,
+      a:0.10+Math.random()*0.34,
+      tw:0.4+Math.random()*1.2,
+      ph:Math.random()*6.283,
+      vx:(Math.random()-0.5)*0.05,
+      vy:-0.01-Math.random()*0.05
+    });
+  }
+}
+function rebuildEdges(){
+  edges=state.actions.map(function(a){ return {si:LN.seedIndexFor(a.ts)}; });
+  seedLit=LN.seedCounts(state);
+  if(REDUCE) draw(0);
+}
+function easeOut(k){ return 1-Math.pow(1-k,3); }
+function bez(p0,p1,p2,u){
+  var v=1-u;
+  return {
+    x:v*v*p0.x+2*v*u*p1.x+u*u*p2.x,
+    y:v*v*p0.y+2*v*u*p1.y+u*u*p2.y
+  };
+}
+function ctrlPt(p0,p2){
+  var mx=(p0.x+p2.x)/2,my=(p0.y+p2.y)/2;
+  var dx=p2.x-p0.x,dy=p2.y-p0.y;
+  var len=Math.sqrt(dx*dx+dy*dy)||1;
+  return {x:mx-dy/len*len*0.16,y:my+dx/len*len*0.16};
+}
+function draw(now){
+  var P=pal();
+  /* 深空底 */
+  var g=ctx.createLinearGradient(0,0,0,H);
+  g.addColorStop(0,P.bg[0]); g.addColorStop(0.55,P.bg[1]); g.addColorStop(1,P.bg[2]);
+  ctx.fillStyle=g; ctx.fillRect(0,0,W,H);
+  /* 星云微光 */
+  var nb=ctx.createRadialGradient(CX,H*0.74,0,CX,H*0.74,Math.max(W,H)*0.55);
+  nb.addColorStop(0,'rgba('+P.neb+','+(isDay()?0.045:0.30)+')');
+  nb.addColorStop(1,'rgba('+P.neb+',0)');
+  ctx.fillStyle=nb; ctx.fillRect(0,0,W,H);
+  var cg=ctx.createRadialGradient(CX,CY,0,CX,CY,110);
+  cg.addColorStop(0,'rgba('+P.selfHalo+','+(isDay()?0.05:0.10)+')');
+  cg.addColorStop(1,'rgba('+P.selfHalo+',0)');
+  ctx.fillStyle=cg; ctx.fillRect(CX-120,CY-120,240,240);
+
+  /* 星尘粒（缓漂+微闪） */
+  for(var i=0;i<dust.length;i++){
+    var d=dust[i];
+    if(!REDUCE){
+      d.x+=d.vx; d.y+=d.vy;
+      if(d.y<-2) d.y=H+2;
+      if(d.x<-2) d.x=W+2; else if(d.x>W+2) d.x=-2;
+    }
+    var a=d.a*(0.62+0.38*Math.sin(now*0.001*d.tw+d.ph));
+    if(a<=0.02) a=0.02;
+    ctx.fillStyle='rgba('+P.dust+','+a.toFixed(3)+')';
+    ctx.beginPath(); ctx.arc(d.x,d.y,d.r,0,6.283); ctx.fill();
+  }
+  /* 金星（一颗稍大的缓行金点·金星线之眼） */
+  var vx=W*0.5+Math.sin(now*0.00007)*W*0.36;
+  var vy=H*0.2+Math.cos(now*0.00005)*H*0.1;
+  var vg=ctx.createRadialGradient(vx,vy,0,vx,vy,7);
+  vg.addColorStop(0,'rgba('+P.venus+',0.95)');
+  vg.addColorStop(0.35,'rgba('+P.venus+',0.4)');
+  vg.addColorStop(1,'rgba('+P.venus+',0)');
+  ctx.fillStyle=vg; ctx.beginPath(); ctx.arc(vx,vy,7,0,6.283); ctx.fill();
+
+  /* 历史之边（每次动作的柔光留下的淡痕·确定性映射=跨刷新稳定） */
+  var per={};
+  for(var e=0;e<edges.length;e++){ per[edges[e].si]=(per[edges[e].si]||0)+1; }
+  ctx.lineCap='round';
+  for(var si2 in per){
+    var sp=seedPts[si2];
+    var alpha=Math.min(0.07+0.05*per[si2],0.30);
+    var c1=ctrlPt({x:CX,y:CY},sp);
+    ctx.strokeStyle='rgba('+P.edge+','+alpha.toFixed(3)+')';
+    ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.quadraticCurveTo(c1.x,c1.y,sp.x,sp.y); ctx.stroke();
+  }
+
+  /* 种子星 */
+  var tSec=now*0.001;
+  for(var k=0;k<SEEDS.length;k++){
+    var p2=seedPts[k];
+    var lit=seedLit[k]||0;
+    var tw=0.75+0.25*Math.sin(tSec*1.4+k*1.9);
+    var glow=0;
+    if(glowUntil[k]&&now<glowUntil[k]) glow=(glowUntil[k]-now)/10000;
+    var hr=6+Math.min(lit,4)*1.6+glow*26;
+    var hg=ctx.createRadialGradient(p2.x,p2.y,0,p2.x,p2.y,hr);
+    var ha=0.12+Math.min(lit,4)*0.05+glow*0.5;
+    hg.addColorStop(0,'rgba('+P.halo+','+ha.toFixed(3)+')');
+    hg.addColorStop(1,'rgba('+P.halo+',0)');
+    ctx.fillStyle=hg; ctx.beginPath(); ctx.arc(p2.x,p2.y,hr,0,6.283); ctx.fill();
+    ctx.fillStyle=P.starCore;
+    ctx.globalAlpha=tw*(0.8+Math.min(lit,3)*0.07);
+    ctx.beginPath(); ctx.arc(p2.x,p2.y,lit?2.1:1.7,0,6.283); ctx.fill();
+    ctx.globalAlpha=1;
+  }
+
+  /* 己星（中央·呼吸发光） */
+  var breath=REDUCE?0.7:(0.5+0.5*Math.sin(tSec*1.37));
+  var sr=24+8*breath;
+  var sg=ctx.createRadialGradient(CX,CY,0,CX,CY,sr);
+  sg.addColorStop(0,'rgba('+P.selfHalo+','+(0.34+0.20*breath).toFixed(3)+')');
+  sg.addColorStop(1,'rgba('+P.selfHalo+',0)');
+  ctx.fillStyle=sg; ctx.beginPath(); ctx.arc(CX,CY,sr,0,6.283); ctx.fill();
+  ctx.strokeStyle='rgba('+P.selfHalo+','+(0.22+0.22*breath).toFixed(3)+')';
+  ctx.lineWidth=0.8;
+  var fl=8+5*breath;
+  ctx.beginPath();
+  ctx.moveTo(CX-fl,CY); ctx.lineTo(CX+fl,CY);
+  ctx.moveTo(CX,CY-fl); ctx.lineTo(CX,CY+fl);
+  ctx.stroke();
+  ctx.fillStyle=P.selfCore;
+  ctx.beginPath(); ctx.arc(CX,CY,2.8,0,6.283); ctx.fill();
+
+  /* 柔光之流（动作动画：全页最美的三秒） */
+  for(var b=beams.length-1;b>=0;b--){
+    var bm=beams[b];
+    var ph=(now-bm.t0)/3000;
+    if(ph>=1){
+      glowUntil[bm.si]=now+10000;
+      beams.splice(b,1);
+      continue;
+    }
+    var target=seedPts[bm.si];
+    var cc=ctrlPt({x:CX,y:CY},target);
+    var ph1=Math.min(ph/0.55,1);
+    var ue=easeOut(ph1);
+    /* 彗尾 */
+    for(var q=0;q<22;q++){
+      var uq=ue-q*0.03;
+      if(uq<=0) continue;
+      var pt=bez({x:CX,y:CY},cc,target,uq);
+      var fa=(1-q/22)*0.85;
+      var fr=2.6*(1-q/22)+0.35;
+      var fgr=ctx.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,fr*2.4);
+      fgr.addColorStop(0,'rgba('+P.comet+','+fa.toFixed(3)+')');
+      fgr.addColorStop(1,'rgba('+P.comet+',0)');
+      ctx.fillStyle=fgr; ctx.beginPath(); ctx.arc(pt.x,pt.y,fr*2.4,0,6.283); ctx.fill();
+    }
+    /* 轨迹淡线 */
+    ctx.strokeStyle='rgba('+P.edge+','+(0.30*(1-ph)).toFixed(3)+')';
+    ctx.lineWidth=1.2;
+    ctx.beginPath(); ctx.moveTo(CX,CY);
+    ctx.quadraticCurveTo(cc.x,cc.y,bez({x:CX,y:CY},cc,target,ue).x,bez({x:CX,y:CY},cc,target,ue).y);
+    ctx.stroke();
+    /* 双星柔光（起止两端的绽放） */
+    if(ph>0.42){
+      var k2=easeOut((ph-0.42)/0.58);
+      var bloomR=10+42*k2;
+      var bloomA=0.55*(1-k2)+0.08;
+      [[{x:CX,y:CY}],[target]].forEach(function(pair){
+        var pp=pair[0];
+        var bg=ctx.createRadialGradient(pp.x,pp.y,0,pp.x,pp.y,bloomR);
+        bg.addColorStop(0,'rgba('+P.halo+','+bloomA.toFixed(3)+')');
+        bg.addColorStop(1,'rgba('+P.halo+',0)');
+        ctx.fillStyle=bg; ctx.beginPath(); ctx.arc(pp.x,pp.y,bloomR,0,6.283); ctx.fill();
+      });
+      /* 绽放涟漪 */
+      if(ph>0.55){
+        var k3=(ph-0.55)/0.45;
+        var rr=8+64*easeOut(k3);
+        ctx.strokeStyle='rgba('+P.edge+','+(0.35*(1-k3)).toFixed(3)+')';
+        ctx.lineWidth=1;
+        ctx.beginPath(); ctx.arc(target.x,target.y,rr,0,6.283); ctx.stroke();
+      }
+    }
+  }
+}
+function tick(now){
+  if(document.hidden){ rafId=null; return; }
+  draw(now);
+  rafId=requestAnimationFrame(tick);
+}
+function startLoop(){
+  if(!rafId&&!REDUCE) rafId=requestAnimationFrame(tick);
+}
+document.addEventListener('visibilitychange',function(){ if(!document.hidden) startLoop(); });
+function fireBeam(si){
+  if(REDUCE){ glowUntil[si]=performance.now()+8000; draw(0); return; }
+  beams.push({si:si,t0:performance.now()});
+  startLoop();
+}
+function redrawAll(){ if(REDUCE) draw(0); }
+
+/* ---------- 导出 / 导入 / 删除 ---------- */
+function fallbackCopy(text){
+  var ta=document.createElement('textarea');
+  ta.value=text; ta.setAttribute('readonly','');
+  ta.style.cssText='position:fixed;left:-9999px;top:0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); }catch(e){}
+  document.body.removeChild(ta);
+}
+function copyText(text,done){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done,function(){ fallbackCopy(text); done(); });
+  }else{ fallbackCopy(text); done(); }
+}
+$('export-btn').addEventListener('click',function(){
+  copyText(LN.exportJSON(state),function(){ toast('已复制导出 JSON——为 v2 全球显影备好了格式'); });
+});
+$('import-btn').addEventListener('click',function(){
+  var p=$('import-panel');
+  p.hidden=!p.hidden;
+  if(!p.hidden) $('import-text').focus();
+});
+$('import-go').addEventListener('click',function(){
+  var st=LN.importJSON($('import-text').value);
+  if(!st){ toast('没能认出这份 JSON——请粘贴本页导出的原样'); return; }
+  state=st; LN.saveState(state);
+  $('import-panel').hidden=true; $('import-text').value='';
+  fullRender();
+  toast('你的星已挂上（'+state.actions.length+' 次动作随之亮起）');
+});
+$('wipe-btn').addEventListener('click',function(){ openModal($('wipe-modal')); });
+$('wipe-cancel').addEventListener('click',function(){ closeModal($('wipe-modal')); });
+$('wipe-go').addEventListener('click',function(){
+  LN.wipe(); state=LN.blankState(); actionType=null;
+  $('name-input').value=''; $('intent-note').value=''; $('action-note').value='';
+  closeModal($('wipe-modal'));
+  fullRender();
+  toast('已彻底删除——随时可以重新点亮');
+});
+
+/* ---------- 全量渲染 ---------- */
+function fullRender(){
+  $('name-input').value=state.name;
+  pickChip($('intent-chips'),state.intent_type);
+  renderSelfLabel(); renderCounter(); renderStats(); renderActDone();
+  rebuildEdges();
+  if(!REDUCE) startLoop();
+}
+
+window.addEventListener('resize',function(){ resize(); },{passive:true});
+bindModal($('rf-modal')); bindModal($('wipe-modal'));
+resize(); rebuildEdges(); fullRender();
+
+/* ?selftest=1 → 控制台与 toast 双通道自检（校验全家桶入口） */
+if(/[?&]selftest=1/.test(location.search)){
+  var r=LN.selfTest();
+  if(window.console&&console.log){
+    console.log('[爱的网络自检] pass='+r.pass+' fail='+r.fail,r.results);
+  }
+  toast('自检：'+r.pass+' 过 / '+r.fail+' 败');
+}
+})();
+</script>
+</body>
+</html>

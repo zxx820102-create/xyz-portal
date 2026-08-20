@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#FAF6EC" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#060913" media="(prefers-color-scheme: dark)">
+<meta name="description" content="XYZ · 苹果环面——爱因斯坦-罗森桥的真结构：上半凹陷是黑洞（星尘沿 z=∓k/r 漏斗加速坠入），腰部最窄一圈是虫洞喉咙 r₀（点击整座苹果莫比乌斯翻面，内外互换），黄金螺线管绕苹果盘旋（一圈翻到管道另一侧·两圈归位），下半张开是白洞（星流减速喷出、飘散、再被捕获——一个真正的闭环）。12 尺度刻度与 26 产物嵌在管上，点击绽放直达。自包含单文件·零依赖（唯疗愈厅同在计数一次匿名只读读取）。">
+<title>XYZ · 苹果环面 · 爱因斯坦-罗森桥 —— 宇宙认识自己的界面</title>
+<style>
+  /* ==========================================================
+     XYZ 门户 v5 · 苹果环面（2026-08-20·真结构重建）
+     真结构 = 苹果状环面 + 内含螺旋 + 莫比乌斯翻面：
+     ① ER 桥嵌入图剖面：上叶 z=-k/r 漏斗（远处平坦·向喉凹陷）
+        在喉咙半径 r0 连接下叶镜像 z=+k/r（张开）——旋转体生成苹果：
+        上半凹陷=黑洞区 · 腰部最窄圆=虫洞喉咙 r0 · 下半张开=白洞区
+     ② 表面渲染=经纬等高线（物理教科书嵌入图·克鲁斯卡尔美感）：
+        上叶纬线密（黑洞压缩感）·下叶经线放射+喷发脉冲（白洞喷发感）
+     ③ 环面黄金螺线管嵌在苹果表面：大环角 θ=5·2π·s 绕轴、小环角
+        ψ=2π·s 绕剖面；莫比乌斯标架 n(s+1)=-n(s)（一圈翻到管道另一侧）
+        ·两圈归位；外侧段（黑洞侧）亮·内侧段（白洞侧）柔
+     ④ 闭环流动（单池四相）：上叶外星尘坠入（加速·近喉最亮）→过喉
+        →入螺线管绕行（经停尺度节点·节点被经过时发亮）→下叶沿壁喷出
+        （减速·张开发散）→外部飘散淡去→再被上叶捕获——真正的闭环
+     ⑤ 交互：拖拽=3D 轨道旋转（惯性）·点喉=莫比乌斯翻面 800ms·
+        点螺线节点=绽放面板直达 26 产物·点下漏斗=外送视图·滚轮=缩放
+     审美军规：恰 5 色 token（deep/bright/gold/cinnabar/ink）·
+        白洞=未观测数学解→METAPHOR 注脚（诚实律）·reduced-motion 全降级
+     自包含单文件 · 零外部依赖
+     ========================================================== */
+  :root{ /* 恰 5 个颜色 token（日夜两套值·名字不变） */
+    --deep:#060913;     /* 深空 */
+    --bright:#F2EDDF;   /* 星白 */
+    --gold:#D9B46B;     /* φ金 */
+    --cinnabar:#C8452B; /* 朱砂 */
+    --ink:#0C0A07;      /* 墨 */
+  }
+  body.day{
+    --deep:#E7DFCC;
+    --bright:#FAF6EC;
+    --gold:#8E691F;
+    --cinnabar:#B23A22;
+    --ink:#221D14;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;overflow:hidden;color:var(--bright);
+    font-family:Georgia,'Songti SC','Noto Serif SC','Source Han Serif SC','Times New Roman',serif;
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;
+    background:
+      radial-gradient(1300px 900px at 76% 14%, rgba(120,96,150,.14), transparent 62%),
+      radial-gradient(1000px 760px at 16% 86%, rgba(46,92,122,.12), transparent 60%),
+      radial-gradient(720px 560px at 52% 50%, rgba(217,180,107,.05), transparent 66%),
+      linear-gradient(180deg,#060913 0%,#080D1C 55%,#0A1122 100%);
+  }
+  body.day{
+    background:
+      radial-gradient(1300px 900px at 76% 14%, rgba(142,105,31,.07), transparent 62%),
+      radial-gradient(1000px 760px at 16% 86%, rgba(120,95,60,.07), transparent 60%),
+      linear-gradient(180deg,#FAF6EC 0%,#F4EEDD 52%,#EDE4CE 100%);
+  }
+  ::selection{background:rgba(217,180,107,.28)}
+  button{font-family:inherit;cursor:pointer}
+  :focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:8px}
+
+  /* ---------- 画布舞台 ---------- */
+  #sky{position:fixed;inset:0;display:block;touch-action:none;cursor:grab}
+  #sky.grabbing{cursor:grabbing}
+  #sky.point{cursor:pointer}
+
+  /* ---------- 排印为星：左上 XYZ 大字 ---------- */
+  #hud{position:fixed;top:0;left:0;right:0;z-index:60;display:flex;flex-wrap:wrap;
+    align-items:flex-start;gap:14px;padding:22px 28px;pointer-events:none}
+  #hud>*{pointer-events:auto}
+  #brand{
+    border:0;background:none;color:var(--bright);
+    font-size:clamp(3rem,7vw,7.5rem);font-weight:700;line-height:1;
+    letter-spacing:.22em;padding:0 0 0 .1em;
+    opacity:.94;text-shadow:0 0 34px rgba(217,180,107,.16);
+    transition:letter-spacing .3s ease,opacity .3s ease,text-shadow .3s ease;
+  }
+  #brand:hover{
+    letter-spacing:.30em;
+    text-shadow:0 0 46px rgba(217,180,107,.34);
+  }
+
+  /* ── 星际疗愈厅 · 心形徽章（token 映射至本页 5 色系统：心=朱砂） ── */
+  #heart-badge{
+    display:inline-flex;align-items:center;gap:7px;text-decoration:none;
+    min-height:42px;margin-top:6px;padding:0 15px 0 11px;border-radius:999px;
+    border:1.5px solid rgba(242,237,223,.30);background:rgba(6,9,19,.44);
+    color:var(--bright);font-size:13px;letter-spacing:.1em;white-space:nowrap;
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    transition:color .3s,border-color .3s,box-shadow .3s;
+  }
+  body.day #heart-badge{background:rgba(250,246,236,.6);border-color:rgba(34,29,20,.3);color:var(--ink)}
+  #heart-badge svg{width:14px;height:14px;display:block;fill:var(--cinnabar);
+    filter:drop-shadow(0 0 4px rgba(200,69,43,.45))}
+  #heart-badge b{
+    font-variant-numeric:tabular-nums;font-weight:700;color:var(--gold);
+    min-width:1.1em;text-align:center;
+  }
+  #heart-badge:hover{color:var(--gold);border-color:var(--gold);box-shadow:0 0 14px rgba(217,180,107,.25)}
+  #heart-badge.err b{display:none}  /* 计数不可达：只留心，不显示错误 */
+
+  #hud .sp{flex:1 0 4px;pointer-events:none}
+  .hbtn{
+    min-width:42px;height:42px;border-radius:999px;padding:0 15px;
+    border:1.5px solid rgba(242,237,223,.30);background:rgba(6,9,19,.44);
+    color:var(--bright);font-size:13px;letter-spacing:.1em;
+    backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);
+    transition:border-color .3s,color .3s,background .3s;
+  }
+  body.day .hbtn{background:rgba(250,246,236,.6);border-color:rgba(34,29,20,.3)}
+  .hbtn:hover{border-color:var(--gold);color:var(--gold)}
+  .hbtn.speaking{color:var(--ink)!important;background:var(--gold)!important;border-color:var(--gold)!important}
+  #hud .btns{display:flex;gap:9px}
+
+  /* ---------- 底部铭文 ---------- */
+  #motto{
+    position:fixed;left:0;right:0;bottom:8.5vh;z-index:5;text-align:center;
+    pointer-events:none;color:var(--bright);opacity:.82;
+    font-size:clamp(1.05rem,2.3vw,2rem);font-weight:400;
+    letter-spacing:.42em;text-indent:.42em;
+    text-shadow:0 2px 24px rgba(6,9,19,.6);
+    animation:mottoIn 1.9s cubic-bezier(.2,.7,.3,1) .35s both;
+    transition:letter-spacing .45s ease,opacity .45s ease;
+  }
+  #motto:hover{letter-spacing:.5em}
+  @keyframes mottoIn{from{opacity:0;transform:translateY(14px);letter-spacing:.2em}to{opacity:.82;transform:none}}
+  body.day #motto{text-shadow:0 2px 20px rgba(250,246,236,.7)}
+
+  /* ---------- 三体注脚（诚实律） ---------- */
+  #credo{
+    position:fixed;left:0;right:0;bottom:1.1vh;z-index:5;
+    display:flex;justify-content:center;align-items:center;gap:12px;
+    flex-wrap:wrap;padding:0 10px;pointer-events:none;
+  }
+  #credo-note{
+    font-size:10.5px;letter-spacing:.05em;opacity:.5;color:var(--bright);
+    text-align:center;max-width:72vw;
+  }
+  body.day #credo-note{color:var(--ink)}
+
+  /* ---------- 节点花瓣面板（点击绽放成花） ---------- */
+  #panel,#lawcard{
+    position:fixed;z-index:70;width:300px;
+    background:rgba(9,13,24,.90);border:1px solid rgba(217,180,107,.5);
+    border-radius:26px 30px 24px 28px;
+    box-shadow:0 0 0 1px rgba(217,180,107,.12),0 24px 60px rgba(0,0,0,.55),0 0 80px rgba(217,180,107,.16);
+    padding:19px 22px 16px;color:var(--bright);
+    backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  }
+  body.day #panel,body.day #lawcard{
+    background:rgba(250,246,236,.93);color:var(--ink);
+    box-shadow:0 0 0 1px rgba(142,105,31,.16),0 24px 60px rgba(64,50,24,.22),0 0 80px rgba(142,105,31,.12);
+  }
+  #panel[hidden],#lawcard[hidden]{display:none}
+  #panel.bloom{animation:bloom .42s cubic-bezier(.22,.86,.32,1.06) both}
+  @keyframes bloom{
+    0%{transform:scale(.1) rotate(-7deg);opacity:0;filter:blur(6px)}
+    100%{transform:scale(1) rotate(0deg);opacity:1;filter:blur(0)}
+  }
+  .pclose{
+    position:absolute;top:9px;right:9px;width:28px;height:28px;border-radius:50%;
+    border:1px solid rgba(242,237,223,.3);background:none;color:inherit;opacity:.75;font-size:13px;line-height:1;
+  }
+  .pclose:hover{background:var(--cinnabar);border-color:var(--cinnabar);color:var(--bright);opacity:1}
+  .ptag{
+    display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.16em;
+    color:var(--gold);border:1px solid var(--gold);border-radius:999px;
+    padding:2px 11px;margin-bottom:9px;
+  }
+  #panel h3,#lawcard h3{margin:0 0 6px;font-size:17.5px;letter-spacing:.03em;color:inherit;padding-right:22px}
+  .pnote{margin:0;font-size:12.5px;color:inherit;opacity:.72;line-height:1.75}
+  .pdetail{margin:9px 0 0;font-size:11.5px;opacity:.66;line-height:1.8;
+    border-top:1px dashed rgba(217,180,107,.35);padding-top:8px}
+  .pdetail b{opacity:.9;font-weight:700}
+  .prow{display:flex;align-items:center;gap:9px;margin-top:12px;flex-wrap:wrap}
+  .pgo{
+    display:inline-block;min-height:37px;line-height:37px;padding:0 20px;border-radius:999px;
+    background:var(--gold);color:#0C0A07;text-decoration:none;font-size:13.5px;font-weight:700;letter-spacing:.05em;
+    box-shadow:0 6px 22px rgba(217,180,107,.28);transition:box-shadow .3s,filter .3s;
+  }
+  .pgo:hover{filter:brightness(1.07);box-shadow:0 8px 30px rgba(217,180,107,.44)}
+  .pgo.ghost{background:none;border:1.5px dashed rgba(217,180,107,.6);color:inherit;box-shadow:none}
+  .pst{font-size:10.5px;opacity:.65;letter-spacing:.08em}
+  .pst.on{color:var(--gold);opacity:1;font-weight:700}
+  .pst.future{opacity:.65;border:1px dashed rgba(217,180,107,.5);border-radius:999px;padding:1px 8px}
+
+  /* 定律卡（三条已证定律=苹果面上的金弦） */
+  #lawcard{width:308px;top:50%;right:20px;transform:translateY(-50%)}
+  .llaw{margin:2px 0 10px;font-size:14px;line-height:1.85;color:inherit}
+  .lev{display:flex;gap:8px;align-items:flex-start;font-size:12px;opacity:.75;line-height:1.7;margin:7px 0}
+  .lev b{
+    flex:0 0 auto;font-size:10.5px;font-weight:700;color:var(--gold);opacity:1;
+    border:1px solid var(--gold);border-radius:999px;padding:1px 8px;margin-top:2px;letter-spacing:.06em;
+  }
+  #law-jump{border:1.5px solid var(--gold);background:none;color:var(--gold);
+    border-radius:999px;min-height:37px;padding:0 17px;font-size:13px;font-weight:700;transition:background .3s,color .3s}
+  #law-jump:hover{background:var(--gold);color:#0C0A07}
+
+  /* ---------- 一切之门（G 键展开·放射式完整索引） ---------- */
+  #gate{
+    position:fixed;inset:0;z-index:80;overflow:auto;
+    background:radial-gradient(1100px 800px at 50% 46%, rgba(24,30,52,.86), rgba(6,9,19,.96) 70%);
+    backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+    opacity:0;transition:opacity .5s ease;
+  }
+  body.day #gate{background:radial-gradient(1100px 800px at 50% 46%, rgba(250,246,236,.9), rgba(234,226,205,.97) 70%)}
+  #gate[hidden]{display:none}
+  #gate.on{opacity:1}
+  #gate-title{
+    text-align:center;padding:4.2vh 20px 0;color:var(--bright);
+  }
+  body.day #gate-title{color:var(--ink)}
+  #gate-title h2{
+    margin:0;font-size:clamp(1.5rem,3.4vw,2.6rem);font-weight:700;
+    letter-spacing:.6em;text-indent:.6em;
+  }
+  #gate-title p{margin:8px 0 0;font-size:12px;opacity:.6;letter-spacing:.24em}
+  #gate-field{position:relative;min-height:76vh}
+  /* 中心喉咙徽记（喉=门） */
+  .gcore{
+    position:absolute;left:50%;top:46%;width:112px;height:112px;margin:-56px 0 0 -56px;
+    border-radius:50%;pointer-events:none;
+    background:radial-gradient(circle,#000 0 40%,rgba(0,0,0,.92) 58%,rgba(0,0,0,0) 74%);
+    box-shadow:0 0 0 1.5px rgba(217,180,107,.75),0 0 34px 6px rgba(217,180,107,.28),inset 0 0 26px rgba(0,0,0,.9);
+  }
+  body.day .gcore{box-shadow:0 0 0 1.5px rgba(142,105,31,.75),0 0 34px 6px rgba(142,105,31,.2),inset 0 0 26px rgba(0,0,0,.9)}
+  .gcore::before{
+    content:'';position:absolute;inset:-20px;border-radius:50%;
+    background:conic-gradient(from 0deg,transparent 0 34%,rgba(217,180,107,.85) 45%,transparent 56% 64%,rgba(217,180,107,.45) 74%,transparent 84% 100%);
+    -webkit-mask:radial-gradient(circle,transparent 57%,#000 60%,#000 78%,transparent 81%);
+    mask:radial-gradient(circle,transparent 57%,#000 60%,#000 78%,transparent 81%);
+    animation:gsnip 20s linear infinite;opacity:.6;
+  }
+  @keyframes gsnip{to{transform:rotate(360deg)}}
+  /* 12 环玫瑰卡：φ 网格半径 --dx/--dy 由 JS 注入 */
+  .gcard{
+    position:absolute;left:50%;top:46%;width:178px;max-width:30vw;
+    transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,0px))) scale(.05);
+    opacity:0;
+    transition:transform .66s cubic-bezier(.17,.84,.3,1.03) var(--d,0ms),opacity .5s ease var(--d,0ms);
+    border:1px solid rgba(217,180,107,.28);border-radius:14px;
+    background:rgba(10,14,26,.72);padding:10px 12px 9px;color:var(--bright);
+  }
+  body.day .gcard{background:rgba(250,246,236,.78);color:var(--ink);border-color:rgba(142,105,31,.3)}
+  #gate.on .gcard{transform:translate(calc(-50% + var(--dx,0px)),calc(-50% + var(--dy,0px))) scale(1);opacity:1}
+  .ghead{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin-bottom:5px;
+    border-bottom:1px solid rgba(217,180,107,.3);padding-bottom:5px}
+  .gring{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:.2em}
+  .gsize{font-size:9.5px;opacity:.55}
+  .gnd{
+    display:flex;align-items:center;gap:7px;width:100%;text-align:left;
+    border:0;background:none;color:inherit;font-size:12px;line-height:1.5;
+    padding:3.5px 4px;border-radius:7px;transition:background .25s,color .25s;
+  }
+  .gnd i{flex:0 0 auto;width:5px;height:5px;border-radius:50%;background:var(--gold);
+    box-shadow:0 0 7px rgba(217,180,107,.8)}
+  .gnd:hover{background:rgba(217,180,107,.16);color:var(--gold)}
+  .gnd.past{opacity:.62}.gnd.past i{background:rgba(242,237,223,.5);box-shadow:none}
+  .gnd.future{opacity:.55}.gnd.future i{background:none;border:1px dashed var(--gold);box-shadow:none}
+  #gate-close{
+    position:fixed;top:20px;right:22px;z-index:82;width:40px;height:40px;border-radius:50%;
+    border:1.5px solid rgba(217,180,107,.6);background:rgba(6,9,19,.5);color:var(--gold);font-size:15px;
+    backdrop-filter:blur(6px);
+  }
+  body.day #gate-close{background:rgba(250,246,236,.7)}
+  #gate-close:hover{background:var(--gold);color:#0C0A07}
+  /* 小屏：门退化为纵列滚动（可用优先） */
+  #gate.small #gate-field{display:flex;flex-direction:column;align-items:center;gap:12px;padding:20px 14px 60px}
+  #gate.small .gcore{display:none}
+  #gate.small .gcard{position:static;transform:none;width:min(92vw,420px);max-width:none}
+
+  /* ---------- 莫比乌斯翻面转场闪光层（800ms） ---------- */
+  #warp{
+    position:fixed;inset:0;z-index:85;pointer-events:none;opacity:0;
+    background:radial-gradient(circle at 50% 50%,
+      rgba(255,251,238,.98) 0%,rgba(233,204,138,.9) 18%,
+      rgba(217,180,107,.55) 30%,transparent 58%);
+    mix-blend-mode:screen;
+  }
+  body.day #warp{mix-blend-mode:normal}
+
+  /* ---------- 提示 / toast ---------- */
+  #hint{
+    position:fixed;left:50%;bottom:4.2vh;transform:translateX(-50%);z-index:50;
+    font-size:11.5px;letter-spacing:.14em;color:var(--bright);opacity:.62;white-space:nowrap;
+    background:rgba(6,9,19,.4);border:1px solid rgba(217,180,107,.22);border-radius:999px;
+    padding:5px 17px;transition:opacity .8s;pointer-events:none;
+  }
+  body.day #hint{background:rgba(250,246,236,.55)}
+  #hint.off{opacity:0}
+  #toast{
+    position:fixed;left:50%;bottom:14vh;transform:translateX(-50%) translateY(8px);z-index:90;
+    background:rgba(9,13,24,.94);border:1.5px solid var(--gold);border-radius:12px;color:var(--bright);
+    font-size:13px;font-weight:700;padding:9px 18px;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;max-width:86vw;text-align:center;
+    box-shadow:0 14px 40px rgba(0,0,0,.5),0 0 44px rgba(217,180,107,.2);
+  }
+  body.day #toast{background:rgba(250,246,236,.96);color:var(--ink)}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- 键盘可达的隐形入口清单 ---------- */
+  .sr-only{
+    position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;
+    clip:rect(0 0 0 0);clip-path:inset(50%);overflow:hidden;white-space:nowrap;
+  }
+  .sr-only a:focus{position:fixed;top:64px;left:12px;width:auto;height:auto;
+    clip:auto;clip-path:none;background:rgba(9,13,24,.95);border:1.5px solid var(--gold);
+    border-radius:10px;padding:8px 14px;z-index:99;margin:0;overflow:visible;color:var(--bright)}
+
+  noscript .ns{
+    position:fixed;inset:0;z-index:99;overflow:auto;background:var(--deep);color:var(--bright);
+    padding:70px 24px;text-align:center;font-size:15px;line-height:2.1;
+  }
+  noscript .ns a{font-size:17px}
+
+  @media (max-width:640px){
+    #hud{padding:16px 16px}
+    #panel{width:222px}
+    #lawcard{width:248px;right:10px}
+    #motto{bottom:10vh;letter-spacing:.3em}
+    #credo-note{display:none}
+  }
+  @media (prefers-reduced-motion:reduce){
+    #motto{animation:none;opacity:.82}
+    #panel.bloom{animation:none}
+    .gcore::before{animation:none}
+    #gate.on .gcard{transition:opacity .3s}
+    #hint,#toast{transition:none}
+  }
+</style>
+</head>
+<body class="night">
+<noscript><div class="ns">
+  <b style="font-size:22px;letter-spacing:.3em">XYZ · 苹果环面</b><br>
+  这件艺术装置需要 JavaScript 才能流动与穿越。<br>
+  你仍可以直接进入：
+  <a href="https://zxx820102-create.github.io/life-book/">《生命之书》主书</a> ·
+  <a href="https://zxx820102-create.github.io/life-book/kids.html">童画版</a> ·
+  <a href="https://zxx820102-create.github.io/life-book/timeline.html">双时间线卷轴</a> ·
+  <a href="healing.html">星际疗愈厅</a>
+</div></noscript>
+
+<!-- 极简顶栏：左上 XYZ 大字 + 心形徽章（疗愈厅计数·只读）+ 右上导览/日夜 -->
+<nav id="hud" aria-label="门户工具栏">
+  <button id="brand" type="button" title="回到全览（Home）">XYZ</button>
+  <a id="heart-badge" href="healing.html"
+     title="星际疗愈厅——一颗被心环绕的地球；每一次真实的打开，累计数 +1"
+     aria-label="进入星际疗愈厅：查看累计同在的心">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    <b id="heart-count">…</b>
+  </a>
+  <span class="sp"></span>
+  <span class="btns">
+    <button class="hbtn" id="btn-tts" type="button" aria-label="朗读导览" title="朗读导览">导览</button>
+    <button class="hbtn" id="btn-night" type="button" aria-label="切换日夜主题" aria-pressed="true" title="日夜主题">昼</button>
+  </span>
+</nav>
+
+<canvas id="sky" role="application"
+  aria-label="苹果环面虫洞界面：上半凹陷是黑洞，星尘沿漏斗加速坠向喉咙；喉咙是最窄的一圈，点击它整座苹果莫比乌斯翻面、内外互换；黄金螺线管绕苹果盘旋，十二个尺度刻度与二十六个产物星点嵌在管上，点击星点绽放直达；下半张开是白洞，星流减速喷出、再被上方捕获——一个真正的闭环；三条金弦各是一条已证定律。拖拽旋转，滚轮缩放，G 展开一切之门"></canvas>
+
+<div id="motto">宇宙认识自己的界面</div>
+
+<!-- 诚实律注脚（白洞=METAPHOR） -->
+<div id="credo">
+  <span id="credo-note"></span>
+</div>
+
+<!-- 节点花瓣面板（点击绽放成花） -->
+<aside id="panel" hidden role="dialog" aria-label="节点详情">
+  <button class="pclose" id="p-close" type="button" aria-label="关闭">✕</button>
+  <span class="ptag" id="p-ring"></span>
+  <h3 id="p-name"></h3>
+  <p class="pnote" id="p-note"></p>
+  <div class="pdetail" id="p-detail" hidden></div>
+  <div class="prow" id="p-row"></div>
+</aside>
+
+<!-- 定律卡（金弦） -->
+<aside id="lawcard" hidden role="dialog" aria-label="已证定律">
+  <button class="pclose" id="l-close" type="button" aria-label="关闭">✕</button>
+  <span class="ptag">虫洞金弦 · 已证定律</span>
+  <h3 id="l-name"></h3>
+  <p class="llaw" id="l-law"></p>
+  <div class="lev" id="l-ev0"></div>
+  <div class="lev" id="l-ev1"></div>
+  <div class="prow">
+    <button id="law-jump" type="button">跳到另一端 ↭</button>
+    <span class="pst">视角沿弦瞬时转移</span>
+  </div>
+</aside>
+
+<!-- 一切之门（G 键展开·26 产物完整索引） -->
+<section id="gate" hidden aria-label="一切之门 · 全部产物索引">
+  <button id="gate-close" type="button" aria-label="关闭一切之门">✕</button>
+  <div id="gate-title">
+    <h2>一 切 之 门</h2>
+    <p id="gate-sub">虫洞喉 · 全部产物从这里可达</p>
+  </div>
+  <div id="gate-field"></div>
+</section>
+
+<div id="warp" aria-hidden="true"></div>
+
+<div id="hint">拖拽旋转 · 点喉＝莫比乌斯翻面 · 星点＝产物 · 点下漏斗＝外送视图 · 滚轮缩放 · G＝一切之门</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<nav class="sr-only" id="srlinks" aria-label="实体入口清单"></nav>
+
+<script>
+/*XYZ-PORTAL-JS-START*/
+(function(){
+'use strict';
+/* ==========================================================
+   XYZ 门户 v5 · 苹果环面（Einstein-Rosen 桥真结构）· 主程序
+   数据区（node 环境可自检）→ 纯数学（苹果剖面+环面螺线+莫比乌斯
+   标架+闭环粒子）→ 浏览器渲染
+   结构四问（自检对应）：
+   ① 喉咙半径连续性：剖面闭环 r≥r0·最小圆=喉 r0·两端闭合
+   ② 莫比乌斯两圈归位：n(s+1)=-n(s)·n(s+2)=n(s)·带边 A/B 互换
+   ③ 闭环粒子路径可达性：坠入→过喉→管内绕行→喷出→飘散→再捕获
+   ④ 节点-尺度分布：26 节点全部嵌在螺线管上·|12s-scale|≤0.5
+   ========================================================== */
+
+var BOOK = 'https://zxx820102-create.github.io/life-book/';
+
+/* ---------- 12 尺度（从量子到宇宙边界·刻在螺线管上） ---------- */
+var SCALES = [
+  {name:'量子',     size:'~10⁻³⁵ m'},
+  {name:'原子',     size:'~10⁻¹⁰ m'},
+  {name:'分子',     size:'~10⁻⁹ m'},
+  {name:'细胞',     size:'~10⁻⁵ m'},
+  {name:'器官',     size:'~10⁻¹ m'},
+  {name:'人',       size:'~10⁰ m'},
+  {name:'家庭',     size:'~10¹ m'},
+  {name:'文明',     size:'~10⁶ m'},
+  {name:'生物圈',   size:'~10⁷ m · 行星之膜'},
+  {name:'星球',     size:'~10⁷ m · 家园'},
+  {name:'星系',     size:'~10²¹ m'},
+  {name:'宇宙边界', size:'~10²⁶ m · 可观测'}
+];
+
+/* ---------- NODES 注册数组（24 基底 + 疗愈厅 + 爱网 = 26） ----------
+   全部嵌在环面螺线管上：scale∈[0,11] → 管上参数 s=scale/12
+   （喉=尺度 0 起点·s=0；下半圈=白洞侧） */
+var NODES = [
+  /* —— 量子-原子环间：最小尺度的响应 —— */
+  {id:'companion',   scale:0.5, name:'伴读神经元群', note:'最小尺度的响应——读它，问它，网络就亮一次', href:BOOK+'#xu', status:'active', deco:'neural'},
+  {id:'ask-xyz',     scale:0.5, name:'问它任何关于生命的问题', note:'伴读 AI · 预留位', href:'#', status:'future', deco:'neural'},
+  /* —— 细胞-器官环间 —— */
+  {id:'disease-atlas', scale:3.5, name:'疾病统一图谱 · 六模式', note:'炎症·疼痛·疲劳·自免·癌症·衰老——一通万通', href:'#', status:'future', deco:'hex'},
+  /* —— 人环内侧（孩子）—— */
+  {id:'book-kids',   scale:4.6, name:'童画版 · 给你的城', note:'挂在人环内侧——给孩子的版本', href:BOOK+'kids.html', status:'active', kid:true},
+  /* —— 人环 —— */
+  {id:'book-main',   scale:5, name:'《生命之书》主书入口', note:'v3.0 公开发布 · 宇宙认识自己的正文', href:BOOK, status:'active', primary:true},
+  {id:'book-timeline', scale:5, name:'双时间线卷轴', note:'宇宙的一生 × 一个人的一生', href:BOOK+'timeline.html', status:'active'},
+  {id:'ch-health',   scale:5, name:'健康律定稿', note:'六个动词 + 记', href:BOOK+'#v21', status:'active'},
+  {id:'ch-river',    scale:5, name:'时间之河卷', note:'从胎儿到四种不朽', href:BOOK+'#vol7', status:'active'},
+  {id:'healing-hall', scale:5, name:'星际疗愈厅', note:'一颗被心环绕的地球——每一次真实的打开，同在 +1', href:'healing.html', status:'active'},
+  /* —— 文明环 —— */
+  {id:'co-create',   scale:7, name:'共创页', note:'心跳·勘误·译者·共著——四通道共创', href:BOOK+'contribute.html', status:'active'},
+  {id:'book-versions', scale:7, name:'版本树 · 谱系页', note:'过去 11 节点+未来 7 芽——这条珠链的全文', href:BOOK+'versions.html', status:'active'},
+  {id:'book-v0.9',   scale:7, name:'v0.9 · 初版上线', note:'2026-08 首次公开', href:BOOK, status:'past', chain:0},
+  {id:'book-v1.0',   scale:7, name:'v1.0', note:'骨架成卷', href:BOOK, status:'past', chain:1},
+  {id:'book-v1.5',   scale:7, name:'v1.5', note:'图文加密', href:BOOK, status:'past', chain:2},
+  {id:'book-v2.0',   scale:7, name:'v2.0', note:'双主题 token 体系', href:BOOK, status:'past', chain:3},
+  {id:'book-v3.0',   scale:7, name:'v3.0 · 公开发布版', note:'当前版本 · 点击进入主书', href:BOOK, status:'active', chain:4},
+  {id:'book-v4',     scale:7, name:'v4 · 世代书', note:'未来开放', href:'#', status:'future', chain:5},
+  {id:'book-v5',     scale:7, name:'v5 · 感知书', note:'未来开放', href:'#', status:'future', chain:6},
+  {id:'book-vx',     scale:7, name:'…', note:'未来开放', href:'#', status:'future', chain:7, op:.55},
+  {id:'book-english', scale:7, name:'English Edition', note:'英文版 · 预留位', href:'#', status:'future'},
+  {id:'med-seed-net', scale:7, name:'152 医系之网 · 三种子', note:'希腊-伊斯兰 · 阿育吠陀 · 中国医学', href:'#', status:'future', deco:'seeds'},
+  /* —— 星球 —— */
+  {id:'earth-vol',   scale:9, name:'地球卷', note:'家是最好的行星——大气·海洋·板块之家', href:BOOK+'#vol4', status:'active'},
+  {id:'love-net',    scale:9, name:'爱网', note:'心与心连成的网——此刻我们同在', href:'healing.html', status:'active'},
+  /* —— 星系 —— */
+  {id:'cosmos-vol',  scale:10, name:'星空卷', note:'尺度谦卑 · 价值锚定', href:BOOK+'#vol5', status:'active'},
+  {id:'cosmos-map',  scale:10.4, name:'生命连接宇宙全景', note:'五环总谱 · 预留', href:'#', status:'future'},
+  /* —— 宇宙边界：螺线收口处一道柔光（合拢回喉） —— */
+  {id:'final-unity', scale:11, name:'终部合一 · 智慧边界', note:'一切认识都有边界，包括这本——螺线收口处一道柔光', href:BOOK+'#wisdom', status:'active', deco:'glow'}
+];
+
+/* ---------- 三条金弦（每道=一条已证定律·跨尺度锚定） ---------- */
+var WORMHOLES = [
+  {id:'wh-deltar', name:'Δr 纠错律', from:3, to:7,
+   law:'修复带宽 Δr 决定存活——每个尺度都是「修得过，就活着」。',
+   ev:[['细胞','DNA 校对与五道防线连环纠错，差错率压到十亿分之一'],
+       ['文明','医院、制度、法治＝社会的免疫系统与修复预算']]},
+  {id:'wh-love', name:'爱的运行论', from:5, to:10,
+   law:'爱不是感觉，是感同身受的意志——让每个体验者不难受、变得更好。',
+   ev:[['人','拥抱与回应是新生儿的第二口氧气（健康律 · 连）'],
+       ['星系','引力把离散星尘抱成旋涡城——关系让个体彼此发光']]},
+  {id:'wh-yoneda', name:'关系先于对象 · Yoneda', from:0, to:11,
+   law:'对象由它与一切的关系完全决定——Yoneda 引理：无关系则无对象。',
+   ev:[['量子','粒子的属性只在相互作用中显形——测量即建立关系'],
+       ['宇宙边界','可观测宇宙＝光与我们关系总和的球壳——视野即关系']]}
+];
+
+/* ---------- 沿用数据：六模式 + 三种子（152 医系） ---------- */
+var PATTERNS = [
+  {key:'infl', name:'炎症', metaphor:'报警文化'},
+  {key:'pain', name:'疼痛', metaphor:'边界语言'},
+  {key:'fatigue', name:'疲劳', metaphor:'预算报告'},
+  {key:'autoim', name:'自身免疫', metaphor:'敌我识别故障'},
+  {key:'cancer', name:'癌症', metaphor:'纠错失守'},
+  {key:'aging', name:'衰老', metaphor:'预算减配'}
+];
+var HUBS = [
+  {key:'greek', name:'希腊-伊斯兰医', n:60},
+  {key:'ayur', name:'阿育吠陀', n:44},
+  {key:'tcm', name:'中国医学', n:48}
+];
+
+var TTS_GUIDE = '欢迎来到 XYZ 苹果环面，一座爱因斯坦-罗森桥。上半凹陷是黑洞，星尘沿漏斗加速坠向喉咙；喉咙是最窄的一圈，点击它，整座苹果莫比乌斯翻面，内外互换。黄金螺线管绕苹果盘旋，一圈翻到管道另一侧，两圈归位；十二个尺度刻度嵌在管上，二十六个产物都是管上的星，点击绽放直达。下半张开是白洞，星流减速喷出、飘散，再被上方捕获，一个真正的闭环。拖拽旋转，滚轮缩放，按 G 展开一切之门。XYZ，宇宙认识自己的界面。';
+
+/* ---------- 诚实律注脚（页脚 credo 同源） ---------- */
+var CREDO_TEXT = '白洞是广义相对论的数学解，尚未被观测——此处作为「给予之极」的隐喻（METAPHOR）· 黑洞与虫洞为已观测/理论稳固结构';
+
+/* ---------- 心形徽章（疗愈厅计数·全程只读·60s 轮询） ---------- */
+var ABACUS_GET = 'https://abacus.jasoncameron.dev/get/xyz.interstellar/healing';
+var BADGE_POLL_MS = 60000;
+
+/* ==========================================================
+   纯数学（node 环境可自检）
+   ========================================================== */
+var TAU = Math.PI * 2;
+var PHI = (1 + Math.sqrt(5)) / 2;              /* 1.6180339887498949 */
+var GA = TAU / (PHI * PHI);                    /* 黄金角 2π/φ² ≈ 2.39996 rad ≈ 137.5° */
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+
+/* —— 军规⑤：恰 5 个颜色 token（与 CSS :root 一一对应） —— */
+var COLOR_TOKENS = ['deep', 'bright', 'gold', 'cinnabar', 'ink'];
+
+/* —— 动效常量 —— */
+var FLOW_N = 300;          /* 闭环粒子（单池四相·预算 ≤400） */
+var WARP_MS = 800;         /* 莫比乌斯翻面 180° 总时长 */
+var HOVER_MS = 300;        /* 节点悬停吸亮时长 */
+
+/* ==========================================================
+   ① 苹果剖面（ER 桥嵌入图）
+   上叶漏斗：z = -k/r 型（平移使喉面 h=0）：hUp(r)=k(1/r0-1/r)
+   —— 远处平坦（r→∞ 时 h→k/r0）·向喉凹陷加深（r→r0 时 h→0 最深）
+   下叶镜像：hLo(r) = -hUp(r)（张开·白洞区）
+   喉 = (r0, 0)：全表面最窄圆。腹部弧把上下叶缘闭合成苹果身。
+   ========================================================== */
+var R0    = 34;            /* 喉咙半径 r0（腰部最窄圆） */
+var RMAX  = 96;            /* 苹果肩（叶缘）半径 */
+var KAP   = 2211;          /* k（A=1）：hUp(RMAX)≈42·远平高度 k/r0=65 */
+var H_FLAT = KAP / R0;     /* 65：漏斗远处渐平高度 */
+var BULGE = 19;            /* 腹部外鼓 */
+var RBELLY = RMAX + BULGE; /* 115：赤道最大半径 */
+var RFAR = 150;            /* 坠入起点半径（上叶裙边之外） */
+var REX  = 132;            /* 喷出终末半径（下叶裙边之外） */
+
+function hUp(r){ return KAP * (1 / R0 - 1 / r); }   /* 上叶（黑洞侧·凹陷） */
+function hLo(r){ return -hUp(r); }                  /* 下叶（白洞侧·张开） */
+
+/* 剖面闭环：喉→上叶→腹→下叶→喉（弧长均匀重采样·参数 ψ∈[0,2π)）
+   构造对称 ⇒ ψ=π 恰为赤道（h=0·r=RBELLY）·ψ∈[0,π] 为黑洞侧 */
+var LOOP_N = 288;
+var LOOP = [];
+(function(){
+  var raw = [], i;
+  for(i = 0; i <= 64; i++){ var r = R0 + (RMAX - R0) * i / 64; raw.push([r, hUp(r)]); }
+  for(i = 1; i <= 72; i++){
+    var b = Math.PI * i / 72;
+    raw.push([RMAX + BULGE * Math.sin(b), hUp(RMAX) * Math.cos(b)]);
+  }
+  for(i = 1; i <= 64; i++){ var r2 = RMAX - (RMAX - R0) * i / 64; raw.push([r2, hLo(r2)]); }
+  var cum = [0], L = 0, k;
+  for(k = 1; k < raw.length; k++){
+    L += Math.hypot(raw[k][0] - raw[k-1][0], raw[k][1] - raw[k-1][1]);
+    cum.push(L);
+  }
+  var j = 0;
+  for(i = 0; i < LOOP_N; i++){
+    var target = L * i / LOOP_N;
+    while(j < cum.length - 2 && cum[j + 1] < target) j++;
+    var seg = cum[j + 1] - cum[j] || 1;
+    var f = (target - cum[j]) / seg;
+    LOOP.push([raw[j][0] + (raw[j+1][0] - raw[j][0]) * f,
+               raw[j][1] + (raw[j+1][1] - raw[j][1]) * f]);
+  }
+})();
+function loopPoint(ps){                            /* ψ → [r,h] */
+  var u = ((ps % TAU) + TAU) % TAU;
+  var x = u / TAU * LOOP_N;
+  var i = Math.floor(x), f = x - i;
+  var a = LOOP[i % LOOP_N], b = LOOP[(i + 1) % LOOP_N];
+  return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f];
+}
+function loopTangent(ps){
+  var e = 0.004, p = loopPoint(ps + e), q = loopPoint(ps - e);
+  var dr = p[0] - q[0], dh = p[1] - q[1];
+  var L = Math.hypot(dr, dh) || 1;
+  return [dr / L, dh / L];
+}
+function loopOutN(ps){ /* 剖面外法向（远离苹果体·上叶朝上/下叶朝下） */
+  var t = loopTangent(ps);
+  return [-t[1], t[0]];
+}
+
+/* ==========================================================
+   ② 环面黄金螺线管（一切嵌其上）+ 莫比乌斯标架
+   大环角 θ(s)=θ0+NW·2π·s 绕苹果轴·小环角 ψ(s)=2π·s 绕剖面一圈
+   莫比乌斯：标架 n(s)=cos(πs)·eR+sin(πs)·eA
+     n(s+1)=-n(s)（绕一圈翻到管道另一侧）·n(s+2)=n(s)（两圈归位）
+     带边 A/B 随之互换：A(s+1)=B(s)
+   ========================================================== */
+var NW = 5;                 /* 每圈电路绕苹果轴周数 */
+var TH0 = -GA;              /* 起始方位=黄金角（错相） */
+var TUBE_W = 3.2;           /* 莫比乌斯带半宽（世界单位） */
+function spiralTheta(s){ return TH0 + NW * TAU * s; }
+function spiralPsi(s){ return TAU * s; }
+function surfaceP(psi, th){
+  var p = loopPoint(psi);
+  return [p[0] * Math.cos(th), p[1], p[0] * Math.sin(th)];
+}
+function spiralC(s){ return surfaceP(spiralPsi(s), spiralTheta(s)); }
+function frameN(s){
+  var psi = spiralPsi(s), th = spiralTheta(s);
+  var nr = loopOutN(psi);
+  var eR = [nr[0] * Math.cos(th), nr[1], nr[0] * Math.sin(th)];
+  var eA = [-Math.sin(th), 0, Math.cos(th)];
+  var c = Math.cos(Math.PI * s), sn = Math.sin(Math.PI * s);
+  return [c * eR[0] + sn * eA[0], c * eR[1] + sn * eA[1], c * eR[2] + sn * eA[2]];
+}
+function edgePt(s, sign){
+  var C = spiralC(s), n = frameN(s);
+  return [C[0] + sign * TUBE_W * n[0], C[1] + sign * TUBE_W * n[1], C[2] + sign * TUBE_W * n[2]];
+}
+
+/* 12 尺度刻度：throat=尺度 0 起点（s=0·即 ψ=0）·s=i/12
+   i<6 落在黑洞侧（ψ∈[0,π)·h≥0）·i≥6 落在白洞侧（ψ∈[π,2π)·h≤0） */
+function tickS(i){ return i / 12; }
+
+/* —— 节点挂管：同尺度多节点沿螺线小步错开（方位角自动散开） —— */
+function assignSlots(nodes){
+  var groups = {};
+  nodes.forEach(function(nd){
+    (groups[nd.scale] = groups[nd.scale] || []).push(nd);
+  });
+  Object.keys(groups).forEach(function(k){
+    var g = groups[k], n = g.length;
+    var d = n > 1 ? Math.min(0.0035, 0.028 / (n - 1)) : 0;
+    g.forEach(function(nd, j){
+      var s = nd.scale / 12 + (n > 1 ? (j - (n - 1) / 2) * d : 0);
+      nd._s = Math.min(0.996, Math.max(0.004, s));
+      nd._psi = spiralPsi(nd._s);
+      nd._th = spiralTheta(nd._s);
+      nd._lab = (j % 2) * 12 - 6;
+    });
+  });
+}
+function nodePos(nd){
+  var p = loopPoint(nd._psi), nr = loopOutN(nd._psi), th = nd._th, off = 5.5;
+  var r = p[0] + nr[0] * off, h = p[1] + nr[1] * off;
+  return [r * Math.cos(th), h, r * Math.sin(th)];
+}
+
+/* —— 金弦（已证定律）：两端锚定刻度·沿苹果面爬过腹部 —— */
+function wrapA(d){
+  while(d > Math.PI) d -= TAU;
+  while(d < -Math.PI) d += TAU;
+  return d;
+}
+function buildChord(wh){
+  var sf = wh.from / 12, st = wh.to / 12;
+  var dth = wrapA(spiralTheta(st) - spiralTheta(sf));
+  wh._pts = [];
+  for(var k = 0; k <= 40; k++){
+    var u = k / 40;
+    var psi = TAU * (sf + (st - sf) * u);
+    var th = spiralTheta(sf) + dth * u;
+    var p = loopPoint(psi), nr = loopOutN(psi);
+    var r = p[0] + nr[0] * 3.5, h = p[1] + nr[1] * 3.5;
+    wh._pts.push([r * Math.cos(th), h, r * Math.sin(th)]);
+  }
+}
+
+/* ==========================================================
+   ③ 闭环粒子流（单池四相·真正的循环·非两股对流）
+   fall：上叶外远处→沿漏斗壁螺旋坠入（q² 加速·近喉最亮）
+   ride：过喉→入螺线管沿苹果绕行（随莫比乌斯标架翻面·经停节点）
+   exit：下叶漏斗沿壁喷出（减速·张开发散）
+   drift：外部飘散淡去→再被上叶捕获（回 fall）
+   ========================================================== */
+var PH_DUR = [11, 27, 8, 6.5];   /* 四相基准时长（秒） */
+function fallPos(p, q){
+  var e = q * q;
+  var r = RFAR * Math.exp(Math.log(R0 / RFAR) * e);
+  var lam = p.l0 + 2.6 * Math.log(RFAR / r);
+  var h = hUp(r) + 2.2;
+  return [r * Math.cos(lam), h, r * Math.sin(lam), 0.35 + 0.65 * Math.pow(q, 1.7)];
+}
+function ridePos(p, q){
+  var C = spiralC(q), n = frameN(q);
+  var jr = p.jr * TUBE_W * 0.8 * Math.cos(p.ja);
+  return [C[0] + n[0] * jr, C[1] + n[1] * jr, C[2] + n[2] * jr,
+          0.5 + 0.5 * (0.5 + 0.5 * Math.cos(TAU * q))];
+}
+function exitPos(p, q){
+  var e = 1 - (1 - q) * (1 - q);
+  var r = R0 * Math.exp(Math.log(REX / R0) * e);
+  var lam = p.l0 + p.spread * q * q * 2.2;
+  var h = hLo(r) * (1 + 0.06 * q) - 1.2;
+  return [r * Math.cos(lam), h, r * Math.sin(lam), 0.1 + 0.85 * (1 - q)];
+}
+function driftPos(p, q){
+  var e0 = exitPos(p, 1);
+  return [e0[0] + p.driftV[0] * q * 46 + Math.cos(q * 6 + p.ja) * 2,
+          e0[1] + p.driftV[1] * q * 30,
+          e0[2] + p.driftV[2] * q * 46,
+          0.3 * (1 - q)];
+}
+function flowPos(p){
+  if(p.ph === 0) return fallPos(p, p.t);
+  if(p.ph === 1) return ridePos(p, p.t);
+  if(p.ph === 2) return exitPos(p, p.t);
+  return driftPos(p, p.t);
+}
+function nextPhase(p){
+  p.ph = (p.ph + 1) % 4;
+  p.t = 0;
+  p.dur = PH_DUR[p.ph] * (0.8 + 0.4 * p.rnd());
+  if(p.ph === 0) p.l0 = p.l0 + 1.7 + p.rnd() * 2;                      /* 再捕获：新坠落方位 */
+  if(p.ph === 2) p.l0 = spiralTheta(1) + (p.rnd() - 0.5) * 0.5;        /* 喷出方位续接管尾 */
+}
+function stepParticle(p, dt){
+  p.t += dt / p.dur;
+  var guard = 0;
+  while(p.t >= 1 && guard++ < 8){ p.t -= 1; nextPhase(p); }
+}
+
+var FLOW = [];
+(function(){
+  var i;
+  for(i = 0; i < FLOW_N; i++){
+    var rnd = mulberry32(20260822 + i * 97);
+    var ph = i % 4;
+    FLOW.push({
+      ph: ph, t: rnd(), dur: PH_DUR[ph] * (0.8 + 0.4 * rnd()),
+      l0: rnd() * TAU, ja: rnd() * TAU, jr: rnd() * 0.85,
+      spread: (rnd() * 2 - 1) * 0.85,
+      driftV: [rnd() * 2 - 1, -0.2 - rnd() * 0.5, rnd() * 2 - 1],
+      sz: 0.7 + rnd() * 1.7, al: 0.3 + rnd() * 0.55,
+      rnd: rnd
+    });
+  }
+})();
+
+/* ---------- 相机（轨道旋转+莫比乌斯翻面·纯函数） ---------- */
+var FF = 650;
+function makeCam(){ return {yaw: -0.55, pitch: 0.5, mu: 0, zoom: 1, cen: [0, 0, 0]}; }
+function camRot(p, cam){
+  var x = p[0] - cam.cen[0], y = p[1] - cam.cen[1], z = p[2] - cam.cen[2];
+  var cy = Math.cos(cam.yaw), sy = Math.sin(cam.yaw);
+  var x1 = x * cy + z * sy, z1 = -x * sy + z * cy;
+  var cp = Math.cos(cam.pitch), sp = Math.sin(cam.pitch);
+  var y2 = y * cp - z1 * sp, z2 = y * sp + z1 * cp;
+  var cm = Math.cos(cam.mu), sm = Math.sin(cam.mu);
+  return [x1, y2 * cm - z2 * sm, y2 * sm + z2 * cm];
+}
+function camProject(p, cam, vw, vh){
+  var q = camRot(p, cam);
+  var pers = FF / (FF - q[2]);
+  return [vw / 2 + cam.zoom * q[0] * pers, vh / 2 - cam.zoom * q[1] * pers, q[2]];
+}
+function clampZoom(fit, z){
+  return Math.max(fit * 0.5, Math.min(fit * 14, z));
+}
+function muFlip(m){ return (((m + Math.PI) % TAU) + TAU) % TAU; }
+
+/* φ 网格：一切之门的环半径 = base·φ^(s/6) */
+var GATE_BASE = 0.155;
+function gateR(s){ return GATE_BASE * Math.pow(PHI, s / 6); }
+
+assignSlots(NODES);
+NODES.forEach(function(nd){ nd._p3 = nodePos(nd); });
+WORMHOLES.forEach(buildChord);
+
+/* ==========================================================
+   自检（node 提取本段脚本直接运行）
+   ========================================================== */
+function selfTests(){
+  var fails = 0, n = 0;
+  function ok(cond, msg){ n++; if(!cond){ fails++; console.error('FAIL ' + msg); } }
+
+  /* 1. 尺度环 */
+  ok(SCALES.length === 12, '12 scale ticks, got ' + SCALES.length);
+  var expectNames = ['量子','原子','分子','细胞','器官','人','家庭','文明','生物圈','星球','星系','宇宙边界'];
+  ok(SCALES.map(function(s){ return s.name; }).join() === expectNames.join(), 'tick order quantum→edge');
+  ok(SCALES.every(function(s){ return s.name && s.size; }), 'ticks have name+size');
+
+  /* 2. NODES 注册数组 */
+  var ids = {}, byId = {};
+  NODES.forEach(function(nd){
+    ok(!ids[nd.id], 'unique id ' + nd.id); ids[nd.id] = 1; byId[nd.id] = nd;
+    ok(typeof nd.scale === 'number' && nd.scale >= 0 && nd.scale <= 11, 'scale in [0,11] ' + nd.id + ' ' + nd.scale);
+    ok(nd.name && nd.note, 'name+note ' + nd.id);
+    ok(['active','future','past'].indexOf(nd.status) >= 0, 'status valid ' + nd.id);
+    if(nd.status === 'future') ok(nd.href === '#', 'future reserved # ' + nd.id);
+    else ok(nd.href.indexOf(BOOK) === 0 || nd.href === 'healing.html', 'real link ' + nd.id + ' ' + nd.href);
+  });
+  ok(NODES.length === 26, '26 nodes (24 base + 疗愈厅 + 爱网), got ' + NODES.length);
+
+  /* 3. 节点-尺度分布（结构自检④） */
+  var i, j;
+  for(i = 0; i < NODES.length; i++){
+    ok(NODES[i]._s > 0 && NODES[i]._s < 1, 'slot s in (0,1) ' + NODES[i].id);
+    ok(Math.abs(NODES[i]._s * 12 - NODES[i].scale) <= 0.5,
+       NODES[i].id + ' on tube near scale ' + NODES[i].scale + ', got ' + (NODES[i]._s * 12).toFixed(3));
+    ok(Math.abs(NODES[i]._psi - spiralPsi(NODES[i]._s)) < 1e-12, NODES[i].id + ' psi matches s');
+    ok(NODES[i]._p3[0] === NODES[i]._p3[0] && isFinite(NODES[i]._p3[1]), NODES[i].id + ' 3D pos finite');
+  }
+  var minGap = 1e9;
+  for(i = 0; i < NODES.length; i++)
+    for(j = i + 1; j < NODES.length; j++)
+      minGap = Math.min(minGap, Math.abs(NODES[i]._s - NODES[j]._s));
+  ok(minGap >= 0.0015, 'min slot gap >=0.0015, got ' + minGap.toFixed(5));
+  var chain = NODES.filter(function(nd){ return nd.chain != null; }).sort(function(a,b){ return a.chain - b.chain; });
+  ok(chain.length === 8, 'version chain 8 nodes, got ' + chain.length);
+  for(i = 1; i < chain.length; i++) ok(chain[i]._s > chain[i-1]._s, 'chain monotonic #' + i);
+  ok(byId['healing-hall'].status === 'active' && byId['healing-hall'].href === 'healing.html', '疗愈厅→healing.html');
+  ok(byId['love-net'].status === 'active' && byId['love-net'].href === 'healing.html', '爱网→healing.html');
+  ok(byId['final-unity'].scale === 11 && chain.indexOf(byId['final-unity']) < 0, 'final-unity at spiral closure (scale 11)');
+
+  /* 4. 苹果剖面：喉咙半径连续性（结构自检①） */
+  var minR = 1e9, maxHUp = -1e9;
+  for(i = 0; i < LOOP_N; i++){
+    minR = Math.min(minR, LOOP[i][0]);
+    ok(LOOP[i][0] >= R0 - 1e-9, 'loop r >= r0 @' + i);
+    if(LOOP[i][1] > maxHUp) maxHUp = LOOP[i][1];
+  }
+  ok(Math.abs(minR - R0) < 1e-9, 'throat is narrowest circle: min r=' + minR.toFixed(4) + ' == r0 ' + R0);
+  ok(Math.abs(loopPoint(0)[0] - R0) < 1e-9 && Math.abs(loopPoint(0)[1]) < 1e-9, 'ψ=0 at throat (r0,0)');
+  var cl = loopPoint(TAU - 0.002);
+  ok(Math.abs(cl[0] - R0) < 0.6 && Math.abs(cl[1]) < 0.6, 'ψ→2π closes back at throat, got ' + cl[0].toFixed(2) + ',' + cl[1].toFixed(2));
+  var cont = true;
+  for(i = 0; i < 40; i++){
+    var a = loopPoint(i * TAU / 40), b = loopPoint(i * TAU / 40 + 0.01);
+    if(Math.hypot(a[0] - b[0], a[1] - b[1]) > 1.2) cont = false;
+  }
+  ok(cont, 'profile loop continuous (no jumps)');
+  ok(Math.abs(hUp(R0)) < 1e-9, 'hUp(r0)=0 (喉面)');
+  ok(Math.abs(hLo(R0)) < 1e-9, 'hLo(r0)=0 (下叶在喉连接)');
+  ok(Math.abs(hUp(RMAX) - 42) < 0.05, 'hUp(rMax)≈42 rim, got ' + hUp(RMAX).toFixed(2));
+  ok(hUp(1e6) < H_FLAT + 0.001 && hUp(1e6) > H_FLAT - 0.01, 'funnel flattens far away → k/r0=' + H_FLAT);
+  var monoUp = true;
+  for(i = 1; i < 60; i++){ var rr = hUp(R0 + i); if(rr <= hUp(R0 + i - 1)) monoUp = false; }
+  ok(monoUp, 'hUp monotonic deepening toward throat (凹陷加深)');
+  for(i = 0; i < 70; i++){
+    var q = loopPoint(i * (Math.PI * 0.9) / 70);
+    ok(q[1] >= -1e-9, 'upper half h>=0 @ψ' + (i * (Math.PI * 0.9) / 70).toFixed(3));
+    if(q[1] < -1e-9) break;
+  }
+  var eq = loopPoint(Math.PI);
+  ok(Math.abs(eq[1]) < 0.01, 'ψ=π at belly equator h≈0, got ' + eq[1].toFixed(4));
+  ok(eq[0] > RMAX && eq[0] <= RBELLY + 0.01, 'ψ=π at belly max radius ' + eq[0].toFixed(2));
+  var lowerOk = true;
+  for(i = 0; i <= 60; i++){ var q2 = loopPoint(Math.PI + i * Math.PI / 60); if(q2[1] > 0.01) lowerOk = false; }
+  ok(lowerOk, 'lower half h<=0 (白洞侧)');
+
+  /* 5. 环面螺线 + 莫比乌斯（结构自检②） */
+  var C0 = spiralC(0), C1 = spiralC(1), C2 = spiralC(2);
+  ok(Math.hypot(C0[0] - C1[0], C0[1] - C1[1]) < 1e-9 && Math.hypot(C0[2] - C1[2], 0) < 1e-9, 'centerline closes after 1 circuit');
+  ok(Math.abs(Math.hypot(C0[0], C0[2]) - R0) < 1e-6 && Math.abs(C0[1]) < 1e-9, 'spiral starts at throat (r0,0)');
+  var n0 = frameN(0), n1 = frameN(1), n2 = frameN(2);
+  ok(Math.hypot(n1[0] + n0[0], n1[1] + n0[1]) < 1e-9 && Math.abs(n1[2] + n0[2]) < 1e-9,
+     'MÖBIUS: n(s+1) = -n(s) (一圈翻到管道另一侧)');
+  ok(Math.hypot(n2[0] - n0[0], n2[1] - n0[1]) < 1e-9 && Math.abs(n2[2] - n0[2]) < 1e-9,
+     'MÖBIUS: n(s+2) = n(s) (两圈归位)');
+  var eA1 = edgePt(1, 1), eB0 = edgePt(0, -1), eA2 = edgePt(2, 1);
+  ok(Math.hypot(eA1[0] - eB0[0], eA1[1] - eB0[1]) < 1e-9 && Math.abs(eA1[2] - eB0[2]) < 1e-9,
+     'band edges swap: A(1)=B(0)');
+  ok(Math.hypot(eA2[0] - eA1[0] + (eA1[0] - eB0[0]), 0) >= 0 && Math.hypot(eA2[0] - edgePt(0, 1)[0], eA2[1] - edgePt(0, 1)[1]) < 1e-9,
+     'edge A closes after 2 circuits: A(2)=A(0)');
+  ok(Math.abs((spiralTheta(1) - spiralTheta(0)) - NW * TAU) < 1e-9, 'major angle sweeps ' + NW + ' wraps per circuit');
+  ok(Math.abs((spiralPsi(1) - spiralPsi(0)) - TAU) < 1e-9, 'minor angle one profile loop per circuit');
+  var onSurf = true;
+  for(i = 0; i <= 48; i++){
+    var s = i / 48, P = spiralC(s), Q = loopPoint(spiralPsi(s));
+    if(Math.abs(Math.hypot(P[0], P[2]) - Q[0]) > 1e-6 || Math.abs(P[1] - Q[1]) > 1e-6) onSurf = false;
+  }
+  ok(onSurf, 'spiral lies on apple surface ∀s');
+  ok(Math.abs(GA - 2.39996) < 2e-4, 'golden angle 2π/φ² ≈ 137.5°, got ' + GA.toFixed(5));
+  ok(Math.abs(TH0 + GA) < 1e-12, 'spiral starts at golden-angle azimuth');
+
+  /* 6. 12 尺度刻度：外侧 6（黑洞侧）·内侧 6（白洞侧）·喉=尺度 0 */
+  var tickUp = 0, tickLo = 0;
+  for(i = 0; i < 12; i++){
+    var T = spiralC(tickS(i));
+    ok(Math.abs(Math.hypot(T[0], T[2]) - loopPoint(tickS(i) * TAU)[0]) < 1e-6, 'tick ' + i + ' on tube');
+    if(i < 6){ ok(T[1] >= -0.75, 'tick ' + i + ' on black-hole side (h>=0), got ' + T[1].toFixed(2)); tickUp++; }
+    else{ ok(T[1] <= 0.75, 'tick ' + i + ' on white-hole side (h<=0), got ' + T[1].toFixed(2)); tickLo++; }
+  }
+  ok(tickUp === 6 && tickLo === 6, '6 outer + 6 inner scale ticks');
+  var T0 = spiralC(tickS(0));
+  ok(Math.abs(Math.hypot(T0[0], T0[2]) - R0) < 1e-6, 'throat = scale-0 origin (tick 0 at r0)');
+
+  /* 7. 闭环粒子路径可达性（结构自检③） */
+  ok(FLOW.length === FLOW_N && FLOW_N <= 400, 'closed-loop particles ' + FLOW_N + ' ≤ 400');
+  var sim = {ph: 0, t: 0, dur: PH_DUR[0], l0: 1.2, ja: 0.7, jr: 0.6, spread: 0.4,
+             driftV: [0.3, -0.4, 0.2], rnd: mulberry32(42)};
+  var seen = [], allFinite = true, tt;
+  for(tt = 0; tt < 200; tt += 0.05){
+    var pos = flowPos(sim);
+    if(!isFinite(pos[0]) || !isFinite(pos[1]) || !isFinite(pos[2]) || !isFinite(pos[3])) allFinite = false;
+    if(seen[seen.length - 1] !== sim.ph) seen.push(sim.ph);
+    stepParticle(sim, 0.05);
+  }
+  ok(allFinite, 'flow positions finite over 200s simulation');
+  ok(seen.length >= 9 && seen[0] === 0, 'particle cycles through phases (visited ' + seen.join('→') + ')');
+  var cyc = true;
+  for(i = 0; i + 4 < seen.length; i++){
+    if(seen[i] === 0 && seen[i+1] === 1 && seen[i+2] === 2 && seen[i+3] === 3){ }
+  }
+  ok(seen.join(',').indexOf('0,1,2,3') >= 0 && seen.join(',').indexOf('0,1,2,3', 4) >= 0,
+     'full cycle fall→ride→exit→drift repeats (真正闭环)');
+  var fe = fallPos(sim, 1);
+  ok(Math.abs(Math.hypot(fe[0], fe[2]) - R0) < 1e-6 && fe[1] > 0 && fe[1] < 4, 'fall ends at throat (r=r0, just above)');
+  var r0p = ridePos(sim, 0);
+  ok(Math.hypot(r0p[0] - C0[0], r0p[1] - C0[1]) < TUBE_W + 0.1, 'ride starts in tube at throat');
+  var r1p = ridePos(sim, 1);
+  ok(Math.hypot(r1p[0] - C0[0], r1p[1] - C0[1]) < TUBE_W + 0.1, 'ride ends back at throat (closes)');
+  var ex0 = exitPos(sim, 0);
+  ok(Math.abs(Math.hypot(ex0[0], ex0[2]) - R0) < 1e-6 && ex0[1] < 0 && ex0[1] > -4, 'exit starts at throat (below)');
+  ok(fallPos(sim, 0.9)[3] > fallPos(sim, 0.2)[3], 'fall brightens near throat (近喉最亮)');
+  var fr8 = Math.hypot(fallPos(sim, 0.8)[0], fallPos(sim, 0.8)[2]),
+      fr9 = Math.hypot(fallPos(sim, 0.9)[0], fallPos(sim, 0.9)[2]),
+      fr2 = Math.hypot(fallPos(sim, 0.2)[0], fallPos(sim, 0.2)[2]),
+      fr3 = Math.hypot(fallPos(sim, 0.3)[0], fallPos(sim, 0.3)[2]);
+  ok((fr8 - fr9) > (fr2 - fr3), 'fall accelerates inward (Δr late > early)');
+  var er1 = Math.hypot(exitPos(sim, 0.1)[0], exitPos(sim, 0.1)[2]),
+      er2 = Math.hypot(exitPos(sim, 0.2)[0], exitPos(sim, 0.2)[2]),
+      er8 = Math.hypot(exitPos(sim, 0.8)[0], exitPos(sim, 0.8)[2]),
+      er9 = Math.hypot(exitPos(sim, 0.9)[0], exitPos(sim, 0.9)[2]);
+  ok((er2 - er1) > (er9 - er8), 'exit decelerates outward (Δr early > late)');
+  ok(ridePos(sim, 0)[3] === 1 && ridePos(sim, 0.5)[3] === 0.5, 'ride brightness peaks at throat');
+  ok(Math.abs(driftPos(sim, 1)[3]) < 1e-9, 'drift fades to zero (飘散淡去)');
+
+  /* 8. 金弦（三条已证定律） */
+  var wids = {};
+  WORMHOLES.forEach(function(wh){
+    ok(!wids[wh.id], 'unique law ' + wh.id); wids[wh.id] = 1;
+    ok(Number.isInteger(wh.from) && wh.from >= 0 && wh.from <= 11, wh.id + ' from anchored');
+    ok(Number.isInteger(wh.to) && wh.to >= 0 && wh.to <= 11, wh.id + ' to anchored');
+    ok(wh.law && wh.law.length <= 60, wh.id + ' law one sentence');
+    ok(wh.ev && wh.ev.length === 2, wh.id + ' two evidence lines');
+    ok(wh._pts && wh._pts.length === 41, wh.id + ' chord sampled');
+    var A = wh._pts[0], T = spiralC(wh.from / 12);
+    ok(Math.hypot(A[0] - T[0], A[1] - T[1]) < 6, wh.id + ' chord start near tick ' + wh.from);
+    var B = wh._pts[40], T2 = spiralC(wh.to / 12);
+    ok(Math.hypot(B[0] - T2[0], B[1] - T2[1]) < 6, wh.id + ' chord end near tick ' + wh.to);
+  });
+  ok(WORMHOLES.length === 3, 'three law chords');
+  ok(WORMHOLES[0].from === 3 && WORMHOLES[0].to === 7, 'Δr: 细胞→文明');
+  ok(WORMHOLES[1].from === 5 && WORMHOLES[1].to === 10, '爱: 人→星系');
+  ok(WORMHOLES[2].from === 0 && WORMHOLES[2].to === 11, 'Yoneda: 量子→宇宙边界');
+
+  /* 9. 相机 + 翻面 */
+  var cam = makeCam();
+  var pr = camProject([0, 0, 0], cam, 1000, 800);
+  ok(Math.abs(pr[0] - 500) < 1e-6 && Math.abs(pr[1] - 400) < 1e-6, 'origin projects to screen center');
+  var prFront = camProject([0, 0, 300], cam, 1000, 800);
+  ok(prFront[0] === prFront[0] && prFront[2] > 0, 'front point depth positive');
+  ok(Math.abs(muFlip(muFlip(0)) - 0) < 1e-9, 'two Möbius flips restore view');
+  ok(Math.abs(muFlip(0) - Math.PI) < 1e-9, 'one flip = 180°');
+  ok(clampZoom(0.01, 99) === 0.01 * 14, 'zoom ceiling 14×fit');
+  ok(clampZoom(0.01, 1e-6) === 0.01 * 0.5, 'zoom floor 0.5×fit');
+  var camF = makeCam(); camF.mu = Math.PI;
+  var qF = camRot([10, 20, 30], camF), q0v = camRot([10, 20, 30], makeCam());
+  ok(Math.abs(qF[1] + q0v[1]) < 1e-9 || Math.abs(qF[1] - q0v[1]) > 1e-9, 'flip rotates view space');
+  ok(Math.abs(wrapA(Math.PI - 0.2) - (Math.PI - 0.2)) < 1e-9, 'wrapA small');
+  ok(Math.abs(wrapA(3 * Math.PI) - Math.PI) < 1e-9, 'wrapA wraps');
+
+  /* 10. 数据保全（沿用旧版素材）+ 诚实律 + 隐私 */
+  ok(PATTERNS.length === 6, 'six patterns');
+  ok(HUBS.reduce(function(s,h){ return s + h.n; }, 0) === 152, 'leaves sum 152');
+  ok(TTS_GUIDE.length > 60 && TTS_GUIDE.length < 400, 'tts guide length ' + TTS_GUIDE.length);
+  var seed = mulberry32(7)();
+  ok(seed > 0 && seed < 1, 'prng sanity');
+  var dataStr = JSON.stringify(NODES) + JSON.stringify(WORMHOLES) + JSON.stringify(SCALES) + TTS_GUIDE;
+  dataStr = dataStr.replace(new RegExp(BOOK, 'g'), '').replace(/https:..zxx820102-create\.github\.io/g, '');
+  ok(!/https?:\/\/(?!zxx820102-create)/.test(dataStr), 'no external URLs in data');
+  ok(!/fetch\(|XMLHttpRequest|sendBeacon|localStorage\.setItem\('key/.test(JSON.stringify(NODES)), 'no collection calls in node data');
+  ok(CREDO_TEXT.indexOf('METAPHOR') >= 0 && CREDO_TEXT.indexOf('白洞') >= 0 && CREDO_TEXT.indexOf('黑洞') >= 0, 'honesty footnote');
+  ok(CREDO_TEXT.length <= 90, 'credo one line, got ' + CREDO_TEXT.length);
+  ok(ABACUS_GET.indexOf('https://abacus.jasoncameron.dev/get/') === 0, 'badge read-only GET endpoint');
+  ok(ABACUS_GET.indexOf('/hit') < 0 && ABACUS_GET.indexOf('post') < 0, 'badge never writes (只读 GET)');
+  ok(BADGE_POLL_MS === 60000, 'badge polls 60s');
+
+  /* 11. 审美军规 */
+  ok(COLOR_TOKENS.length === 5, 'exactly 5 color tokens');
+  ok(Math.abs(PHI - 1.6180339887) < 1e-9, 'φ precision');
+  ok(WARP_MS === 800, 'Möbius flip 800ms');
+  ok(HOVER_MS === 300, 'hover glow 300ms');
+  ok(Math.abs(gateR(11) / gateR(0) - Math.pow(PHI, 11 / 6)) < 1e-9, 'gate φ-grid radii ratio');
+  ok(gateR(11) < 0.5, 'gate max radius fits viewport');
+
+  console.log((fails === 0 ? 'ALL PASS' : 'FAILED') + ': ' + (n - fails) + '/' + n + ' checks');
+  if(typeof process !== 'undefined' && process.exit) process.exitCode = fails === 0 ? 0 : 1;
+}
+
+if(typeof window === 'undefined'){ selfTests(); return; }
+
+/* ==========================================================
+   浏览器渲染
+   ========================================================== */
+var $ = function(s){ return document.querySelector(s); };
+var cv = $('#sky'), ctx = cv.getContext('2d');
+var REDUCE = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var DPR = Math.min(window.devicePixelRatio || 1, 2);
+var VW = 0, VH = 0, FIT = 1, DIAG = 1;
+var cam = makeCam();
+var YAW0 = -0.55, PITCH0 = 0.5;
+var SERIF = 'Georgia,"Songti SC","Noto Serif SC","Source Han Serif SC",serif';
+var PAL = null;
+
+function proj(p){ return camProject(p, cam, VW, VH); }
+function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
+function lerp(a, b, k){ return a + (b - a) * k; }
+function ease3(k){ return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2; }
+function easeIn3(k){ return k * k * k; }
+function easeOut3(k){ return 1 - Math.pow(1 - k, 3); }
+
+/* 背景星场（黄金角分布·种子确定） */
+var STARS = [];
+(function(){
+  var rnd = mulberry32(20260821), i;
+  for(i = 0; i < 460; i++){
+    STARS.push({a: i * GA + rnd() * 0.5, rf: Math.sqrt(rnd()),
+                sz: rnd() < 0.85 ? (0.6 + rnd() * 0.9) : (1.6 + rnd() * 1.2),
+                ph: rnd() * TAU, tw: 0.4 + rnd() * 1.2, b: 0.25 + rnd() * 0.6});
+  }
+})();
+
+/* ---------- 主题（夜=默认深空·苹果发光） ---------- */
+function pal(){
+  if(PAL) return PAL;
+  var cs = getComputedStyle(document.body);
+  function v(name){ return cs.getPropertyValue('--' + name).trim(); }
+  PAL = {deep: v('deep'), bright: v('bright'), gold: v('gold'), cinnabar: v('cinnabar'), ink: v('ink'),
+         night: !document.body.classList.contains('day')};
+  return PAL;
+}
+function applyDay(on){
+  document.body.classList.toggle('day', on);
+  document.body.classList.toggle('night', !on);
+  var b = $('#btn-night');
+  b.textContent = on ? '夜' : '昼';
+  b.setAttribute('aria-pressed', on ? 'true' : 'false');
+  PAL = null; needsDraw();
+}
+function bindTheme(){
+  var stored = null;
+  try{ stored = localStorage.getItem('xyzp-day'); }catch(e){}
+  applyDay(stored === '1');
+  $('#btn-night').addEventListener('click', function(){
+    var on = !document.body.classList.contains('day');
+    applyDay(on);
+    try{ localStorage.setItem('xyzp-day', on ? '1' : '0'); }catch(e){}
+  });
+}
+
+/* ---------- 朗读导览 ---------- */
+function bindTTS(){
+  var synth = window.speechSynthesis, voice = null;
+  function pickVoice(){
+    if(!synth) return null;
+    var vs = synth.getVoices();
+    if(!vs || !vs.length) return null;
+    var zh = vs.filter(function(v){ return /^zh/i.test(v.lang || ''); });
+    return zh.filter(function(v){ return /zh[-_]cn/i.test(v.lang); })[0] || zh[0] || null;
+  }
+  if(synth && 'SpeechSynthesisUtterance' in window){
+    voice = pickVoice();
+    try{ synth.onvoiceschanged = function(){ voice = pickVoice(); }; }catch(e){}
+    setTimeout(function(){ voice = pickVoice(); }, 600);
+  }
+  $('#btn-tts').addEventListener('click', function(){
+    if(!synth){ showToast('此浏览器不支持语音朗读'); return; }
+    if(synth.speaking){ try{ synth.cancel(); }catch(e){} $('#btn-tts').classList.remove('speaking'); return; }
+    var u = new SpeechSynthesisUtterance(TTS_GUIDE);
+    u.lang = 'zh-CN'; if(voice) u.voice = voice; u.rate = 1;
+    u.onend = function(){ $('#btn-tts').classList.remove('speaking'); };
+    u.onerror = function(){ $('#btn-tts').classList.remove('speaking'); };
+    try{ synth.cancel(); synth.speak(u); $('#btn-tts').classList.add('speaking'); }catch(e){}
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden && synth){ try{ synth.cancel(); }catch(e){} $('#btn-tts').classList.remove('speaking'); }
+  });
+}
+
+/* ---------- 心形徽章（疗愈厅计数·只读轮询） ---------- */
+function bindHeartBadge(){
+  var badge = $('#heart-badge'), num = $('#heart-count');
+  if(!badge || !num || typeof fetch !== 'function') return;
+  function tick(){
+    fetch(ABACUS_GET, {cache: 'no-store'}).then(function(r){
+      if(!r.ok) throw new Error(r.status);
+      return r.json();
+    }).then(function(j){
+      num.textContent = (Number(j.value) || 0).toLocaleString('zh-Hans-CN-u-nu-latn');
+      badge.classList.remove('err');
+    }).catch(function(){
+      badge.classList.add('err');
+    });
+  }
+  tick();
+  setInterval(tick, BADGE_POLL_MS);
+}
+
+/* ---------- 工具 ---------- */
+var showToastTm = null;
+function showToast(msg){
+  var t = $('#toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(showToastTm);
+  showToastTm = setTimeout(function(){ t.classList.remove('show'); }, 3600);
+}
+
+function resize(){
+  VW = window.innerWidth; VH = window.innerHeight;
+  DIAG = Math.hypot(VW, VH);
+  cv.width = Math.round(VW * DPR); cv.height = Math.round(VH * DPR);
+  cv.style.width = VW + 'px'; cv.style.height = VH + 'px';
+  FIT = (Math.min(VW, VH) / 2 - 10) / 165;      /* 取景包住漏斗裙边（r≈150） */
+  cam.zoom = clampZoom(FIT, cam.zoom);
+  layoutGate();
+  needsDraw();
+}
+
+/* ==========================================================
+   绘制
+   ========================================================== */
+var DRAW = true;
+function needsDraw(){ DRAW = true; }
+
+function glowSprite(color){
+  var c = document.createElement('canvas'); c.width = c.height = 48;
+  var g = c.getContext('2d'), gr = g.createRadialGradient(24, 24, 0, 24, 24, 24);
+  gr.addColorStop(0, 'rgba(255,252,240,.95)');
+  gr.addColorStop(0.32, color);
+  gr.addColorStop(1, 'rgba(0,0,0,0)');
+  g.fillStyle = gr; g.beginPath(); g.arc(24, 24, 24, 0, TAU); g.fill();
+  return c;
+}
+var SPRITES = {};
+function sprites(){
+  var P = pal();
+  if(!SPRITES.gold || SPRITES.forNight !== P.night){
+    SPRITES.gold = glowSprite(P.night ? '#D9B46B' : '#B98F45');
+    SPRITES.white = glowSprite('#E8E4D8');
+    SPRITES.forNight = P.night;
+  }
+  return SPRITES;
+}
+
+function drawStars(P, t){
+  var s = sprites(), cx = VW / 2, cy = VH / 2;
+  var R = DIAG * 0.55;
+  var rot = cam.yaw * 0.22 + cam.mu * 0.1;
+  for(var i = 0; i < STARS.length; i++){
+    var st = STARS[i], a = st.a + rot;
+    var x = cx + Math.cos(a) * st.rf * R, y = cy + Math.sin(a) * st.rf * R;
+    if(x < -8 || x > VW + 8 || y < -8 || y > VH + 8) continue;
+    var tw = REDUCE ? 0.7 : 0.55 + 0.45 * Math.sin(t / 1000 * st.tw + st.ph);
+    var alpha = st.b * tw * (P.night ? 1 : 0.26);
+    var sz = st.sz * (P.night ? 3.6 : 2.2);
+    ctx.globalAlpha = alpha;
+    ctx.drawImage(s.white, x - sz, y - sz, sz * 2, sz * 2);
+  }
+  ctx.globalAlpha = 1;
+}
+
+/* 深空苹果辉光（夜） */
+function drawAppleBloom(P){
+  if(!P.night) return;
+  var c = proj([0, 0, 0]);
+  var R = cam.zoom * 175;
+  var g = ctx.createRadialGradient(c[0], c[1], 0, c[0], c[1], R);
+  g.addColorStop(0, 'rgba(217,180,107,.085)');
+  g.addColorStop(0.5, 'rgba(217,180,107,.035)');
+  g.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g;
+  ctx.beginPath(); ctx.arc(c[0], c[1], R, 0, TAU); ctx.fill();
+}
+
+/* —— 通用折线绘制：按前后景分段换透明度（教科书线框深度感） —— */
+function strokeRuns2(pts, color, aNear, aFar, width){
+  var curNear = null, buf = [];
+  function flush(){
+    if(buf.length > 1){
+      ctx.beginPath();
+      ctx.moveTo(buf[0][0], buf[0][1]);
+      for(var q = 1; q < buf.length; q++) ctx.lineTo(buf[q][0], buf[q][1]);
+      ctx.lineWidth = width;
+      ctx.strokeStyle = color;
+      ctx.globalAlpha = curNear ? aNear : aFar;
+      ctx.stroke();
+    }
+    buf = [];
+  }
+  for(var k = 0; k < pts.length; k++){
+    var near = pts[k][2] >= 0;
+    if(curNear === null) curNear = near;
+    if(near !== curNear){ flush(); curNear = near; }
+    buf.push(pts[k]);
+  }
+  flush();
+  ctx.globalAlpha = 1;
+}
+
+/* 圆环（等高线·纬线） */
+function ringPts(r, h, seg){
+  var pts = [];
+  for(var k = 0; k <= seg; k++){
+    var a = k / seg * TAU;
+    pts.push(proj([r * Math.cos(a), h, r * Math.sin(a)]));
+  }
+  return pts;
+}
+
+/* —— 苹果表面：经纬等高线（教科书嵌入图风格） —— */
+var RINGS_UP = [36, 38.5, 41.5, 45, 49, 54, 60, 68, 78, 88, 96];
+var RINGS_UP_APRON = [106, 118, 133];
+var RINGS_LO = [40, 48, 60, 76, 92];
+var RINGS_LO_APRON = [104, 122];
+var BELLY_B = [Math.PI / 3, Math.PI / 2, 2 * Math.PI / 3];
+
+function drawContours(P, t){
+  var night = P.night;
+  var latC = night ? P.bright : P.ink;
+  var i, pts;
+  /* 上叶纬线：密（黑洞压缩感） */
+  for(i = 0; i < RINGS_UP.length; i++){
+    pts = ringPts(RINGS_UP[i], hUp(RINGS_UP[i]), 44);
+    strokeRuns2(pts, latC, 0.30 * (1.15 - i / RINGS_UP.length * 0.5), 0.10, 1);
+  }
+  /* 上叶裙边（远处平坦的嵌入图张角） */
+  for(i = 0; i < RINGS_UP_APRON.length; i++){
+    pts = ringPts(RINGS_UP_APRON[i], hUp(RINGS_UP_APRON[i]), 44);
+    strokeRuns2(pts, latC, 0.14, 0.05, 1);
+  }
+  /* 腹部纬线（苹果身） */
+  for(i = 0; i < BELLY_B.length; i++){
+    var b = BELLY_B[i];
+    pts = ringPts(RMAX + BULGE * Math.sin(b), hUp(RMAX) * Math.cos(b), 44);
+    strokeRuns2(pts, i === 1 ? P.gold : latC, i === 1 ? 0.34 : 0.20, i === 1 ? 0.12 : 0.07, i === 1 ? 1.4 : 1);
+  }
+  /* 下叶纬线：疏 */
+  for(i = 0; i < RINGS_LO.length; i++){
+    pts = ringPts(RINGS_LO[i], hLo(RINGS_LO[i]), 44);
+    strokeRuns2(pts, latC, 0.20, 0.07, 1);
+  }
+  for(i = 0; i < RINGS_LO_APRON.length; i++){
+    pts = ringPts(RINGS_LO_APRON[i], hLo(RINGS_LO_APRON[i]), 44);
+    strokeRuns2(pts, latC, 0.11, 0.04, 1);
+  }
+  /* 上叶经线：8 条·极淡（引导坠入） */
+  for(i = 0; i < 8; i++){
+    var lam = i * TAU / 8 + 0.3;
+    pts = [];
+    for(var k = 0; k <= 22; k++){
+      var r = R0 + (RMAX - R0) * k / 22;
+      pts.push(proj([r * Math.cos(lam), hUp(r) + 0.4, r * Math.sin(lam)]));
+    }
+    strokeRuns2(pts, latC, 0.12, 0.05, 1);
+  }
+  /* 下叶经线：12 条放射（白洞喷发感·亮度前沿向外走） */
+  var speed = REDUCE ? 0 : t / 2600;
+  for(i = 0; i < 12; i++){
+    var lam2 = i * TAU / 12;
+    var front = ((speed * 0.22 + i * 0.37) % 1);
+    var rf = R0 + (REX - R0) * front;
+    for(var segI = 0; segI < 10; segI++){
+      var rA = R0 + (REX - R0) * segI / 10, rB = R0 + (REX - R0) * (segI + 1) / 10;
+      var pulse = Math.exp(-Math.pow(((rA + rB) / 2 - rf) / 22, 2));
+      pts = [];
+      for(var k2 = 0; k2 <= 3; k2++){
+        var rr2 = rA + (rB - rA) * k2 / 3;
+        pts.push(proj([rr2 * Math.cos(lam2), hLo(rr2) * 1.03 - 0.6, rr2 * Math.sin(lam2)]));
+      }
+      strokeRuns2(pts, P.gold, 0.10 + 0.38 * pulse * (night ? 1 : 0.7), 0.04 + 0.10 * pulse, 1);
+    }
+  }
+}
+
+/* —— 金弦（已证定律） —— */
+function drawChords(P){
+  WORMHOLES.forEach(function(wh){
+    var hov = HOVER && HOVER.type === 'chord' && HOVER.wh === wh;
+    var pts = [];
+    for(var k = 0; k < wh._pts.length; k++) pts.push(proj(wh._pts[k]));
+    ctx.setLineDash([5, 6]);
+    strokeRuns2(pts, P.gold, hov ? 0.9 : 0.4, hov ? 0.4 : 0.15, hov ? 2.2 : 1.4);
+    ctx.setLineDash([]);
+    var mid = pts[20];
+    if(mid && mid[0] > -80 && mid[0] < VW + 80 && mid[1] > -40 && mid[1] < VH + 40){
+      ctx.font = '700 12px ' + SERIF;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.globalAlpha = hov ? 1 : 0.78;
+      ctx.strokeStyle = P.night ? P.deep : P.bright; ctx.lineWidth = 3.4;
+      ctx.strokeText(wh.name, mid[0], mid[1] - 13);
+      ctx.fillStyle = P.gold;
+      ctx.fillText(wh.name, mid[0], mid[1] - 13);
+      ctx.globalAlpha = 1;
+    }
+  });
+}
+
+/* —— 虫洞喉（最窄圆·点击翻面） —— */
+var TH_GLOW = 0;
+function drawThroat(P, t, sec){
+  var c = proj([0, 0, 0]);
+  var zoom = cam.zoom;
+  var hov = HOVER && HOVER.type === 'throat';
+  TH_GLOW += ((hov ? 1 : 0) - TH_GLOW) * (REDUCE ? 1 : 0.11);
+  var night = P.night;
+  /* 喉内暗盘（洞的深度） */
+  var R = R0 * zoom;
+  if(R > 3 && c[0] > -200 && c[0] < VW + 200 && c[1] > -200 && c[1] < VH + 200){
+    var g = ctx.createRadialGradient(c[0], c[1], R * 0.1, c[0], c[1], R * 1.02);
+    g.addColorStop(0, '#000000');
+    g.addColorStop(0.75, night ? 'rgba(0,0,0,.72)' : 'rgba(20,16,8,.5)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(c[0], c[1], R * 1.02, 0, TAU); ctx.fill();
+    /* 喉圈：最窄圆 r0 */
+    var pts = ringPts(R0, 0, 56);
+    if(night){ ctx.shadowBlur = 10 + 14 * TH_GLOW; ctx.shadowColor = P.gold; }
+    strokeRuns2(pts, P.gold, 0.85 + 0.15 * TH_GLOW, 0.3, 2.4 + TH_GLOW * 1.2);
+    ctx.shadowBlur = 0;
+    /* 标签 */
+    if(zoom / FIT < 3.2 && R > 18){
+      ctx.font = '600 11px ' + SERIF;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.strokeStyle = night ? P.deep : P.bright; ctx.lineWidth = 3;
+      ctx.strokeText('虫 洞 喉 r₀ · 点 击 翻 面', c[0], c[1] + R * 1.3);
+      ctx.fillStyle = P.gold;
+      ctx.fillText('虫 洞 喉 r₀ · 点 击 翻 面', c[0], c[1] + R * 1.3);
+    }
+  }
+}
+
+/* —— 环面黄金螺线管（莫比乌斯带·两圈归位） —— */
+function drawSpiral(P){
+  var night = P.night;
+  var i;
+  /* 带边 A/B（各画两圈：A(2)=A(0) 才闭合——莫比乌斯可视） */
+  for(var signI = 0; signI < 2; signI++){
+    var sign = signI === 0 ? 1 : -1;
+    for(var half = 0; half < 4; half++){
+      var pts = [];
+      for(var k = 0; k <= 260; k++){
+        var s = (half * 0.5 + k / 260 * 0.5);
+        pts.push(proj(edgePt(s, sign)));
+      }
+      var upper = (half % 2) === 0;   /* s∈[0,.5)∪[1,1.5)=黑洞侧 */
+      strokeRuns2(pts, P.gold,
+                  upper ? 0.82 : 0.46,
+                  upper ? 0.30 : 0.15, 1.5);
+    }
+  }
+  /* 中心线（一圈闭合） */
+  for(i = 0; i < 2; i++){
+    var pts2 = [];
+    for(var k2 = 0; k2 <= 300; k2++){
+      var s2 = i * 0.5 + k2 / 300 * 0.5;
+      pts2.push(proj(spiralC(s2)));
+    }
+    strokeRuns2(pts2, night ? P.bright : P.ink, i === 0 ? 0.65 : 0.38, i === 0 ? 0.24 : 0.13, 1);
+  }
+  /* 12 尺度刻度（外侧 6·内侧 6·喉=尺度 0） */
+  for(i = 0; i < 12; i++){
+    var s3 = tickS(i);
+    var C = spiralC(s3), n3 = frameN(s3);
+    var A = proj([C[0] - 5.5 * n3[0], C[1] - 5.5 * n3[1], C[2] - 5.5 * n3[2]]);
+    var B = proj([C[0] + 5.5 * n3[0], C[1] + 5.5 * n3[1], C[2] + 5.5 * n3[2]]);
+    ctx.beginPath();
+    ctx.moveTo(A[0], A[1]); ctx.lineTo(B[0], B[1]);
+    ctx.lineWidth = i === 5 ? 2.2 : 1.6;
+    ctx.strokeStyle = i === 5 ? P.gold : P.bright;
+    ctx.globalAlpha = 0.5 + 0.4 * (i === 5 ? 1 : 0.5);
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* 刻度标签（全览仪器态） */
+function drawTickLabels(P){
+  if(cam.zoom / FIT >= 2.8) return;
+  var i;
+  for(i = 0; i < 12; i++){
+    var p = proj(spiralC(tickS(i)));
+    if(p[0] < -60 || p[0] > VW + 60 || p[1] < -30 || p[1] > VH + 30) continue;
+    var you = i === 5;
+    ctx.font = (you ? '700 ' : '600 ') + (you ? 12.5 : 11) + 'px ' + SERIF;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.globalAlpha = p[2] >= 0 ? 0.9 : 0.45;
+    ctx.strokeStyle = P.night ? P.deep : P.bright; ctx.lineWidth = 3;
+    ctx.strokeText(SCALES[i].name, p[0] + 9, p[1] + (i % 2 ? 11 : -11));
+    ctx.fillStyle = you ? P.gold : (P.night ? P.bright : P.ink);
+    ctx.fillText(SCALES[i].name, p[0] + 9, p[1] + (i % 2 ? 11 : -11));
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* —— 闭环粒子流（单池四相） —— */
+function drawFlow(P, t){
+  var sp = sprites(), sec = REDUCE ? 0 : t / 1000;
+  var night = P.night;
+  if(night) ctx.globalCompositeOperation = 'lighter';
+  for(var i = 0; i < FLOW_N; i++){
+    var p = FLOW[i];
+    if(!REDUCE) stepParticle(p, 1 / 60);
+    var pos = flowPos(p);
+    var fade = 1;
+    if(p.ph === 0) fade = Math.min(1, p.t / 0.06);
+    if(p.ph === 3) fade = 1;
+    var scr = proj([pos[0], pos[1], pos[2]]);
+    if(scr[0] < -10 || scr[0] > VW + 10 || scr[1] < -10 || scr[1] > VH + 10) continue;
+    var depthK = scr[2] >= 0 ? 1 : 0.55;
+    var sz = p.sz * clamp(cam.zoom * 0.8, 0.8, 3.4);
+    ctx.globalAlpha = clamp(p.al * pos[3] * fade * depthK * (night ? 1 : 0.55), 0, 1);
+    ctx.drawImage(sp.gold, scr[0] - sz, scr[1] - sz, sz * 2, sz * 2);
+  }
+  ctx.globalCompositeOperation = 'source-over';
+  ctx.globalAlpha = 1;
+}
+
+/* 节点被经过时发亮（ride 相粒子扫过管上节点） */
+function updateVisits(){
+  NODES.forEach(function(nd){ nd._v = (nd._v || 0) * 0.965; });
+  if(REDUCE) return;
+  for(var i = 0; i < FLOW_N; i++){
+    var p = FLOW[i];
+    if(p.ph !== 1) continue;
+    for(var j = 0; j < NODES.length; j++){
+      var nd = NODES[j];
+      var d = Math.abs(p.t - nd._s);
+      d = Math.min(d, 1 - d);
+      if(d < 0.02 && nd._v < 1 - d / 0.02) nd._v = 1 - d / 0.02;
+    }
+  }
+}
+
+/* 版本链细枝（谱系=文明尺度的珠串·沿管） */
+function drawChain(P){
+  var chain = NODES.filter(function(nd){ return nd.chain != null; }).sort(function(a,b){ return a.chain - b.chain; });
+  if(chain.length < 2) return;
+  ctx.beginPath();
+  var started = false;
+  chain.forEach(function(nd){
+    var p = proj(nd._p3);
+    if(started) ctx.lineTo(p[0], p[1]); else { ctx.moveTo(p[0], p[1]); started = true; }
+  });
+  ctx.strokeStyle = P.bright; ctx.globalAlpha = 0.32; ctx.lineWidth = 1;
+  ctx.setLineDash([2, 5]); ctx.stroke(); ctx.setLineDash([]);
+  ctx.globalAlpha = 1;
+}
+
+/* 节点微缩装饰（沿用） */
+function drawDeco(P, nd, p, t){
+  var night = P.night, i;
+  if(nd.deco === 'glow'){
+    var g = ctx.createRadialGradient(p[0], p[1], 0, p[0], p[1], 84);
+    g.addColorStop(0, P.gold);
+    g.addColorStop(0.4, 'rgba(217,180,107,.4)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.globalAlpha = night ? 0.5 : 0.3;
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(p[0], p[1], 84, 0, TAU); ctx.fill();
+    ctx.globalAlpha = 1;
+  }else if(nd.deco === 'neural'){
+    var soma = [], k;
+    for(k = 0; k < 6; k++){
+      var a = k * GA + (REDUCE ? 0 : t / 9000);
+      soma.push([p[0] + Math.cos(a) * 24, p[1] + Math.sin(a) * 24]);
+    }
+    ctx.strokeStyle = P.bright; ctx.globalAlpha = 0.4; ctx.lineWidth = 1;
+    ctx.beginPath();
+    for(k = 0; k < 6; k++){
+      ctx.moveTo(p[0], p[1]); ctx.lineTo(soma[k][0], soma[k][1]);
+      ctx.moveTo(soma[k][0], soma[k][1]); ctx.lineTo(soma[(k + 1) % 6][0], soma[(k + 1) % 6][1]);
+    }
+    ctx.stroke();
+    for(k = 0; k < 6; k++){
+      var tw = REDUCE ? 0.6 : 0.4 + 0.6 * Math.sin(t / 700 + k * 1.7);
+      ctx.globalAlpha = 0.35 + 0.55 * tw;
+      ctx.beginPath(); ctx.arc(soma[k][0], soma[k][1], 2.4, 0, TAU);
+      ctx.fillStyle = k % 3 === 0 ? P.gold : P.bright;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }else if(nd.deco === 'hex'){
+    for(i = 0; i < 6; i++){
+      var a2 = i * TAU / 6 + (REDUCE ? 0 : t / 14000);
+      ctx.beginPath();
+      ctx.arc(p[0] + Math.cos(a2) * 15, p[1] + Math.sin(a2) * 15, 2, 0, TAU);
+      ctx.fillStyle = P.gold; ctx.globalAlpha = 0.75;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    ctx.beginPath(); ctx.arc(p[0], p[1], 15, 0, TAU);
+    ctx.strokeStyle = P.gold; ctx.globalAlpha = 0.3; ctx.lineWidth = 1; ctx.setLineDash([2, 4]);
+    ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }else if(nd.deco === 'seeds'){
+    var hubs = [];
+    for(i = 0; i < 3; i++){
+      var a3 = -Math.PI / 2 + i * TAU / 3;
+      hubs.push([p[0] + Math.cos(a3) * 14, p[1] + Math.sin(a3) * 14]);
+    }
+    ctx.strokeStyle = P.bright; ctx.globalAlpha = 0.35; ctx.lineWidth = 1;
+    ctx.beginPath();
+    hubs.forEach(function(h, k){ k === 0 ? ctx.moveTo(h[0], h[1]) : ctx.lineTo(h[0], h[1]); });
+    ctx.closePath(); ctx.stroke();
+    var rnd = mulberry32(152);
+    for(i = 0; i < 14; i++){
+      var a4 = rnd() * TAU, r4 = 18 + rnd() * 12;
+      ctx.beginPath();
+      ctx.arc(p[0] + Math.cos(a4) * r4, p[1] + Math.sin(a4) * r4, 1.1, 0, TAU);
+      ctx.fillStyle = P.gold; ctx.globalAlpha = 0.7; ctx.fill();
+    }
+    hubs.forEach(function(h){
+      ctx.beginPath(); ctx.arc(h[0], h[1], 3, 0, TAU);
+      ctx.fillStyle = P.gold; ctx.globalAlpha = 0.9; ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+  }
+}
+
+/* ---------- 节点=管上的活星（呼吸·悬停 300ms 吸亮·被粒子经过发亮） ---------- */
+function tierOf(nd){
+  if(nd.primary) return 0;
+  if(nd.status === 'active') return 1;
+  if(nd.status === 'past') return 2;
+  return 3;
+}
+function drawNodes(P, t){
+  var sp = sprites();
+  NODES.forEach(function(nd){
+    var scr = proj(nd._p3);
+    nd._sx = scr[0]; nd._sy = scr[1]; nd._depth = scr[2];
+    if(scr[0] < -140 || scr[0] > VW + 140 || scr[1] < -140 || scr[1] > VH + 140){ nd._h = 0; return; }
+    var hov = HOVER && HOVER.type === 'node' && HOVER.nd === nd;
+    var sel = PANEL_ND === nd;
+    var tgtH = (hov || sel) ? 1 : 0;
+    nd._h = (nd._h || 0) + (tgtH - (nd._h || 0)) * (REDUCE ? 1 : 0.14);
+    var h = nd._h;
+    var v = nd._v || 0;
+    drawDeco(P, nd, scr, t);
+    var br = REDUCE ? 0 : Math.sin(t / 1000 * 1.1 + nd._s * 40);
+    var base = nd.primary ? 8 : (nd.kid ? 4.6 : (nd.status === 'future' ? 4 : 6));
+    var r = base * (1 + 0.06 * br) * (1 + 0.55 * h + 0.3 * v);
+    var op = (nd.op || 1) * (0.82 + 0.12 * br + 0.18 * v);
+    if(h > 0.03 || v > 0.03){
+      ctx.globalAlpha = clamp(0.5 * h + 0.45 * v, 0, 1);
+      ctx.drawImage(sp.gold, scr[0] - r * 3.4, scr[1] - r * 3.4, r * 6.8, r * 6.8);
+      ctx.globalAlpha = 1;
+    }
+    if(nd.status === 'future'){
+      ctx.beginPath(); ctx.arc(scr[0], scr[1], r, 0, TAU);
+      ctx.setLineDash([2.5, 2.5]);
+      ctx.strokeStyle = h > 0.3 ? P.gold : P.bright;
+      ctx.lineWidth = 1.5; ctx.globalAlpha = 0.9 * op;
+      ctx.stroke(); ctx.setLineDash([]);
+    }else{
+      if(nd.primary || h > 0.25 || v > 0.2){
+        ctx.globalAlpha = clamp((nd.primary ? 0.8 : 0.6 * Math.max(h, v)) * op, 0, 1);
+        ctx.drawImage(sp.gold, scr[0] - r * 2.6, scr[1] - r * 2.6, r * 5.2, r * 5.2);
+      }
+      ctx.beginPath(); ctx.arc(scr[0], scr[1], r, 0, TAU);
+      ctx.fillStyle = nd.status === 'active' ? P.gold : (P.night ? 'rgba(10,14,26,.9)' : 'rgba(250,246,236,.9)');
+      ctx.strokeStyle = nd.status === 'active' ? P.gold : P.bright;
+      ctx.lineWidth = 1.8; ctx.globalAlpha = op;
+      ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(scr[0], scr[1], r * 0.32, 0, TAU);
+      ctx.fillStyle = P.night ? P.deep : P.bright;
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    /* 标签 */
+    var a = [1, 0.92, 0.8, 0.74][tierOf(nd)];
+    if(nd._depth < 0) a *= 0.5;
+    if(h > 0.05) a = Math.max(a, h);
+    if(a < 0.06) return;
+    var fs = nd.primary ? 13.5 : (nd.kid ? 11 : 12);
+    ctx.font = (nd.primary ? '700 ' : '600 ') + fs + 'px ' + SERIF;
+    ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+    ctx.globalAlpha = a;
+    ctx.strokeStyle = P.night ? P.deep : P.bright; ctx.lineWidth = 3.2;
+    ctx.strokeText(nd.name, scr[0] + r + 7, scr[1] + (nd._lab || 0));
+    ctx.fillStyle = (nd.primary || hov || sel) ? P.gold : (P.night ? P.bright : P.ink);
+    ctx.fillText(nd.name, scr[0] + r + 7, scr[1] + (nd._lab || 0));
+    ctx.globalAlpha = 1;
+  });
+}
+
+/* 你在这 · 人尺度（刻度 5·黑洞侧腹部）· 1Hz 呼吸 */
+function drawYouMarker(P, t){
+  var p = proj(spiralC(tickS(5)));
+  if(p[0] < -60 || p[0] > VW + 60 || p[1] < -60 || p[1] > VH + 60) return;
+  var br = REDUCE ? 0 : Math.sin(t / 1000 * TAU);
+  var sp = sprites();
+  ctx.globalAlpha = 0.55 + 0.3 * br;
+  ctx.drawImage(sp.gold, p[0] - 26, p[1] - 26, 52, 52);
+  ctx.globalAlpha = 1;
+  ctx.beginPath(); ctx.arc(p[0], p[1], 6 + 1.8 * br, 0, TAU);
+  ctx.strokeStyle = P.gold; ctx.lineWidth = 2; ctx.stroke();
+  ctx.beginPath(); ctx.arc(p[0], p[1], 10.5 - 1.2 * br, 0, TAU);
+  ctx.strokeStyle = P.gold; ctx.lineWidth = 1; ctx.globalAlpha = 0.55; ctx.stroke();
+  ctx.globalAlpha = 1;
+  ctx.font = '700 12.5px ' + SERIF;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+  ctx.strokeStyle = P.night ? P.deep : P.bright; ctx.lineWidth = 3;
+  ctx.strokeText('你在这', p[0] + 15, p[1] - 14);
+  ctx.fillStyle = P.gold;
+  ctx.fillText('你在这', p[0] + 15, p[1] - 14);
+}
+
+function render(t){
+  var P = pal();
+  ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  ctx.clearRect(0, 0, VW, VH);
+  drawStars(P, t);
+  drawAppleBloom(P);
+  drawContours(P, t);
+  drawChords(P);
+  drawThroat(P, t, t / 1000);
+  drawSpiral(P);
+  drawTickLabels(P);
+  drawChain(P);
+  updateVisits();
+  drawFlow(P, t);
+  drawNodes(P, t);
+  drawYouMarker(P, t);
+  positionPanel();
+}
+
+/* ==========================================================
+   交互
+   ========================================================== */
+var HOVER = null, PANEL_ND = null, LAW = null, FLY = null, FLIP = null;
+var pointers = new Map();
+var dragMoved = 0, dragT0 = 0, yawV = 0, pitchV = 0, lastMoveT = 0, inertiaOn = false;
+var pinch0 = null;
+
+function panelOpen(){ return PANEL_ND != null; }
+function lawOpen(){ return LAW != null; }
+function gateOpen(){ return !$('#gate').hidden; }
+function busy(){ return !!FLIP; }
+
+function hitNode(sx, sy){
+  var best = null, bd = 1e9;
+  NODES.forEach(function(nd){
+    if(nd._sx === undefined) return;
+    var base = nd.primary ? 8 : (nd.kid ? 4.6 : (nd.status === 'future' ? 4 : 6));
+    var r = base * 1.3 + 9;
+    var d = Math.hypot(nd._sx - sx, nd._sy - sy);
+    if(d < r && d < bd){ bd = d; best = nd; }
+  });
+  return best;
+}
+function hitThroat(sx, sy){
+  var c = proj([0, 0, 0]);
+  var R = Math.max(24, R0 * cam.zoom * 1.1);
+  return Math.hypot(c[0] - sx, c[1] - sy) <= R;
+}
+function hitChord(sx, sy){
+  for(var i = 0; i < WORMHOLES.length; i++){
+    var wh = WORMHOLES[i], best = 1e9;
+    for(var k = 0; k < wh._pts.length; k += 2){
+      var p = proj(wh._pts[k]);
+      best = Math.min(best, Math.hypot(p[0] - sx, p[1] - sy));
+    }
+    if(best <= 12) return wh;
+  }
+  return null;
+}
+function hitLowerFunnel(sx, sy){
+  var c = proj([0, -H_FLAT * 0.82, 0]);
+  var R = Math.max(36, RBELLY * cam.zoom * 0.55);
+  return Math.hypot(c[0] - sx, c[1] - sy) <= R;
+}
+function probe(sx, sy){
+  var nd = hitNode(sx, sy);
+  if(nd) return {type: 'node', nd: nd};
+  if(hitThroat(sx, sy)) return {type: 'throat'};
+  var wh = hitChord(sx, sy);
+  if(wh) return {type: 'chord', wh: wh};
+  if(hitLowerFunnel(sx, sy)) return {type: 'funnel'};
+  return null;
+}
+
+cv.addEventListener('pointerdown', function(e){
+  if(busy()) return;
+  cv.setPointerCapture && cv.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
+  dismissHint();
+  if(pointers.size === 1){
+    dragMoved = 0; dragT0 = performance.now();
+    lastMoveT = dragT0; yawV = 0; pitchV = 0; inertiaOn = false;
+    cv.classList.add('grabbing');
+  }else if(pointers.size === 2){
+    var ps = Array.from(pointers.values());
+    pinch0 = {
+      d: Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y),
+      zoom: cam.zoom, pitch: cam.pitch
+    };
+  }
+  FLY = null;
+  needsDraw();
+});
+
+cv.addEventListener('pointermove', function(e){
+  if(pointers.has(e.pointerId)) pointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
+  if(pointers.size === 1 && pointers.has(e.pointerId)){
+    var prev = pointers.get(e.pointerId);
+    var dx = e.clientX - prev.x, dy = e.clientY - prev.y;
+    pointers.set(e.pointerId, {x: e.clientX, y: e.clientY});
+    dragMoved += Math.hypot(dx, dy);
+    cam.yaw += dx * 0.006;
+    cam.pitch = clamp(cam.pitch + dy * 0.005, -1.25, 1.25);
+    var now = performance.now(), dt = Math.max(1, now - lastMoveT);
+    if(dt < 120){ yawV = dx * 0.006 / dt * 1000; pitchV = dy * 0.005 / dt * 1000; }
+    lastMoveT = now;
+    needsDraw();
+  }else if(pointers.size === 2 && pinch0){
+    var ps = Array.from(pointers.values());
+    var d2 = Math.hypot(ps[0].x - ps[1].x, ps[0].y - ps[1].y);
+    cam.zoom = clampZoom(FIT, pinch0.zoom * (d2 / Math.max(20, pinch0.d)));
+    dragMoved = 99;
+    needsDraw();
+  }else if(pointers.size === 0){
+    var h = probe(e.clientX, e.clientY);
+    if(!HOVER || !!h !== !!HOVER || (h && HOVER && (h.type !== HOVER.type || h.nd !== HOVER.nd || h.wh !== HOVER.wh))) needsDraw();
+    HOVER = h;
+    cv.classList.toggle('point', !!h);
+  }
+});
+
+function endPointer(e){
+  pointers.delete(e.pointerId);
+  if(pointers.size < 2) pinch0 = null;
+  if(pointers.size === 0){
+    cv.classList.remove('grabbing');
+    var dt = performance.now() - dragT0;
+    if(dragMoved < 7 && dt < 500){
+      var h = probe(e.clientX, e.clientY);
+      if(h && h.type === 'node') warpToNode(h.nd);
+      else if(h && h.type === 'throat') startFlip();
+      else if(h && h.type === 'chord') activate(h.wh);
+      else if(h && h.type === 'funnel') ejectionView();
+      else closeAll();
+    }else if(!REDUCE && (Math.abs(yawV) > 0.15 || Math.abs(pitchV) > 0.1)){
+      inertiaOn = true;
+    }
+  }
+  needsDraw();
+}
+cv.addEventListener('pointerup', endPointer);
+cv.addEventListener('pointercancel', endPointer);
+cv.addEventListener('pointerleave', function(){ if(pointers.size === 0){ HOVER = null; cv.classList.remove('point'); needsDraw(); } });
+
+cv.addEventListener('wheel', function(e){
+  if(busy()) return;
+  e.preventDefault();
+  dismissHint();
+  FLY = null;
+  var d = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+  if(e.deltaMode === 1) d *= 16;
+  cam.zoom = clampZoom(FIT, cam.zoom * Math.exp(-clamp(d, -240, 240) * 0.0016));
+  needsDraw();
+}, {passive: false});
+
+window.addEventListener('keydown', function(e){
+  var tag = e.target && e.target.tagName;
+  if(tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+  if(tag === 'A' || tag === 'BUTTON'){
+    if(e.key !== 'Escape') return;
+  }
+  if(e.key === 'Home' || e.key === 'h' || e.key === 'H'){ goHome(); e.preventDefault(); }
+  else if(e.key === 'Escape'){ if(gateOpen()) closeGate(); else closeAll(); }
+  else if(e.key === 'g' || e.key === 'G'){ if(!gateOpen()) openGate(); }
+  else if(e.key === 'f' || e.key === 'F'){ if(!busy()) startFlip(); }
+  else if(e.key === '+' || e.key === '='){ cam.zoom = clampZoom(FIT, cam.zoom * 1.25); needsDraw(); e.preventDefault(); }
+  else if(e.key === '-' || e.key === '_'){ cam.zoom = clampZoom(FIT, cam.zoom / 1.25); needsDraw(); e.preventDefault(); }
+  else if(e.key === 'ArrowLeft'){ cam.yaw -= 0.12; needsDraw(); e.preventDefault(); }
+  else if(e.key === 'ArrowRight'){ cam.yaw += 0.12; needsDraw(); e.preventDefault(); }
+  else if(e.key === 'ArrowUp'){ cam.pitch = clamp(cam.pitch + 0.1, -1.25, 1.25); needsDraw(); e.preventDefault(); }
+  else if(e.key === 'ArrowDown'){ cam.pitch = clamp(cam.pitch - 0.1, -1.25, 1.25); needsDraw(); e.preventDefault(); }
+});
+
+/* ---------- 视角飞行 ---------- */
+function flyTo(target, dur){
+  var to = {
+    yaw: target.yaw != null ? target.yaw : cam.yaw,
+    pitch: target.pitch != null ? clamp(target.pitch, -1.25, 1.25) : cam.pitch,
+    zoom: clampZoom(FIT, target.zoom != null ? target.zoom : cam.zoom),
+    cen: target.cen || cam.cen
+  };
+  if(REDUCE){
+    cam.yaw = to.yaw; cam.pitch = to.pitch; cam.zoom = to.zoom; cam.cen = to.cen;
+    needsDraw(); return;
+  }
+  FLY = {t0: performance.now(), dur: dur || 950,
+         from: {yaw: cam.yaw, pitch: cam.pitch, zoom: cam.zoom, cen: cam.cen},
+         to: to, dYaw: wrapA(to.yaw - cam.yaw), dPitch: to.pitch - cam.pitch};
+  needsDraw();
+}
+function stepFly(t){
+  if(!FLY) return;
+  var k = clamp((t - FLY.t0) / FLY.dur, 0, 1);
+  var e = ease3(k);
+  cam.yaw = FLY.from.yaw + FLY.dYaw * e;
+  cam.pitch = FLY.from.pitch + FLY.dPitch * e;
+  cam.zoom = lerp(FLY.from.zoom, FLY.to.zoom, e);
+  cam.cen = [lerp(FLY.from.cen[0], FLY.to.cen[0], e),
+             lerp(FLY.from.cen[1], FLY.to.cen[1], e),
+             lerp(FLY.from.cen[2], FLY.to.cen[2], e)];
+  if(k >= 1){ cam.zoom = FLY.to.zoom; FLY = null; }
+}
+function goHome(){ if(!gateOpen()) flyTo({yaw: YAW0, pitch: PITCH0, zoom: FIT, cen: [0, 0, 0]}, 850); }
+
+/* ---------- 莫比乌斯翻面（800ms·沿轴 180°·内外互换） ---------- */
+function startFlip(){
+  closeAll();
+  var warpEl = $('#warp');
+  if(REDUCE){
+    cam.mu = muFlip(cam.mu);
+    warpEl.style.transition = 'opacity .18s ease';
+    warpEl.style.opacity = '0.5';
+    setTimeout(function(){ warpEl.style.opacity = '0'; }, 190);
+    showToast('莫比乌斯翻面 · 内外侧互换——同一座桥，另一侧的你');
+    needsDraw();
+    return;
+  }
+  FLIP = {t0: performance.now(), from: cam.mu, to: cam.mu + Math.PI};
+  warpEl.style.transition = 'none';
+  needsDraw();
+}
+function stepFlip(t){
+  if(!FLIP) return;
+  var warpEl = $('#warp');
+  var k = clamp((t - FLIP.t0) / WARP_MS, 0, 1);
+  /* 前半加速旋入·后半减速绽开 */
+  if(k < 0.5) cam.mu = FLIP.from + Math.PI * 0.5 * easeIn3(k / 0.5);
+  else cam.mu = FLIP.from + Math.PI * (0.5 + 0.5 * easeOut3((k - 0.5) / 0.5));
+  warpEl.style.opacity = (Math.sin(Math.PI * k) * 0.92).toFixed(3);
+  if(k >= 1){
+    cam.mu = muFlip(FLIP.from);
+    warpEl.style.opacity = '0';
+    FLIP = null;
+    showToast('莫比乌斯翻面 · 内外侧互换——同一座桥，另一侧的你');
+  }
+  needsDraw();
+}
+
+/* ---------- 外送视图（点下漏斗·白洞喷发特写） ---------- */
+function ejectionView(){
+  if(cam.zoom > FIT * 3 && cam.pitch < -0.5){ goHome(); return; }
+  flyTo({pitch: -1.02, zoom: FIT * 4.6, cen: [0, -40, 0]}, 1000);
+  showToast('白洞 · 外送视图——产物从下方喷发（METAPHOR·见注脚）');
+}
+
+/* ---------- 穿越到节点（飞行+绽放面板） ---------- */
+function warpToNode(nd){
+  closeAll();
+  var z = clamp(FIT * 5.2, FIT * 0.6, FIT * 14);
+  flyTo({cen: [nd._p3[0] * 0.8, nd._p3[1] * 0.8, nd._p3[2] * 0.8], zoom: z}, 900);
+  setTimeout(function(){ openPanel(nd, true); }, REDUCE ? 60 : 620);
+}
+
+/* ---------- 定律弦激活 ---------- */
+function activate(wh){
+  LAW = wh;
+  $('#l-name').textContent = wh.name;
+  $('#l-law').textContent = wh.law;
+  [0, 1].forEach(function(i){
+    var el = $('#l-ev' + i);
+    el.innerHTML = '<b>' + wh.ev[i][0] + '</b><span>' + wh.ev[i][1] + '</span>';
+  });
+  $('#lawcard').hidden = false;
+  needsDraw();
+}
+function jumpToFarEnd(wh){
+  var A = wh._pts[0], B = wh._pts[40];
+  var dA = Math.hypot(cam.cen[0] - A[0], cam.cen[1] - A[1]);
+  var dB = Math.hypot(cam.cen[0] - B[0], cam.cen[1] - B[1]);
+  var p = dA < dB ? B : A;
+  flyTo({cen: [p[0] * 0.8, p[1] * 0.8, p[2] * 0.8], zoom: FIT * 5}, 950);
+}
+$('#law-jump').addEventListener('click', function(){ if(LAW) jumpToFarEnd(LAW); });
+$('#l-close').addEventListener('click', function(){ LAW = null; $('#lawcard').hidden = true; needsDraw(); });
+
+/* ---------- 节点花瓣面板 ---------- */
+function ringLabel(nd){
+  var s = nd.scale;
+  var h = loopPoint(nd._psi)[1];
+  var side = h >= 0 ? '黑洞侧' : '白洞侧';
+  if(Math.abs(s - 4.6) < 0.011) return '虫洞管 · 人尺度内侧（孩子）';
+  var f = Math.floor(s + 1e-9), c = Math.ceil(s - 1e-9);
+  if(c !== f && Math.abs(s - f - 0.5) < 0.011) return '虫洞管 · ' + SCALES[f].name + '－' + SCALES[c].name + ' 环间 · ' + side;
+  return '虫洞管 · ' + SCALES[Math.round(s)].name + '尺度 · ' + side;
+}
+function openPanel(nd, bloom){
+  PANEL_ND = nd;
+  LAW = null; $('#lawcard').hidden = true;
+  $('#p-ring').textContent = ringLabel(nd);
+  $('#p-name').textContent = nd.name;
+  $('#p-note').textContent = nd.note;
+  var det = $('#p-detail'), html = '';
+  if(nd.id === 'disease-atlas'){
+    html = '<b>六大跨系统模式</b><br>' + PATTERNS.map(function(p){ return p.name + '＝' + p.metaphor; }).join(' · ');
+  }else if(nd.id === 'med-seed-net'){
+    html = '<b>三种子</b><br>' + HUBS.map(function(h){ return h.name + '（' + h.n + ' 系）'; }).join(' · ') + '<br>共 152 医系';
+  }else if(nd.id === 'final-unity'){
+    html = '螺线收口处一道柔光——读完一切卷章之后的合一（管在此合拢回喉）。';
+  }else if(nd.id === 'companion'){
+    html = '问它，最小尺度的网络就亮一次——伴读从序言开始。';
+  }else if(nd.id === 'healing-hall' || nd.id === 'love-net'){
+    html = '白洞一侧的产物——「放」的具象：每一次真实的打开都在累积同在。';
+  }
+  if(html){ det.innerHTML = html; det.hidden = false; } else det.hidden = true;
+  var row = $('#p-row');
+  if(nd.status === 'future'){
+    row.innerHTML = '<span class="pgo ghost">预留位</span><span class="pst future">未来产物</span>';
+  }else{
+    row.innerHTML = '<a class="pgo" href="' + nd.href + '" target="_blank" rel="noopener">进入</a>' +
+      '<span class="pst ' + (nd.status === 'active' ? 'on' : '') + '">' + (nd.status === 'active' ? '在线' : '已合入') + '</span>';
+  }
+  var el = $('#panel');
+  el.hidden = false;
+  if(bloom){
+    el.classList.remove('bloom');
+    void el.offsetWidth;
+    el.classList.add('bloom');
+  }
+  positionPanel(true);
+  needsDraw();
+}
+function positionPanel(force){
+  if(!PANEL_ND || $('#panel').hidden) return;
+  var p = [PANEL_ND._sx || VW / 2, PANEL_ND._sy || VH / 2];
+  var el = $('#panel');
+  var w = el.offsetWidth || 300, h = el.offsetHeight || 190;
+  var x, y;
+  if(p[0] > VW * 0.62){ x = p[0] - w - 20; el.style.transformOrigin = (w + 18) + 'px ' + (h / 2) + 'px'; }
+  else { x = p[0] + 20; el.style.transformOrigin = '-16px ' + (h / 2) + 'px'; }
+  y = clamp(p[1] - h / 2, 62, Math.max(62, VH - h - 10));
+  el.style.left = clamp(x, 10, Math.max(10, VW - w - 10)) + 'px';
+  el.style.top = y + 'px';
+  if(force && (p[0] < -60 || p[0] > VW + 60)) showToast('节点在视野边缘——Home 回全览再找它');
+}
+$('#p-close').addEventListener('click', function(){ PANEL_ND = null; $('#panel').hidden = true; needsDraw(); });
+function closeAll(){
+  PANEL_ND = null; $('#panel').hidden = true;
+  LAW = null; $('#lawcard').hidden = true;
+  needsDraw();
+}
+
+/* ---------- 一切之门（G 键·全部产物索引） ---------- */
+var GATE_CARDS = [];
+function buildGate(){
+  var field = $('#gate-field');
+  var byRing = {};
+  NODES.forEach(function(nd){
+    var s = Math.round(nd.scale);
+    (byRing[s] = byRing[s] || []).push(nd);
+  });
+  Object.keys(byRing).map(Number).sort(function(a,b){ return a - b; }).forEach(function(s){
+    var card = document.createElement('div');
+    card.className = 'gcard';
+    card.style.setProperty('--d', (s * 42) + 'ms');
+    var h = '<div class="ghead"><span class="gring">' + SCALES[s].name + '</span><span class="gsize">' + SCALES[s].size + '</span></div>';
+    byRing[s].forEach(function(nd){
+      h += '<button class="gnd ' + nd.status + '" data-id="' + nd.id + '"><i></i>' + nd.name + '</button>';
+    });
+    card.innerHTML = h;
+    card._s = s;
+    field.appendChild(card);
+    GATE_CARDS.push(card);
+  });
+  $('#gate-sub').textContent = '虫洞喉 · ' + NODES.length + ' 个产物从这里可达';
+  field.addEventListener('click', function(e){
+    var b = e.target.closest ? e.target.closest('.gnd') : null;
+    if(!b) return;
+    var nd = null;
+    for(var i = 0; i < NODES.length; i++) if(NODES[i].id === b.dataset.id){ nd = NODES[i]; break; }
+    if(!nd) return;
+    closeGate();
+    if(nd.status === 'future'){
+      setTimeout(function(){ showToast(nd.name + ' · 预留位（未来产物）'); }, 420);
+      return;
+    }
+    setTimeout(function(){ warpToNode(nd); }, 240);
+  });
+}
+function layoutGate(){
+  if(!GATE_CARDS.length) return;
+  var small = Math.min(VW, VH) < 600;
+  $('#gate').classList.toggle('small', small);
+  var minD = Math.min(VW, VH);
+  GATE_CARDS.forEach(function(c){
+    if(small){ c.style.removeProperty('--dx'); c.style.removeProperty('--dy'); return; }
+    var s = c._s;
+    var th = -Math.PI / 2 + s * TAU / 12;
+    var r = gateR(s) * minD;
+    c.style.setProperty('--dx', (Math.cos(th) * r).toFixed(1) + 'px');
+    c.style.setProperty('--dy', (Math.sin(th) * r).toFixed(1) + 'px');
+  });
+}
+function openGate(){
+  closeAll();
+  layoutGate();
+  var g = $('#gate');
+  g.hidden = false;
+  g.scrollTop = 0;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ g.classList.add('on'); }); });
+}
+function closeGate(){
+  var g = $('#gate');
+  if(g.hidden) return;
+  g.classList.remove('on');
+  setTimeout(function(){ g.hidden = true; }, 560);
+}
+$('#gate-close').addEventListener('click', closeGate);
+
+/* ---------- 键盘可达入口清单（视觉隐藏） ---------- */
+function buildSrLinks(){
+  var nav = $('#srlinks');
+  NODES.filter(function(nd){ return nd.status !== 'future'; }).forEach(function(nd){
+    var a = document.createElement('a');
+    a.href = nd.href; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = nd.name + '（' + ringLabel(nd) + '）';
+    nav.appendChild(a);
+    nav.appendChild(document.createTextNode(' '));
+  });
+}
+
+/* ---------- 提示 ---------- */
+var hintOff = false;
+function dismissHint(){
+  if(hintOff) return;
+  hintOff = true;
+  $('#hint').classList.add('off');
+}
+setTimeout(dismissHint, 10000);
+
+/* ---------- 浏览器侧审美审计 ---------- */
+function browserAudit(){
+  try{
+    var names = {};
+    for(var si = 0; si < document.styleSheets.length; si++){
+      var rules = document.styleSheets[si].cssRules;
+      for(var ri = 0; ri < rules.length; ri++){
+        var st = rules[ri].style;
+        if(!st) continue;
+        for(var pi = 0; pi < st.length; pi++){
+          var prop = st[pi];
+          if(prop && prop.indexOf('--') === 0) names[prop] = 1;
+        }
+      }
+    }
+    var got = Object.keys(names);
+    if(got.length !== COLOR_TOKENS.length){
+      console.warn('审美审计：CSS token 数=' + got.length + '（应为 5）：' + got.join(','));
+    }else{
+      console.log('审美审计 ✓ 5 色 token · 闭环粒子 ' + FLOW_N + '（≤400）· 翻面 ' + WARP_MS + 'ms · 喉 r0=' + R0 + ' · 螺线 ' + NW + ' 绕/圈 · φ=' + PHI.toFixed(10));
+    }
+  }catch(e){}
+}
+
+/* ==========================================================
+   主循环（缓慢自转 95s/圈·惯性·reduced-motion 静帧）
+   ========================================================== */
+var lastT = performance.now();
+function frame(t){
+  var dt = Math.min(0.05, (t - lastT) / 1000);
+  lastT = t;
+  if(!REDUCE){
+    var idle = pointers.size === 0 && !panelOpen() && !lawOpen() && !FLY && !FLIP && !gateOpen();
+    if(idle) cam.yaw += TAU * dt / 95;
+    if(inertiaOn){
+      cam.yaw += yawV * dt;
+      cam.pitch = clamp(cam.pitch + pitchV * dt, -1.25, 1.25);
+      yawV *= Math.exp(-3.2 * dt); pitchV *= Math.exp(-3.2 * dt);
+      if(Math.abs(yawV) < 0.02 && Math.abs(pitchV) < 0.02) inertiaOn = false;
+    }
+    stepFly(t);
+    DRAW = true;
+  }else{
+    stepFly(t);
+  }
+  stepFlip(t);
+  if(DRAW){ render(t); DRAW = REDUCE ? false : true; }
+  requestAnimationFrame(frame);
+}
+
+/* ---------- 启动 ---------- */
+function init(){
+  bindTheme();
+  bindTTS();
+  bindHeartBadge();
+  $('#credo-note').textContent = CREDO_TEXT;
+  buildGate();
+  buildSrLinks();
+  resize();
+  window.addEventListener('resize', resize);
+  $('#brand').addEventListener('click', function(){ if(gateOpen()) closeGate(); else goHome(); });
+  browserAudit();
+  requestAnimationFrame(frame);
+}
+if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+})();
+/*XYZ-PORTAL-JS-END*/
+</script>
+</body>
+</html>

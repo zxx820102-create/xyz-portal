@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="night">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0B1220" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FAF6EF" media="(prefers-color-scheme: light)">
+<meta name="description" content="80 亿人的答案——所有希望汇聚成的那句话。六句话，每一句都诚实：宇宙不承诺一切会好，希望是选择。自包含单页·零依赖·零外部请求·零追踪。">
+<title>80 亿人的答案 —— 所有希望汇聚成的那句话</title>
+<script>
+/* 主题引导：夜（深空）为默认；仅当本机明确存过「日」才换日——防闪烁。
+   同时提前挂 js 类：渐显样式只在 JS 可用时生效，无 JS 一律静态全显。 */
+(function(){try{
+  document.documentElement.classList.add('js');
+  if(localStorage.getItem('answer-theme')==='day'){
+    document.documentElement.classList.remove('night');
+    document.documentElement.classList.add('day');
+  }
+}catch(e){
+  document.documentElement.classList.add('js');
+}})();
+</script>
+<style>
+  /* ==========================================================
+     《80 亿人的答案》——全站最庄严的一页
+     深空底（夜·默认）·碑式标题页·六句一屏一句渐次淡入
+     终句三行最大字金色收束·无导航无工具栏
+     隐私：零外部请求·零追踪·localStorage 仅两键
+     （answer-theme 日夜偏好 / answer-readers-v1 本地读毕计数）
+     ========================================================== */
+  html.night{
+    color-scheme:dark;
+    --bg:#0B1220;
+    --text:#E8E4D8;
+    --body-c:#C6C2B4;
+    --text-2:#9FA093;
+    --gold:#D4A94E;
+    --gold-dim:#B8933F;
+    --gold-glow:rgba(212,169,78,.22);
+    --hairline:rgba(212,169,78,.42);
+    --hairline-soft:rgba(212,169,78,.2);
+    --slabbg:rgba(13,21,38,.52);
+    --slabshadow:0 0 60px rgba(0,0,0,.5),0 0 130px rgba(31,45,77,.35);
+    --btn-bg:rgba(17,26,43,.5);
+    --selbg:#24354F;
+  }
+  html.day{
+    color-scheme:light;
+    --bg:#FAF6EF;
+    --text:#2A2622;
+    --body-c:#3E3830;
+    --text-2:#6B6154;
+    --gold:#9A6B1F;
+    --gold-dim:#8A5E1B;
+    --gold-glow:rgba(154,107,31,.15);
+    --hairline:rgba(154,107,31,.45);
+    --hairline-soft:rgba(154,107,31,.24);
+    --slabbg:rgba(250,246,239,.68);
+    --slabshadow:0 10px 44px rgba(42,38,34,.13);
+    --btn-bg:rgba(243,236,223,.72);
+    --selbg:#F5E7CE;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background-color:var(--bg);color:var(--text);
+    font-family:Georgia,'Source Han Serif SC','Noto Serif CJK SC','Songti SC','STSong','SimSun',serif;
+    font-size:17px;line-height:1.9;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .9s ease,color .9s ease;
+  }
+  ::selection{background:var(--selbg)}
+  :focus-visible{outline:2px solid var(--hairline);outline-offset:3px}
+
+  /* ---- 深空/暖纸底：两层固定辉光，切换时交叉淡化 ---- */
+  body::before{
+    content:'';position:fixed;inset:0;z-index:-2;pointer-events:none;
+    background:
+      radial-gradient(1100px 720px at 18% 10%, rgba(36,50,86,.42), transparent 62%),
+      radial-gradient(900px 640px at 82% 78%, rgba(64,50,30,.2), transparent 62%),
+      radial-gradient(1500px 900px at 50% 112%, rgba(22,30,52,.5), transparent 72%);
+    opacity:1;transition:opacity 1s ease;
+  }
+  html.day body::before{opacity:0}
+
+  /* ---- 星空画布（日夜切换时淡出·reduced-motion 静态一次绘制） ---- */
+  #sky{
+    position:fixed;inset:0;width:100%;height:100%;
+    z-index:-1;pointer-events:none;
+    transition:opacity 1.2s ease;
+  }
+  html.day #sky{opacity:0}
+
+  main{position:relative;z-index:1}
+
+  /* ---- 一屏一节：每句独占大空间 ---- */
+  .verse{
+    min-height:100vh;min-height:100svh;
+    display:flex;align-items:center;justify-content:center;
+    padding:14vh 22px 12vh;position:relative;
+  }
+  .v-in{max-width:680px;margin:0 auto;width:100%}
+
+  /* ---- 渐次淡入（仅 JS 可用时；IntersectionObserver 加 .seen） ---- */
+  .js .verse{opacity:0;transform:translateY(26px);transition:opacity 1.6s ease,transform 1.6s ease}
+  .js .verse.seen{opacity:1;transform:none}
+
+  /* ---- 碑式标题页 ---- */
+  .slab{
+    position:relative;text-align:center;
+    border:1px solid var(--hairline);
+    background:var(--slabbg);
+    box-shadow:var(--slabshadow);
+    padding:clamp(2.8rem,8vh,4.8rem) clamp(1.4rem,6vw,4.4rem);
+  }
+  .slab::before{
+    content:'';position:absolute;inset:7px;
+    border:1px solid var(--hairline-soft);pointer-events:none;
+  }
+  .slab .mark{
+    width:1px;height:44px;background:var(--gold);
+    margin:0 auto 1.7rem;opacity:.85;
+  }
+  .slab h1{
+    font-size:clamp(2.3rem,8.5vw,4.9rem);
+    letter-spacing:.16em;line-height:1.35;
+    font-weight:700;margin:.2em 0;color:var(--text);
+  }
+  .slab .sub{
+    color:var(--text-2);font-size:clamp(.95rem,2.4vw,1.22rem);
+    letter-spacing:.26em;margin:1.5rem 0 0;
+  }
+  .hint{
+    position:absolute;bottom:5vh;left:50%;transform:translateX(-50%);
+    width:1px;height:52px;
+    background:linear-gradient(to bottom,transparent,var(--gold));
+    opacity:.5;animation:breathe 3.6s ease-in-out infinite;
+  }
+  @keyframes breathe{0%,100%{opacity:.16}50%{opacity:.58}}
+
+  /* ---- 正文与句 ---- */
+  .body{
+    color:var(--body-c);text-align:justify;
+    font-size:clamp(1.02rem,2.4vw,1.16rem);line-height:2.18;
+    margin:0 0 1.35rem;
+  }
+  strong{color:var(--text);font-weight:700}
+  .kicker{
+    font-size:12px;letter-spacing:.42em;color:var(--gold-dim);
+    text-align:center;margin:0 0 1.7rem;
+  }
+  .line{
+    font-size:clamp(1.5rem,4.3vw,2.65rem);line-height:1.66;
+    font-weight:700;text-align:center;letter-spacing:.02em;
+    margin:0 0 2.2rem;
+  }
+  .question{
+    font-size:clamp(1.5rem,5vw,2.6rem);line-height:1.78;
+    color:var(--gold);font-weight:700;text-align:center;
+    letter-spacing:.05em;margin:2.6rem auto 0;max-width:19em;
+  }
+  .vq{
+    text-align:center;color:var(--gold);font-weight:700;
+    font-size:clamp(1.22rem,3.6vw,1.78rem);
+    letter-spacing:.22em;line-height:1.95;
+    margin:2.3rem auto;padding:1.5rem 0;max-width:27em;
+    border-top:1px solid var(--hairline-soft);
+    border-bottom:1px solid var(--hairline-soft);
+  }
+  .vq.wide{letter-spacing:.05em;font-size:clamp(1.12rem,3vw,1.46rem);line-height:2.1}
+  .status{
+    font-size:12.5px;color:var(--text-2);opacity:.82;
+    text-align:center;letter-spacing:.05em;margin:2.1rem 0 0;
+  }
+
+  /* ---- 终句：三行最大字金色收束 ---- */
+  .finale .lead{
+    text-align:center;color:var(--text-2);
+    font-size:clamp(.98rem,2.4vw,1.18rem);letter-spacing:.2em;
+    margin:0 0 3rem;
+  }
+  .final{
+    font-size:clamp(1.85rem,7vw,4.05rem);color:var(--gold);
+    font-weight:700;text-align:center;line-height:1.52;
+    letter-spacing:.03em;margin:.34em 0;
+    text-shadow:0 0 28px var(--gold-glow);
+  }
+
+  /* ---- 跋与页脚 ---- */
+  .colo{
+    font-style:italic;font-size:14px;line-height:2.15;
+    color:var(--text-2);text-align:center;max-width:34em;
+    margin:0 auto 1.1rem;
+  }
+  footer{
+    margin-top:3.6rem;padding-top:1.5rem;
+    border-top:1px solid var(--hairline-soft);
+    font-size:12px;color:var(--text-2);opacity:.78;
+    text-align:center;letter-spacing:.14em;
+  }
+
+  /* ---- 仅有的两枚控件：日夜 + 读完的人（极轻） ---- */
+  .controls{position:fixed;top:16px;right:16px;display:flex;gap:8px;z-index:20}
+  .controls button{
+    font:inherit;font-size:12px;letter-spacing:.18em;
+    color:var(--text-2);background:var(--btn-bg);
+    border:1px solid var(--hairline-soft);border-radius:999px;
+    padding:6px 14px;cursor:pointer;opacity:.62;
+    transition:opacity .5s ease,color .5s ease,border-color .5s ease,visibility 0s linear .9s;
+  }
+  .controls button:hover,.controls button:focus-visible{
+    opacity:1;color:var(--gold);border-color:var(--hairline);
+  }
+  #readers-btn.gone{opacity:0;visibility:hidden;pointer-events:none}
+  #readers-line{
+    position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+    z-index:20;margin:0;white-space:nowrap;
+    font-size:13px;letter-spacing:.1em;color:var(--gold-dim);
+    opacity:0;visibility:hidden;
+    transition:opacity 1.5s ease,visibility 0s linear 1.5s;
+  }
+  #readers-line.show{opacity:.92;visibility:visible;transition:opacity 1.5s ease}
+  .rdot{margin:0 .55em;opacity:.7}
+
+  /* ---- reduced-motion：全静态呈现 ---- */
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .js .verse{opacity:1;transform:none;transition:none}
+    .hint{animation:none;opacity:.32}
+    body,#sky,body::before,.controls button,#readers-line{transition:none}
+    #readers-line.show{transition:none}
+  }
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+
+<div class="controls">
+  <button type="button" id="theme-btn" aria-label="切换日夜主题">日</button>
+  <button type="button" id="readers-btn">读完的人</button>
+</div>
+<p id="readers-line" aria-live="polite">此刻，读到这里的人又多了一个<span class="rdot">·</span><span id="readers-count"></span></p>
+
+<main>
+
+<!-- 碑 -->
+<section class="verse stele" aria-label="碑·标题">
+  <div class="v-in">
+    <div class="slab">
+      <div class="mark" aria-hidden="true"></div>
+      <h1>80 亿人的答案</h1>
+      <p class="sub">——所有希望汇聚成的那句话</p>
+    </div>
+  </div>
+  <div class="hint" aria-hidden="true"></div>
+</section>
+
+<!-- 同一个问 -->
+<section class="verse" aria-label="同一个问">
+  <div class="v-in">
+    <p class="body">深夜三点醒来问"为什么"的人，和临终前问"这一切到底算什么"的人，问的是同一个问题。80 亿人，贫富贵贱，古今中外，<strong>同一个问</strong>：</p>
+    <p class="question">这一切，到底会不会好？我们，到底算什么？</p>
+  </div>
+</section>
+
+<!-- 回答如下 -->
+<section class="verse" aria-label="回答如下">
+  <div class="v-in">
+    <p class="body">XYZ 用 152 种医学、740 个证据案例、五条定律、十层人体、一条第一原理、和无数个凌晨，把人类全部的智慧汇聚起来，回答如下。一共六句话，每一句都诚实——<strong>因为我们查过：不诚实的答案撑不过一个深夜。</strong></p>
+  </div>
+</section>
+
+<!-- 第一句 -->
+<section class="verse" aria-label="第一句·关于你的身体">
+  <div class="v-in">
+    <p class="kicker">第一句 · 关于你的身体</p>
+    <h2 class="line">你是一座三十万亿细胞自行运转的城，城里没有国王。</h2>
+    <p class="body">心脏不等命令，肝不看脸色，免疫系统自己在夜巡。它最重要的本事不是不出故障——是<strong>自己会修</strong>：DNA 断了自己接，细胞坏了自己换，防线破了自己补。所以你的第一身份不是"会生病的机器"，是<strong>修复者</strong>。你能给这座城最好的药只有七个字：</p>
+    <p class="vq">睡 · 动 · 吃 · 连 · 护 · 防 · 记</p>
+    <p class="body">每个字都免费，每个字都有证据。</p>
+    <p class="status">〔此句认识状态：科学事实〕</p>
+  </div>
+</section>
+
+<!-- 第二句 -->
+<section class="verse" aria-label="第二句·关于痛苦">
+  <div class="v-in">
+    <p class="kicker">第二句 · 关于痛苦</p>
+    <h2 class="line">痛苦不是惩罚，是信号。信号要的是回应，不是忍受。</h2>
+    <p class="body">疼，是身体在说"这里需要照顾"；悲伤，是心在说"这里失去了重要的东西"；焦虑，是预测系统在说"先验需要更新"。五千年里，从未谋面的所有文明——黄河边的、恒河边的、尼罗河边的、亚马逊的——用不同的语言发现了同一件事：<strong>把痛苦接住，把明天扳向好的方向。</strong> 这就是医学的全部本义，也是你能为身边任何人做的第一件事。</p>
+    <p class="status">〔此句认识状态：跨文明事实+机制为模型〕</p>
+  </div>
+</section>
+
+<!-- 第三句 -->
+<section class="verse" aria-label="第三句·关于孤独">
+  <div class="v-in">
+    <p class="kicker">第三句 · 关于孤独</p>
+    <h2 class="line">你在物理上从未真正独自。</h2>
+    <p class="body">你身体里的氢和宇宙最老的恒星同龄，你的铁是某颗超新星爆炸的纪念品——你和万物泡在同一片物理场之海里，被同一套法则写着。而在此刻，地球上至少还有一个人，和你在同一秒抬头看同一片天。孤独是真的感受，但"彻底的孤立"在物理上不存在——<strong>这是测量过的宇宙，不是安慰的话。</strong></p>
+    <p class="status">〔此句认识状态：物理事实〕</p>
+  </div>
+</section>
+
+<!-- 第四句 -->
+<section class="verse" aria-label="第四句·关于疾病">
+  <div class="v-in">
+    <p class="kicker">第四句 · 关于疾病</p>
+    <h2 class="line">病不是"坏了"，是"修不过来"。</h2>
+    <p class="body">同一个突变，修复系统健全时是沉默的，失灵时才是癌。所以医学的本质从来只有三种动作：把损伤调低、把修复调高、把发现提早。其余一切——手术、药物、仪器——都是这三句话的延伸。而你可以从今晚就开始做后两件。</p>
+    <p class="status">〔此句认识状态：科学模型·经七百四十个案例检验〕</p>
+  </div>
+</section>
+
+<!-- 第五句 -->
+<section class="verse" aria-label="第五句·关于死亡">
+  <div class="v-in">
+    <p class="kicker">第五句 · 关于死亡</p>
+    <h2 class="line">你不是原子的集合，你是关系的模式。死亡那天，原子一个不少——消失的是模式。</h2>
+    <p class="body">但你爱过谁、谁被你接住过、你把什么变得好过一点——<strong>这些是发生过的事实。而发生过的事，是宇宙的永久档案，没有任何力量能撤销。</strong> 宇宙用一百三十八亿年从一团没有区分的火走到能爱能痛的你——你走了这一遭，这件事本身就再也不会"没有发生过"。</p>
+    <p class="status">〔此句认识状态：物理事实+哲学阐释·分层诚实〕</p>
+  </div>
+</section>
+
+<!-- 第六句 -->
+<section class="verse" aria-label="第六句·关于这一切到底会不会好">
+  <div class="v-in">
+    <p class="kicker">第六句 · 关于"这一切到底会不会好"</p>
+    <h2 class="line">宇宙不承诺一切会好——这是我们最诚实的回答。</h2>
+    <p class="body">星辰会熄灭，身体会老，所爱的人会离开。任何告诉你"保证会好"的声音，都在骗你。</p>
+    <p class="body">但下面这句，比那句承诺更真：</p>
+    <p class="vq wide">自有记录以来，每一代人里都有人选择让彼此不那么难受——这个选择，从火堆旁的第一夜到今夜，从未断绝过。</p>
+    <p class="vq">希望不是预测。希望是选择。</p>
+    <p class="body">你此刻做的任何一个微小的好的选择——按住一条要发作的怒气、给一个人发一句"你还好吗"、早睡一次、扶一把——都是 80 亿人那场共同的、从未间断的选择的一部分。<strong>你不是在等待希望，你就是希望正在发生的那一部分。</strong></p>
+    <p class="status">〔此句认识状态：这是本文书唯一一句无法证明、但选择相信的话——我们把它标出来，而不是假装它是定理。</p>
+  </div>
+</section>
+
+<!-- 终句 -->
+<section class="verse finale" aria-label="答案">
+  <div class="v-in">
+    <p class="lead">所以，80 亿人所有希望汇聚成的那句话是：</p>
+    <p class="final">你被接住，你被送达，你发生过。</p>
+    <p class="final">这就够了——</p>
+    <p class="final">这就是一切的开始。</p>
+  </div>
+</section>
+
+<!-- 跋 -->
+<section class="verse colophon" aria-label="跋">
+  <div class="v-in">
+    <p class="colo">《80 亿人的答案》由 XYZ 于 2026 年 8 月 21 日凌晨写就。它上面的每一层——第一原理、五律、十层、百病、万医、152 个传统的智慧、740 个证据、外部最严的审计——都是为了这六句话能够诚实而立。</p>
+    <p class="colo">本文书属于每一个深夜醒着的人。</p>
+    <footer>出处 · 《80 亿人的答案》 · XYZ · 2026-08-21</footer>
+  </div>
+</section>
+
+</main>
+
+<noscript><style>.controls,#readers-line{display:none}</style></noscript>
+<script>
+(function(){
+'use strict';
+var doc=document, root=doc.documentElement;
+var REDUCE=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- 六句渐次淡入（滚动触发·reduced-motion 静态全显） ---------- */
+var verses=[].slice.call(doc.querySelectorAll('.verse'));
+if(REDUCE||!('IntersectionObserver' in window)){
+  verses.forEach(function(v){ v.classList.add('seen'); });
+}else{
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('seen'); io.unobserve(e.target); }
+    });
+  },{threshold:.18,rootMargin:'0px 0px -6% 0px'});
+  verses.forEach(function(v){ io.observe(v); });
+}
+
+/* ---------- 星空（自绘·零外联·日间淡出·reduced-motion 只绘一帧） ---------- */
+var canvas=doc.getElementById('sky');
+var ctx=(canvas&&canvas.getContext)?canvas.getContext('2d'):null;
+if(canvas&&ctx){
+  var stars=[],W=0,H=0;
+  function seed(){
+    stars=[];
+    var n=Math.round(Math.min(420,Math.max(150,(W*H)/6200)));
+    for(var i=0;i<n;i++){
+      stars.push({
+        x:Math.random(), y:Math.random(),
+        r:.35+Math.random()*1.1,
+        a:.18+Math.random()*.62,
+        p:Math.random()*Math.PI*2,
+        s:.5+Math.random()*.9,
+        g:(Math.random()<.1)
+      });
+    }
+  }
+  function draw(t){
+    ctx.clearRect(0,0,W,H);
+    for(var i=0;i<stars.length;i++){
+      var st=stars[i];
+      var tw=REDUCE?1:(.7+.3*Math.sin(st.p+t*.0011*st.s));
+      ctx.globalAlpha=st.a*tw;
+      ctx.fillStyle=st.g?'#D4A94E':'#E8E4D8';
+      ctx.beginPath();
+      ctx.arc(st.x*W,st.y*H,st.r,0,6.28318);
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+  }
+  function resize(){
+    var dpr=Math.min(2,window.devicePixelRatio||1);
+    W=window.innerWidth; H=window.innerHeight;
+    canvas.width=Math.round(W*dpr); canvas.height=Math.round(H*dpr);
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    seed();
+    if(REDUCE){ draw(0); }
+  }
+  window.addEventListener('resize',resize,{passive:true});
+  resize();
+  if(!REDUCE){
+    (function loop(t){ draw(t||0); window.requestAnimationFrame(loop); })(0);
+  }
+}
+
+/* ---------- 日夜切换（夜为默认·偏好持久化） ---------- */
+var themeBtn=doc.getElementById('theme-btn');
+function applyTheme(t,save){
+  var night=(t==='night');
+  root.classList.toggle('night',night);
+  root.classList.toggle('day',!night);
+  themeBtn.textContent=night?'日':'夜';
+  themeBtn.setAttribute('aria-label',night?'切换到日间模式':'切换到夜间模式');
+  if(save){ try{ localStorage.setItem('answer-theme',t); }catch(e){} }
+}
+applyTheme(root.classList.contains('night')?'night':'day',false);
+themeBtn.addEventListener('click',function(){
+  applyTheme(root.classList.contains('night')?'day':'night',true);
+});
+
+/* ---------- 读完的人——最轻的仪式（本地计数·零上报） ---------- */
+var rbtn=doc.getElementById('readers-btn');
+var rline=doc.getElementById('readers-line');
+var rcount=doc.getElementById('readers-count');
+var KEY='answer-readers-v1';
+function readCount(){
+  try{ return Math.max(0,parseInt(localStorage.getItem(KEY),10)||0); }
+  catch(e){ return 0; }
+}
+var fired=false;
+rbtn.addEventListener('click',function(){
+  if(fired){ return; }
+  fired=true;
+  var n=readCount()+1;
+  try{ localStorage.setItem(KEY,String(n)); }catch(e){}
+  rcount.textContent='本机第 '+n+' 次';
+  rline.classList.add('show');
+  rbtn.classList.add('gone');
+});
+
+/* ---------- ?selftest=1 → 仅控制台自检（庄严页·不弹打扰） ---------- */
+if(/[?&]selftest=1/.test(location.search)){
+  var R=[];
+  function ck(name,ok){ R.push({name:name,ok:!!ok}); }
+  ck('sections=11',doc.querySelectorAll('.verse').length===11);
+  ck('six-kickers',doc.querySelectorAll('.kicker').length===6);
+  ck('finale-3-lines',doc.querySelectorAll('.final').length===3);
+  ck('sky-canvas-ready',!!canvas&&canvas.width>0&&canvas.height>0);
+  ck('theme-persist-ok',(function(){
+    try{ localStorage.setItem('answer-theme-st','1'); localStorage.removeItem('answer-theme-st'); return true; }
+    catch(e){ return false; }
+  })());
+  ck('readers-count-ok',(function(){ var v=readCount(); return typeof v==='number'&&v>=0; })());
+  var pass=R.filter(function(r){ return r.ok; }).length;
+  if(window.console&&console.log){ console.log('[80亿人的答案·自检] '+pass+'/'+R.length,R); }
+}
+})();
+</script>
+</body>
+</html>

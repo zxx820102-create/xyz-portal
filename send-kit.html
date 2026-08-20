@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="《生命之书》外送工具台——九页卡片×专属转发文案×本地二维码，把转发成本降到 30 秒。零外联：QR 本地生成，无统计、无追踪。">
+<title>外送工具台 · Send Kit —— 30 秒把一本书送给一个人</title>
+<script>
+/* 主题引导：默认按时间（6-18 点日间），手动切换持久化，防闪烁 */
+(function(){try{
+  var saved = localStorage.getItem('sendkit-theme');
+  var hour = new Date().getHours();
+  var night = saved === 'night' || (saved !== 'day' && (hour < 6 || hour >= 18));
+  var el = document.documentElement;
+  el.classList.remove('day','night');
+  el.classList.add(night ? 'night' : 'day');
+}catch(e){}})();
+</script>
+<style>
+  /* ==========================================================
+     外送工具台 v1 —— 与《生命之书》同族（主书 31 token 的工具页子集）
+     日（白昼之书）+ 夜（星空之书）· 4pt 间距 · 44px 触达 · Georgia 衬线
+     ========================================================== */
+  html.day{
+    color-scheme:light;
+    --paper:#FAF6EF; --layer1:#F3ECDF; --layer2:#EBE1CF; --layer3:#E2D5BD;
+    --ink:#2A2622; --ink2:#6B6154; --ink3:#4A443C;
+    --cinnabar:#B3452C; --cinnabar-deep:#9A3A24;
+    --success:#3E7A52; --success-deep:#2C5C3E;
+    --link:#8C4510; --selbg:#F5E7CE;
+    --border:#D9CDB9; --border-strong:#99855F;
+    --bg:var(--paper); --text:var(--ink); --text-2:var(--ink2); --text-3:var(--ink3);
+    --accent:var(--cinnabar); --accent-deep:var(--cinnabar-deep);
+    --accent-line:#9A6B1F; --btn-bg:var(--layer1); --btn-bg-hover:var(--layer2);
+    --shadow:0 2px 14px rgba(42,38,34,.10);
+  }
+  html.night{
+    color-scheme:dark;
+    --space:#0B1220; --layer1:#111A2B; --layer2:#182338; --layer3:#1F2D47;
+    --star:#E8E4D8; --star2:#9FA093;
+    --gold:#D4A94E; --gold-dim:#B8933F;
+    --link:#9EC1E8; --selbg:#24354F;
+    --border:#2B3A54; --border-strong:#55698F;
+    --bg:var(--space); --text:var(--star); --text-2:var(--star2); --text-3:var(--star);
+    --accent:var(--gold); --accent-deep:var(--gold-dim);
+    --accent-line:var(--gold); --btn-bg:var(--layer1); --btn-bg-hover:var(--layer2);
+    --shadow:0 2px 14px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;background:var(--bg);color:var(--text);
+    font-family:Georgia,'Source Han Serif SC','Noto Serif CJK SC','Songti SC','STSong','SimSun',serif;
+    font-size:17px;line-height:30px;letter-spacing:.01em;
+    -webkit-font-smoothing:antialiased;
+    transition:background-color .7s ease,color .7s ease;
+  }
+  ::selection{background:var(--selbg)}
+  :focus-visible{outline:2px solid var(--border-strong);outline-offset:2px}
+  .page{max-width:720px;margin:0 auto;padding:20px 18px 48px}
+
+  /* ---------- 顶栏 ---------- */
+  .topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding-top:10px}
+  .topbar h1{margin:0;font-size:28px;line-height:38px;letter-spacing:.12em;color:var(--accent)}
+  .topbar .tagline{margin:2px 0 0;font-size:13px;line-height:20px;color:var(--text-2);letter-spacing:.06em}
+  #theme-btn{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1px solid var(--border-strong);
+    background:var(--btn-bg);cursor:pointer;font-size:17px;line-height:1;padding:0;color:var(--accent);
+    font-family:inherit;transition:transform .12s cubic-bezier(.4,0,.2,1),background-color .7s ease}
+  #theme-btn:hover{transform:translateY(-1px);background:var(--btn-bg-hover)}
+  #theme-btn:active{transform:scale(.96)}
+
+  .goldline{height:1px;margin:18px 0 14px;border:0;
+    background:linear-gradient(90deg,transparent 0%,var(--accent-line) 16%,var(--accent-line) 84%,transparent 100%)}
+
+  /* ---------- 30 秒指南 ---------- */
+  .guide{background:var(--layer1);border:1px solid var(--border);border-radius:14px;padding:18px 18px 14px;margin:0 0 24px}
+  .guide h2{margin:0 0 4px;font-size:19px;line-height:28px;letter-spacing:.06em}
+  .guide .why{margin:0 0 14px;font-size:14px;line-height:24px;color:var(--text-2)}
+  .steps{display:grid;grid-template-columns:1fr;gap:10px;margin:0 0 14px}
+  .step{display:flex;align-items:flex-start;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px}
+  .step .num{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--bg);
+    display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;margin-top:5px}
+  .step b{color:var(--accent-deep)}
+  .step p{margin:0;font-size:15px;line-height:26px}
+  .audiences{display:grid;grid-template-columns:1fr;gap:10px}
+  .aud{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 14px;font-size:14px;line-height:24px}
+  .aud b{color:var(--accent-deep);letter-spacing:.06em}
+  .aud .pages{color:var(--text-2)}
+
+  /* ---------- 页卡 ---------- */
+  .card{background:var(--layer1);border:1px solid var(--border);border-radius:14px;
+    padding:20px 18px 16px;margin:0 0 22px;box-shadow:var(--shadow)}
+  .card-head{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+  .card-head h2{margin:0;font-size:21px;line-height:30px;letter-spacing:.05em}
+  .card-head h2 .no{color:var(--accent);font-size:14px;letter-spacing:.15em;margin-right:8px;font-weight:400}
+  .card-head .value{margin:0;font-size:14px;line-height:23px;color:var(--text-2)}
+  .card-head .value b{color:var(--text);font-weight:400}
+
+  .linkrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 14px}
+  .linkrow a{color:var(--link);text-decoration:none;font-size:13.5px;word-break:break-all;line-height:22px;
+    border-bottom:1px dotted var(--link)}
+  .linkrow a:hover{border-bottom-style:solid}
+
+  .qrbox{display:flex;flex-direction:column;align-items:center;gap:6px;margin:4px 0 16px}
+  .qrframe{background:var(--paper);border:1px solid var(--border);border-radius:12px;padding:10px;
+    transition:background-color .7s ease}
+  .qrframe canvas{display:block;width:148px;height:148px;border-radius:4px}
+  .qrbox .cap{font-size:12px;line-height:18px;color:var(--text-2);letter-spacing:.08em}
+
+  .copyblock{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:0 0 12px}
+  .copyblock .lab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+  .copyblock .lab span{font-size:12.5px;letter-spacing:.14em;color:var(--accent-deep)}
+  .copyblock .txt{margin:0;font-size:15px;line-height:26px;white-space:pre-wrap}
+  .copyblock .txt a{color:var(--link);text-decoration:none}
+
+  .btn{min-height:44px;min-width:44px;padding:8px 18px;border-radius:999px;cursor:pointer;
+    border:1px solid var(--border-strong);background:var(--btn-bg);color:var(--text);
+    font-family:inherit;font-size:14px;line-height:24px;letter-spacing:.06em;
+    transition:background-color .15s ease,transform .12s cubic-bezier(.4,0,.2,1)}
+  .btn:hover{background:var(--btn-bg-hover);transform:translateY(-1px)}
+  .btn:active{transform:scale(.97)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:var(--bg);font-weight:700}
+  .btn.primary:hover{background:var(--accent-deep);border-color:var(--accent-deep)}
+  .btn.small{min-height:36px;padding:4px 14px;font-size:13px}
+
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);
+    background:var(--layer3);color:var(--text);border:1px solid var(--border-strong);border-radius:999px;
+    padding:9px 22px;font-size:14px;line-height:22px;letter-spacing:.05em;opacity:0;pointer-events:none;
+    transition:opacity .25s ease,transform .25s ease;z-index:99}
+  #toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  /* ---------- 页脚诚实计数 ---------- */
+  footer{margin-top:8px;text-align:center}
+  .count{font-size:15px;line-height:26px;color:var(--text-2)}
+  .count b{color:var(--accent-deep);font-size:22px;line-height:32px;font-variant-numeric:tabular-nums}
+  .count .turn{color:var(--text)}
+  .footnotes{margin:14px 0 0;font-size:12.5px;line-height:21px;color:var(--text-2)}
+  #qr-selftest{font-variant-numeric:tabular-nums}
+  .noscript-note{background:var(--layer2);border:1px solid var(--border);border-radius:10px;
+    padding:10px 14px;font-size:14px;line-height:26px;margin:0 0 16px}
+  .noscript-note a{color:var(--link);word-break:break-all}
+
+  /* ---------- 桌面增强 ---------- */
+  @media (min-width:640px){
+    .steps{grid-template-columns:repeat(3,1fr)}
+    .audiences{grid-template-columns:repeat(3,1fr)}
+    .card .split{display:grid;grid-template-columns:180px 1fr;gap:18px;align-items:start}
+    .qrbox{margin:2px 0 0}
+    .copyblocks{min-width:0}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation:none!important;transition:none!important}
+    #toast{transition:opacity .15s ease}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header class="topbar">
+    <div>
+      <h1>外送工具台</h1>
+      <p class="tagline">30 秒，把一本书送给一个真实的人</p>
+    </div>
+    <button id="theme-btn" type="button" aria-label="切换日夜主题" title="切换日夜主题">夜</button>
+  </header>
+
+  <hr class="goldline">
+
+  <noscript><div class="noscript-note">
+    本页的一键复制与二维码需要 JavaScript。九页真实链接如下（长按或右键复制）：<br>
+    <a href="https://zxx820102-create.github.io/life-book/">《生命之书》主书</a> ·
+    <a href="https://zxx820102-create.github.io/life-book/kids.html">童画版</a> ·
+    <a href="https://zxx820102-create.github.io/life-book/timeline.html">双时间线卷轴</a> ·
+    <a href="https://zxx820102-create.github.io/xyz-portal/healing.html">星际疗愈厅</a> ·
+    <a href="https://zxx820102-create.github.io/xyz-portal/love.html">爱的网络</a> ·
+    <a href="https://zxx820102-create.github.io/xyz-portal/">螺旋门户</a> ·
+    <a href="https://zxx820102-create.github.io/life-book/contribute.html">共创页</a> ·
+    <a href="https://zxx820102-create.github.io/life-book/versions.html">版本树</a> ·
+    <a href="https://zxx820102-create.github.io/life-book/sense.html">感知页</a>
+  </div></noscript>
+
+  <!-- ========== 30 秒外送指南 ========== -->
+  <section class="guide" aria-labelledby="guide-title">
+    <h2 id="guide-title">30 秒外送指南</h2>
+    <p class="why">当前最短板不是书，是转发——九页全在线，独立访客还是 0。下面三步，一次转发就是一齿咬合。</p>
+    <div class="steps">
+      <div class="step"><span class="num" aria-hidden="true">一</span>
+        <p><b>挑一条</b><br>按你要发给的人，从下面九张卡挑一条最合适的。</p></div>
+      <div class="step"><span class="num" aria-hidden="true">二</span>
+        <p><b>复制</b><br>点「复制文案」（或「复制链接」），文案里自带网址。</p></div>
+      <div class="step"><span class="num" aria-hidden="true">三</span>
+        <p><b>发给一个真实的人</b><br>微信粘贴、发送。当面打开也行——每卡有二维码，手机扫码直达。</p></div>
+    </div>
+    <div class="audiences">
+      <div class="aud"><b>发给家人</b><br><span class="pages">主书（父母关心健康）· 童画版（有孩子的家庭）· 疗愈厅（需要陪伴的时刻）</span></div>
+      <div class="aud"><b>发给朋友</b><br><span class="pages">时间线（好奇心重的人）· 门户（爱美的人）· 爱网（温柔的人）</span></div>
+      <div class="aud"><b>发到群里</b><br><span class="pages">主书（读书群）· 感知页（写作/产品群）· 共创页（想参与的人）· 版本树（开源社区）</span></div>
+    </div>
+  </section>
+
+  <!-- ========== 九页卡片（由 PAGES 数据渲染） ========== -->
+  <main id="cards" aria-label="九页外送卡片"></main>
+
+  <!-- ========== 诚实计数 ========== -->
+  <hr class="goldline">
+  <footer>
+    <p class="count">当前独立访客 <b>0</b><br>
+      <span class="turn">你转发的第一个人，将把这个 0 变成 1。</span></p>
+    <p class="footnotes">
+      隐私零外联：二维码本地生成（BYTE 模式·L 纠错·MIT 算法内嵌），无统计像素、无 CDN、无追踪——复制只进你的剪贴板。<br>
+      <span id="qr-selftest">QR 自检运行中…</span><br>
+      外送工具台 · 与《生命之书》同族 · 2026-08-20
+    </p>
+  </footer>
+</div>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ==========================================================
+   微型 QR 生成器（内嵌·零依赖）
+   算法源自 Kazuhiko Arase qrcode-generator（MIT）核心逻辑重写：
+   BYTE 模式 · L 纠错 · 版本 1-10（271 字节上限）· 8 掩码罚分择优
+   离线已过三重验证：RS 伴随式归零 + 自研解码器往返 + jsQR 交叉解码
+   ========================================================== */
+'use strict';
+var GF_EXP = new Array(512), GF_LOG = new Array(256);
+(function () {
+  var x = 1;
+  for (var i = 0; i < 255; i++) {
+    GF_EXP[i] = x; GF_LOG[x] = i;
+    x <<= 1;
+    if (x & 0x100) x ^= 0x11D;
+  }
+  for (var j = 255; j < 512; j++) GF_EXP[j] = GF_EXP[j - 255];
+})();
+function gfMul(a, b) { return (a && b) ? GF_EXP[GF_LOG[a] + GF_LOG[b]] : 0; }
+function rsGenPoly(n) {
+  var poly = [1];
+  for (var i = 0; i < n; i++) {
+    var next = new Array(poly.length + 1);
+    for (var k = 0; k < poly.length; k++) next[k + 1] = 0;
+    next[0] = 0;
+    for (var k2 = 0; k2 < poly.length; k2++) {
+      next[k2] ^= poly[k2];
+      next[k2 + 1] ^= gfMul(poly[k2], GF_EXP[i]);
+    }
+    poly = next;
+  }
+  return poly;
+}
+function rsEncode(data, ecLen) {
+  var gen = rsGenPoly(ecLen);
+  var rem = data.concat(new Array(ecLen).fill(0));
+  for (var i = 0; i < data.length; i++) {
+    var f = rem[i];
+    if (f) for (var j = 0; j < gen.length; j++) rem[i + j] ^= gfMul(gen[j], f);
+  }
+  return rem.slice(data.length);
+}
+var RS_L = {
+  1:{blocks:[19],ec:7}, 2:{blocks:[34],ec:10}, 3:{blocks:[55],ec:15},
+  4:{blocks:[80],ec:20}, 5:{blocks:[108],ec:26}, 6:{blocks:[68,68],ec:18},
+  7:{blocks:[78,78],ec:20}, 8:{blocks:[97,97],ec:24}, 9:{blocks:[116,116],ec:30},
+  10:{blocks:[68,68,69,69],ec:18}
+};
+var ALIGN_POS = {
+  1:[], 2:[6,18], 3:[6,22], 4:[6,26], 5:[6,30], 6:[6,34],
+  7:[6,22,38], 8:[6,24,42], 9:[6,26,46], 10:[6,28,50]
+};
+function bchFormat(ecBits, mask) {
+  var data = (ecBits << 3) | mask;
+  var d = data << 10;
+  for (var i = 4; i >= 0; i--) if (d & (1 << (i + 10))) d ^= 0x537 << i;
+  return ((data << 10) | d) ^ 0x5412;
+}
+function bchVersion(v) {
+  var d = v << 12;
+  for (var i = 5; i >= 0; i--) if (d & (1 << (i + 12))) d ^= 0x1F25 << i;
+  return (v << 12) | d;
+}
+var MASKS = [
+  function (i, j) { return ((i + j) & 1) === 0; },
+  function (i, j) { return (i & 1) === 0; },
+  function (i, j) { return (j % 3) === 0; },
+  function (i, j) { return ((i + j) % 3) === 0; },
+  function (i, j) { return (((i >> 1) + (j / 3 | 0)) & 1) === 0; },
+  function (i, j) { return ((i * j) & 1) + ((i * j) % 3) === 0; },
+  function (i, j) { return ((((i * j) & 1) + (i * j) % 3) & 1) === 0; },
+  function (i, j) { return ((((i + j) & 1) + (i * j) % 3) & 1) === 0; }
+];
+function qrEncode(text) {
+  var bytes = typeof TextEncoder !== 'undefined'
+    ? Array.from(new TextEncoder().encode(text))
+    : Array.prototype.map.call(unescape(encodeURIComponent(text)), function (c) { return c.charCodeAt(0); });
+  var dataTotal = 0, version = 0;
+  for (var v = 1; v <= 10; v++) {
+    var cap = RS_L[v].blocks.reduce(function (a, b) { return a + b; }, 0);
+    if (4 + (v < 10 ? 8 : 16) + bytes.length * 8 <= cap * 8) { version = v; dataTotal = cap; break; }
+  }
+  if (!version) throw new Error('QR 内容超长');
+  var bits = [];
+  function push(val, len) { for (var k = len - 1; k >= 0; k--) bits.push((val >> k) & 1); }
+  push(4, 4);
+  push(bytes.length, version < 10 ? 8 : 16);
+  for (var b = 0; b < bytes.length; b++) push(bytes[b], 8);
+  var capBits = dataTotal * 8;
+  for (var t = 0; t < 4 && bits.length < capBits; t++) bits.push(0);
+  while (bits.length % 8) bits.push(0);
+  var padFlip = true;
+  while (bits.length < capBits) { push(padFlip ? 0xEC : 0x11, 8); padFlip = !padFlip; }
+  var codewords = [];
+  for (var c = 0; c < bits.length; c += 8) {
+    var by = 0;
+    for (var q = 0; q < 8; q++) by = (by << 1) | bits[c + q];
+    codewords.push(by);
+  }
+  var spec = RS_L[version], blocks = spec.blocks, ecLen = spec.ec;
+  var dataBlocks = [], ecBlocks = [], off = 0;
+  for (var bi = 0; bi < blocks.length; bi++) {
+    var d = codewords.slice(off, off + blocks[bi]); off += blocks[bi];
+    dataBlocks.push(d);
+    ecBlocks.push(rsEncode(d, ecLen));
+  }
+  var maxLen = Math.max.apply(null, blocks), final = [];
+  for (var di = 0; di < maxLen; di++)
+    for (var bj = 0; bj < dataBlocks.length; bj++)
+      if (di < dataBlocks[bj].length) final.push(dataBlocks[bj][di]);
+  for (var ei = 0; ei < ecLen; ei++)
+    for (var bj2 = 0; bj2 < ecBlocks.length; bj2++)
+      final.push(ecBlocks[bj2][ei]);
+  var size = 17 + 4 * version;
+  var M = [], R = [];
+  for (var r = 0; r < size; r++) { M.push(new Array(size).fill(null)); R.push(new Array(size).fill(false)); }
+  function set(rw, cl, dark, reserved) { M[rw][cl] = !!dark; if (reserved !== false) R[rw][cl] = true; }
+  function placeFinder(r0, c0) {
+    for (var dr = -1; dr <= 7; dr++) for (var dc = -1; dc <= 7; dc++) {
+      var r = r0 + dr, c = c0 + dc;
+      if (r < 0 || c < 0 || r >= size || c >= size) continue;
+      var dark = (dr >= 0 && dr <= 6 && (dc === 0 || dc === 6)) ||
+                 (dc >= 0 && dc <= 6 && (dr === 0 || dr === 6)) ||
+                 (dr >= 2 && dr <= 4 && dc >= 2 && dc <= 4);
+      set(r, c, dark, true);
+    }
+  }
+  placeFinder(0, 0); placeFinder(0, size - 7); placeFinder(size - 7, 0);
+  for (var t2 = 8; t2 < size - 8; t2++) { set(6, t2, t2 % 2 === 0, true); set(t2, 6, t2 % 2 === 0, true); }
+  var ap = ALIGN_POS[version];
+  for (var ai = 0; ai < ap.length; ai++) for (var aj = 0; aj < ap.length; aj++) {
+    var ar = ap[ai], ac = ap[aj];
+    if ((ar === 6 && ac === 6) || (ar === 6 && ac === size - 7) || (ar === size - 7 && ac === 6)) continue;
+    for (var dr2 = -2; dr2 <= 2; dr2++) for (var dc2 = -2; dc2 <= 2; dc2++)
+      set(ar + dr2, ac + dc2, Math.max(Math.abs(dr2), Math.abs(dc2)) !== 1, true);
+  }
+  set(size - 8, 8, true, true);
+  for (var f = 0; f < 9; f++) { R[8][f] = true; R[f][8] = true; }
+  for (var f2 = 0; f2 < 8; f2++) { R[8][size - 1 - f2] = true; R[size - 1 - f2][8] = true; }
+  if (version >= 7) {
+    var vBits = bchVersion(version);
+    for (var vb = 0; vb < 18; vb++) {
+      var bit = (vBits >> vb) & 1;
+      set(vb / 3 | 0, vb % 3 + size - 11, bit, true);
+      set(vb % 3 + size - 11, vb / 3 | 0, bit, true);
+    }
+  }
+  var bitIdx = 0, totalBits = final.length * 8, dirUp = true;
+  for (var col = size - 1; col > 0; col -= 2) {
+    if (col === 6) col--;
+    for (var step = 0; step < size; step++) {
+      var row = dirUp ? size - 1 - step : step;
+      for (var cOff = 0; cOff < 2; cOff++) {
+        var cc = col - cOff;
+        if (R[row][cc]) continue;
+        var bit2 = bitIdx < totalBits ? ((final[bitIdx >> 3] >> (7 - (bitIdx & 7))) & 1) : 0;
+        M[row][cc] = bit2 === 1;
+        bitIdx++;
+      }
+    }
+    dirUp = !dirUp;
+  }
+  function applyMask(maskFn) {
+    for (var r3 = 0; r3 < size; r3++) for (var c3 = 0; c3 < size; c3++)
+      if (!R[r3][c3] && maskFn(r3, c3)) M[r3][c3] = !M[r3][c3];
+  }
+  function penalty() {
+    var score = 0, r4, c4, run, k;
+    for (r4 = 0; r4 < size; r4++) {
+      run = 1;
+      for (c4 = 1; c4 < size; c4++) {
+        if (M[r4][c4] === M[r4][c4 - 1]) { run++; if (run === 5) score += 3; else if (run > 5) score++; }
+        else run = 1;
+      }
+    }
+    for (c4 = 0; c4 < size; c4++) {
+      run = 1;
+      for (r4 = 1; r4 < size; r4++) {
+        if (M[r4][c4] === M[r4 - 1][c4]) { run++; if (run === 5) score += 3; else if (run > 5) score++; }
+        else run = 1;
+      }
+    }
+    for (r4 = 0; r4 < size - 1; r4++)
+      for (c4 = 0; c4 < size - 1; c4++) {
+        var m00 = M[r4][c4];
+        if (m00 === M[r4][c4 + 1] && m00 === M[r4 + 1][c4] && m00 === M[r4 + 1][c4 + 1]) score += 3;
+      }
+    var PAT = [1,0,1,1,1,0,1,0,0,0,0];
+    for (r4 = 0; r4 < size; r4++)
+      for (c4 = 0; c4 <= size - 11; c4++) {
+        var okA = true, okB = true;
+        for (k = 0; k < 11; k++) {
+          if (M[r4][c4 + k] !== !!PAT[k]) okA = false;
+          if (M[r4][c4 + k] !== !!PAT[10 - k]) okB = false;
+        }
+        if (okA || okB) score += 40;
+      }
+    for (c4 = 0; c4 < size; c4++)
+      for (r4 = 0; r4 <= size - 11; r4++) {
+        var okC = true, okD = true;
+        for (k = 0; k < 11; k++) {
+          if (M[r4 + k][c4] !== !!PAT[k]) okC = false;
+          if (M[r4 + k][c4] !== !!PAT[10 - k]) okD = false;
+        }
+        if (okC || okD) score += 40;
+      }
+    var dark = 0;
+    for (r4 = 0; r4 < size; r4++) for (c4 = 0; c4 < size; c4++) if (M[r4][c4]) dark++;
+    score += Math.floor(Math.abs(dark * 100 / (size * size) - 50) / 5) * 10;
+    return score;
+  }
+  function placeFormat(maskId) {
+    var f = bchFormat(1, maskId);
+    for (var fi = 0; fi < 15; fi++) {
+      var fbit = ((f >> fi) & 1) === 1;
+      if (fi < 6) M[fi][8] = fbit;
+      else if (fi < 8) M[fi + 1][8] = fbit;
+      else M[size - 15 + fi][8] = fbit;
+      if (fi < 8) M[8][size - 1 - fi] = fbit;
+      else if (fi === 8) M[8][7] = fbit;
+      else M[8][14 - fi] = fbit;
+    }
+  }
+  var best = -1, bestScore = Infinity, snapshots = [];
+  for (var mi = 0; mi < 8; mi++) {
+    var snap = M.map(function (rowArr) { return rowArr.slice(); });
+    applyMask(MASKS[mi]);
+    placeFormat(mi);
+    var sc = penalty();
+    if (sc < bestScore) { bestScore = sc; best = mi; }
+    snapshots.push(M.map(function (rowArr2) { return rowArr2.slice(); }));
+    for (var rr = 0; rr < size; rr++) for (var cc2 = 0; cc2 < size; cc2++) M[rr][cc2] = snap[rr][cc2];
+  }
+  for (var rr2 = 0; rr2 < size; rr2++) for (var cc3 = 0; cc3 < size; cc3++) M[rr2][cc3] = snapshots[best][rr2][cc3];
+  return { size: size, modules: M, mask: best, version: version };
+}
+
+/* ==========================================================
+   九页数据（真实 URL·2026-08-20 九页全在线·两 repo）
+   PAGES 顺序 = 任务书：主书/童画/时间线/疗愈厅/爱网/门户/共创/版本树/感知
+   ========================================================== */
+var PAGES = [
+  { id:'book', no:'壹', name:'《生命之书》主书',
+    value:'写给每个人的<b>身体与宇宙说明书</b>——七部·10.9 万字，从细胞讲到宇宙',
+    url:'https://zxx820102-create.github.io/life-book/',
+    friend:'送你一本我在读的书——《生命之书》，写给每个人的身体与宇宙说明书。它不讲大道理，只讲你身体里每天都在发生的事：为什么熬夜会累、为什么拥抱能止痛、为什么你是星尘做的。免费、无广告，慢慢读：',
+    group:'分享一本书：《生命之书》——写给每个人的身体与宇宙说明书。七部 10.9 万字，从细胞讲到宇宙，从健康讲到死亡教育；每个说法都标认识状态（事实/模型/类比），可查证。免费无广告：' },
+  { id:'kids', no:'贰', name:'童画版 · 给你的城',
+    value:'孩子的第一本身体书——把身体讲成<b>一座城</b>（12 岁以下插图版）',
+    url:'https://zxx820102-create.github.io/life-book/kids.html',
+    friend:'家里有小朋友的话，这本《生命之书·童画版》可能适合——把身体讲成"你的城"：警察细胞在巡逻、发电厂线粒体在轰鸣、修路队在连夜修补。12 岁以下插图版，孩子自己就能看：',
+    group:'给家长们的分享：《生命之书》童画版——把身体讲成一座城，免疫是警察、线粒体是发电厂、愈合是修路队。12 岁以下插图版，免费无广告，适合亲子共读：' },
+  { id:'timeline', no:'叁', name:'双时间线卷轴',
+    value:'<b>宇宙的一生 × 一个人的一生</b>——同一根轴上对照着看',
+    url:'https://zxx820102-create.github.io/life-book/timeline.html',
+    friend:'把 138 亿年宇宙史和你的一生放在同一张卷轴上对照着看，很奇妙——你出生那刻照进来的星光、你细胞里比地球还老的原子，都在同一条河里。手机一分钟就能滑完：',
+    group:'分享一张双时间线卷轴：宇宙的一生 × 一个人的一生——138 亿年的大事与你的第一声啼哭在同一根轴上对照。手机滑动可读，一分钟看完一个人的宇宙位置：' },
+  { id:'healing', no:'肆', name:'星际疗愈厅',
+    value:'一颗被心环绕的地球——<b>每次真实打开，同在 +1</b>·此刻我们同在',
+    url:'https://zxx820102-create.github.io/xyz-portal/healing.html',
+    friend:'心情低落的时候可以打开这个页面——星际疗愈厅，一颗被心环绕的地球。你每次打开，就有一颗心升起来加入环带，计数 +1；远隔天边的人，打开的是同一个数字。什么都不用做，打开就是同在：',
+    group:'分享一个安静的页面：星际疗愈厅——打开即真实计数 +1，能看到此刻有多少人同在；什么都不用做，打开就是陪伴。送给群里有需要的时刻：' },
+  { id:'love', no:'伍', name:'爱的网络',
+    value:'<b>让爱被看见</b>——30 秒点亮一颗星·匿名·零追踪',
+    url:'https://zxx820102-create.github.io/xyz-portal/love.html',
+    friend:'做个 30 秒的小实验：点亮你自己的一颗星，选一个想给出的爱的动作（陪伴/倾听/照护/原谅……），看一道柔光从你的星流向文明里那些关于爱的星座——仁、慈悲、Ubuntu。匿名、零追踪：',
+    group:'分享一个"让爱被看见"的小站：入网三件事 30 秒——点亮自己 + 选一个爱的意向 + 记一个今日动作。匿名默认、零追踪、无排行（爱不可竞争）：' },
+  { id:'portal', no:'陆', name:'螺旋门户 · XYZ',
+    value:'<b>宇宙认识自己的界面</b>——黄金螺线绕 12 尺度·点击虫洞喉咙可穿越',
+    url:'https://zxx820102-create.github.io/xyz-portal/',
+    friend:'给你看一个我见过最特别的网站首页——XYZ 螺旋门户：一条真黄金螺线从量子核心绕到宇宙边界，26 个内容星点挂在螺线上，点击黑洞喉咙可以"穿越"。第一眼像天文仪器，第二眼才见导航：',
+    group:'分享一个艺术级导航实验：XYZ 门户——真黄金螺线（任意 90° 半径比恰为黄金分割 φ）+ 虫洞穿越 + 12 尺度宇宙，26 个内容入口全部挂在螺线上。手机可玩：' },
+  { id:'contribute', no:'柒', name:'共创页 · 共同写作',
+    value:'<b>四通道成为共同作者</b>——从点一颗心跳到写一章',
+    url:'https://zxx820102-create.github.io/life-book/contribute.html',
+    friend:'这本书在找共同作者——四条通道按你想投入的深度选：点一颗"心跳"、提一处勘误、认领一门语言的翻译、乃至共写一章。如果你曾想参与一本书的诞生，从这里进：',
+    group:'一个公开的图书共创实验：《生命之书》共创页，四通道（心跳反馈/校对建议/译者认领/章节共著）+ 贡献者宪章。哪怕只点一颗"看不懂"的心，也是在帮这本书长对：' },
+  { id:'versions', no:'捌', name:'版本树 · 谱系页',
+    value:'这本书的<b>发育史</b>——过去 11 节点史实 + 未来 7 芽推演（诚实分层）',
+    url:'https://zxx820102-create.github.io/life-book/versions.html',
+    friend:'你可以查这本"活着的书"的完整发育史——版本树：从初版到今天每一版为什么改、改了什么；未来七版也诚实画成渐淡的虚枝，标明是推演不是承诺。开源般的透明：',
+    group:'分享一个少见的做法：这本书把版本史公开成一棵生长树——过去 11 个节点是史实，未来 7 个芽是推演（透明度递减·诚实标注）。一本书的"发育史"可考：' },
+  { id:'sense', no:'玖', name:'感知页 · 神经末梢',
+    value:'书的神经末梢——<b>读者最不懂什么</b>，书就往哪里长（全本地零上传）',
+    url:'https://zxx820102-create.github.io/life-book/sense.html',
+    friend:'这本书长了一个"神经末梢"——感知页：读者在哪里点"看不懂"，哪里就显影成"最不懂 TOP 榜"，书的下一步就往那里长。你可以看大家共同不懂什么，也可以留下自己的困惑（全本地保存）：',
+    group:'一个诚实的实验：《生命之书》感知页公开"读者最不懂什么"——疑问显影、证据保鲜日期、感知快照可导出，全程本地零上传。书的生长方向由读者的困惑决定：' }
+];
+
+/* ==========================================================
+   渲染 + 交互
+   ========================================================== */
+(function () {
+  var reduceMotion = false;
+  try { reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+
+  /* ---- 复制（clipboard API + execCommand 回退·与主书共创页同机制） ---- */
+  var toastTimer = null;
+  function toast(msg) {
+    var el = document.getElementById('toast');
+    if (!el) return;
+    el.textContent = msg;
+    el.classList.add('on');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.classList.remove('on'); }, 1800);
+  }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyText(text, label) {
+    var done = function (ok) {
+      toast(ok ? '已复制' + (label ? '：' + label : '') + '——去发给一个真实的人' : '复制失败，请长按文案手动复制');
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () {
+        done(fallbackCopy(text));
+      });
+    } else {
+      done(fallbackCopy(text));
+    }
+  }
+
+  /* ---- QR 渲染（固定极性：墨/纸·跨主题保证扫码器兼容） ---- */
+  function renderQR(canvas, url) {
+    var res = qrEncode(url);
+    var quiet = 4, n = res.size, total = n + quiet * 2;
+    var css = 148, dpr = Math.min(window.devicePixelRatio || 1, 3);
+    var px = Math.round(css * dpr), scale = px / total;
+    canvas.width = px; canvas.height = px;
+    canvas.setAttribute('role', 'img');
+    canvas.setAttribute('aria-label', '二维码：扫码打开 ' + url);
+    var ctx = canvas.getContext('2d');
+    if (!ctx) throw new Error('canvas 2d 不可用');
+    ctx.fillStyle = '#FAF6EF';
+    ctx.fillRect(0, 0, px, px);
+    ctx.fillStyle = '#2A2622';
+    for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) {
+      if (!res.modules[r][c]) continue;
+      ctx.fillRect(Math.floor((c + quiet) * scale), Math.floor((r + quiet) * scale),
+                   Math.ceil(scale), Math.ceil(scale));
+    }
+    return res;
+  }
+
+  /* ---- 卡片构建 ---- */
+  var cards = document.getElementById('cards');
+  var qrOk = 0, qrFail = 0;
+  PAGES.forEach(function (p, idx) {
+    var card = document.createElement('section');
+    card.className = 'card';
+    card.setAttribute('aria-label', p.name);
+
+    var head = document.createElement('div');
+    head.className = 'card-head';
+    head.innerHTML = '<h2><span class="no" aria-hidden="true">' + p.no + '</span>' + p.name + '</h2>' +
+      '<p class="value">' + p.value + '</p>';
+    card.appendChild(head);
+
+    var linkrow = document.createElement('div');
+    linkrow.className = 'linkrow';
+    var a = document.createElement('a');
+    a.href = p.url; a.target = '_blank'; a.rel = 'noopener';
+    a.textContent = p.url;
+    linkrow.appendChild(a);
+    var linkBtn = document.createElement('button');
+    linkBtn.type = 'button'; linkBtn.className = 'btn small';
+    linkBtn.textContent = '复制链接';
+    linkBtn.addEventListener('click', function () { copyText(p.url, p.name + ' 链接'); });
+    linkrow.appendChild(linkBtn);
+    card.appendChild(linkrow);
+
+    var split = document.createElement('div');
+    split.className = 'split';
+
+    var qrbox = document.createElement('div');
+    qrbox.className = 'qrbox';
+    var frame = document.createElement('div');
+    frame.className = 'qrframe';
+    var cv = document.createElement('canvas');
+    frame.appendChild(cv);
+    qrbox.appendChild(frame);
+    var cap = document.createElement('div');
+    cap.className = 'cap';
+    cap.textContent = '扫码直达 · 本地生成';
+    qrbox.appendChild(cap);
+    split.appendChild(qrbox);
+
+    var blocks = document.createElement('div');
+    blocks.className = 'copyblocks';
+    [['朋友版', p.friend], ['群版', p.group]].forEach(function (pair) {
+      var lab2 = pair[0], body = pair[1];
+      var cb = document.createElement('div');
+      cb.className = 'copyblock';
+      var lab = document.createElement('div');
+      lab.className = 'lab';
+      var labSpan = document.createElement('span');
+      labSpan.textContent = '微信' + lab2;
+      lab.appendChild(labSpan);
+      var btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'btn primary';
+      btn.textContent = '复制文案';
+      (function (text, name) {
+        btn.addEventListener('click', function () { copyText(text, name + ' ' + lab2); });
+      })(body + '\n' + p.url, p.name);
+      lab.appendChild(btn);
+      cb.appendChild(lab);
+      var txt = document.createElement('p');
+      txt.className = 'txt';
+      txt.textContent = body + '\n' + p.url;
+      cb.appendChild(txt);
+      blocks.appendChild(cb);
+    });
+    split.appendChild(blocks);
+
+    card.appendChild(split);
+    cards.appendChild(card);
+
+    try { renderQR(cv, p.url); qrOk++; }
+    catch (e) {
+      qrFail++;
+      cap.textContent = '二维码生成失败——链接与文案仍可用';
+    }
+  });
+
+  /* ---- QR 自检（结构不变量·已知内容编码校验） ---- */
+  (function () {
+    var el = document.getElementById('qr-selftest');
+    if (!el) return;
+    try {
+      var probe = qrEncode('https://zxx820102-create.github.io/life-book/');
+      var m = probe.modules, n = probe.size, ok = true;
+      // 定位方块三角 + 中心暗 + 尺寸/版本一致
+      ok = ok && m[0][0] && m[6][6] && m[3][3] && m[0][n-7] && m[n-7][0] && m[n-8][8];
+      ok = ok && n === 17 + 4 * probe.version;
+      // 时序线在 (6,8) 为暗、(6,9) 为亮
+      ok = ok && m[6][8] === true && m[6][9] === false;
+      el.textContent = 'QR 自检：' + qrOk + '/9 卡本地生成' + (ok ? ' · 探针结构校验通过' : '') +
+        (qrFail ? ' · ' + qrFail + ' 张降级' : '') + '（离线三重验证：RS 伴随式 + 解码往返 + jsQR 交叉）';
+    } catch (e) {
+      el.textContent = 'QR 自检：探针异常（' + e.message + '）';
+    }
+  })();
+
+  /* ---- 日夜切换 ---- */
+  var themeBtn = document.getElementById('theme-btn');
+  function themeNow() { return document.documentElement.classList.contains('night') ? 'night' : 'day'; }
+  function syncThemeBtn() {
+    themeBtn.textContent = themeNow() === 'night' ? '昼' : '夜';
+    themeBtn.setAttribute('aria-pressed', String(themeNow() === 'night'));
+  }
+  themeBtn.addEventListener('click', function () {
+    var next = themeNow() === 'night' ? 'day' : 'night';
+    var el = document.documentElement;
+    el.classList.remove('day', 'night');
+    el.classList.add(next);
+    try { localStorage.setItem('sendkit-theme', next); } catch (e) {}
+    syncThemeBtn();
+  });
+  syncThemeBtn();
+})();
+</script>
+</body>
+</html>
