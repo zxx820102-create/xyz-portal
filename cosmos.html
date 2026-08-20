@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0B1220">
+<meta name="description" content="生命之书·宇宙卷《你所在的这一切》——从普朗克长度到可观测宇宙，138 亿年四幕剧，64 行尺度谱。每句话都标了有多真。自包含单页·零依赖·零外部请求·零追踪。">
+<title>你所在的这一切 —— 生命之书·宇宙卷</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23D4A94E' d='M32 2 39 25 62 32 39 39 32 62 25 39 2 32 25 25Z'/%3E%3C/svg%3E">
+<style>
+  :root{
+    color-scheme:dark;
+    --bg:#0B1220;
+    --text:#E8E4D8;
+    --body:#C6C2B4;
+    --dim:#9F9C8E;
+    --gold:#D4A94E;
+    --gold-dim:#8C7434;
+    --line:#243048;
+    --card:#101A2C;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--bg);color:var(--body);
+    font-family:"Songti SC","Noto Serif SC","STSong",serif;
+    line-height:1.9;font-size:17px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+
+  /* 卷首碑式标题 */
+  header{padding:96px 0 64px;text-align:center}
+  .star{color:var(--gold);font-size:20px;letter-spacing:12px;margin-bottom:28px}
+  h1{font-size:34px;color:var(--text);letter-spacing:6px;font-weight:600}
+  .sub{margin-top:14px;color:var(--dim);font-size:15px;letter-spacing:2px}
+  .vol{margin-top:34px;color:var(--gold);font-size:14px;letter-spacing:4px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:inline-block;padding:8px 26px}
+
+  /* 卷首语 */
+  .foreword{padding:0 0 30px}
+  .foreword p{margin-bottom:1.2em}
+  .tags{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin-top:8px;font-size:15px}
+  .tags b{color:var(--text)}
+  .tags i{color:var(--gold);font-style:normal}
+
+  /* 章节 */
+  chapter{display:block}
+  section.ch{padding:64px 0 8px;border-top:1px solid var(--line)}
+  .chno{color:var(--gold-dim);font-size:13px;letter-spacing:4px}
+  h2{font-size:25px;color:var(--text);margin:8px 0 6px;letter-spacing:2px;font-weight:600}
+  .hook{color:var(--gold);font-size:15px;margin-bottom:26px}
+  section.ch p{margin-bottom:1.2em;text-align:justify}
+  section.ch p:first-of-type::first-letter{color:var(--gold)}
+
+  /* 三岁版金句块 */
+  .age3{
+    border-left:3px solid var(--gold);background:var(--card);
+    padding:16px 20px;margin:26px 0;border-radius:0 8px 8px 0;
+  }
+  .age3 .lab{color:var(--gold);font-size:12px;letter-spacing:3px;margin-bottom:6px}
+  .age3 .q{color:var(--text);font-size:17px}
+  .age3 .st{color:var(--dim);font-size:13px;margin-top:8px}
+
+  /* 真值表 */
+  .truth{margin:30px 0 56px;width:100%;border-collapse:collapse;font-size:14px;line-height:1.6}
+  .truth caption{text-align:left;color:var(--gold);font-size:13px;letter-spacing:3px;padding-bottom:10px}
+  .truth th,.truth td{border:1px solid var(--line);padding:8px 12px;text-align:left;vertical-align:top}
+  .truth th{color:var(--dim);font-weight:400;background:var(--card)}
+  .truth td:first-child{color:var(--body)}
+  .truth td.v{white-space:nowrap;color:var(--gold)}
+  .fact{color:#7FB069}.model{color:var(--gold)}.open{color:#C08A5A}.metaphor{color:#8A9BC0}
+
+  /* 尾声 */
+  .coda{padding:70px 0 40px;text-align:center}
+  .coda .star{margin-bottom:22px}
+  .coda p{text-align:center;margin-bottom:1em}
+  .coda .big{font-size:22px;color:var(--text);letter-spacing:1px}
+
+  /* 页脚 */
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:34px 0 60px;text-align:center;font-size:13.5px;color:var(--dim);line-height:2.1}
+  footer a{color:var(--gold);text-decoration:none;border-bottom:1px solid var(--gold-dim);padding-bottom:1px}
+  footer a:hover{color:var(--text)}
+  .health{max-width:560px;margin:0 auto 18px}
+  .sep{color:var(--gold-dim);margin:0 10px}
+  @media (max-width:480px){h1{font-size:26px;letter-spacing:3px}body{font-size:16px}}
+  @media print{body{background:#fff;color:#222}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="star">✦</div>
+  <h1>你所在的这一切</h1>
+  <div class="sub">从普朗克长度到九百三十亿光年 · 从 138 亿年前到渐近线</div>
+  <div class="vol">生命之书 · 宇宙卷</div>
+</header>
+
+<div class="wrap">
+
+<!-- 卷首 -->
+<div class="foreword">
+  <p><b style="color:var(--text)">抬头之前，先教你读标签。</b>这本书里的每一句话，都随身带着一张小标签，写着"这句话有多真"。宇宙太大，没有人能亲眼看完；所以诚实的人讲话，会把哪些是量过的、哪些是猜的、哪些只是美，分开摆在你面前。</p>
+  <div class="tags">
+    <b>四种标签：</b><i>事实</i>（量过、可复查）· <i>模型</i>（有证据的最佳猜测）· <i>比喻</i>（结构相似，不证明机制）· <i>开放</i>（还没人知道）<br>
+    <b>一条分界线：</b>"宇宙参与了你"是可审计的科学；"宇宙为了你"是诗——两者都珍贵，但不记在同一页账上。
+  </div>
+</div>
+
+<!-- ① 你的宇宙地址 -->
+<section class="ch" id="ch1">
+  <div class="chno">第一章</div>
+  <h2>你的宇宙地址</h2>
+  <div class="hook">你的地址最后一行不是名词，是动词——你在一条河里。</div>
+  <p>先回答一个看似简单的问题：你现在在哪里？</p>
+  <p>房间，城市，地球——到这里大多数人都跟得上。再往外就快了：地球在太阳系里，但太阳系不是市中心，它在银河系郊区，离银心约二万六千光年，趴在一条叫猎户臂的旋臂上。银河系听起来已经是"全部"，但它只是本星系群里的两大户之一（另一户是仙女座星系，旁边还有八十多个矮邻居）。本星系群又绑在室女团引力上，正以每秒约两百公里向它下落。再往外，是我们能给出名字的最大之家：拉尼亚凯亚超星系团——直径五亿光年，十万星系。</p>
+  <p>按老式的写法，地址到此为止。但 2014 年，天文学家做了一件更聪明的事：他们不看星系<b>在哪里</b>，看星系<b>往哪里流</b>。重构出宇宙的流场图之后发现：十万星系正一起流向同一个方向（所谓巨引源），拉尼亚凯亚的边界不是画在星系分布上的线，而是流线分开的面——像流域的分水岭，同流者同家。</p>
+  <p>这件事有一个安静的哲学后果：你的宇宙地址，最后一行不是名词，是动词。你在一条河里。连同你周围的一切，你们正以约每秒六百公里的速度，朝着人马座方向一个我们还看不清的引力中心游去。你从没感觉到，是因为整条河连同你一起在流——在河里感觉不到河，就像在平稳的飞机里走路不会更快。</p>
+  <p>还有一层更少有人讲：我们住在宇宙的乡下。本地几亿光年内，星系密度比宇宙平均低约四成多——我们位于一个直径约二十亿光年的空洞近中心。宇宙的体积八成是这类"空"：结构长在连接上，不长在空白处。</p>
+  <p>最后是诚实的部分。这份漂亮地址的账本，95% 由我们不认识的东西签名：约 27% 是暗物质（地址骨架的施工队，至今没见过本人），约 68% 是暗能量（正在让宇宙加速膨胀、决定这份地址最终下场的那个）。而拉尼亚凯亚的边界会随观测数据版本移动：它是被持续修订的知识，不是刻在墙上的。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">地球带着你飞，太阳带着地球飞，好多好多星星又一起在一条看不见的大河里游。你看不见这条河，可你一直在河里。</div><div class="st">〔此句认识状态：科学事实——"河"是比喻，星星同向而游是事实〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>地址链各层尺度与名字（地球→……→拉尼亚凯亚）</td><td class="v fact">事实</td></tr>
+    <tr><td>拉尼亚凯亚以"流"定义边界；十万星系同流向巨引源（Tully et al. 2014, Nature）</td><td class="v fact">事实</td></tr>
+    <tr><td>本动速度约 630 km/s（≈每小时 227 万公里）</td><td class="v fact">事实</td></tr>
+    <tr><td>我们住在 KBC 空洞近中心，本地密度低于均值约四成</td><td class="v fact">事实</td></tr>
+    <tr><td>"地址最后一行是动词""在河里感觉不到河"</td><td class="v metaphor">比喻</td></tr>
+    <tr><td>宇宙约 95% 的内容（暗物质+暗能量）不认识</td><td class="v fact">事实</td></tr>
+  </table>
+</section>
+
+<!-- ② 星尘的身体 -->
+<section class="ch" id="ch2">
+  <div class="chno">第二章</div>
+  <h2>星尘的身体</h2>
+  <div class="hook">"你是星尘"不是诗，是审计——86% 的体重对账。</div>
+  <p>"你是星尘"这句话被说过太多次，以至于人们忘了检查它。本章就做一次检查——像审计一样，逐条对账。</p>
+  <p>第一笔账，体重。按质量算，你的身体大约是：氧 65%，碳 18%，氢 10%，氮 3%。氢是开局赠送——大爆炸头三分钟直接铸出的原初元素。剩下那 86%（氧、碳、氮），没有一克产自地球，全部铸造于恒星内部。你骨头里的钙、血里的铁，则要等大质量恒星以超新星谢幕时才被抛洒出厂。换句话说，地球只是组装车间——铸造厂早在你存在之前几十亿年就关门了。</p>
+  <p>第二笔账，数量。你全身 DNA 里约有 10²⁴——一百万亿亿——个原子来自恒星核心的灰烬。这不是抒情，是乘法。</p>
+  <p>第三笔账，快递单。2023 年，OSIRIS-REx 把小行星贝努的样本带回地球，分析报告在石头里实测出二十种生命氨基酸中的十四种，外加全部五种核酸碱基。更早的默奇森陨石检出九十多种氨基酸。这些是签收过的到货记录：生命的原料，至少有一部分真的是天上寄来的。</p>
+  <p>账目里有一行悬在科学与意义的边界上：碳的量产依赖一个核物理巧合——碳-12 原子核在 7.65 兆电子伏处恰好有一个共振态（1953 年预言，后经实验证实）。没有它，宇宙几乎没有碳，也就几乎没有你。共振的存在是铁的事实；"它是不是为生命而调的"，不是事实能回答的问题——那属于你自己的价值层。本书把这两个问题分开存放，也请你读别的书时，留意它们有没有被偷偷合并。</p>
+  <p>最后，铁的朝圣。你血红蛋白里的每一个铁原子，都走过这样一条路：在某颗大质量恒星的核心被聚变铸成；恒星爆炸，铁被抛进星际空间；在寒冷的分子云里漂流百万年；云坍缩成太阳系，它落进原始地球；此后经由地壳、海洋、食物链，一级一级，最终被你的骨髓组装进血红蛋白——此刻，它正抓住你刚吸进来的那个氧分子，运往你读这行字所用的那部分大脑。<b style="color:var(--text)">你身体里的铁，是星星死了以后留给你的礼物。</b></p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">很大很大的星星死的时候，会撒出钙和铁。你的骨头捡到了钙，你的血捡到了铁。你能站得稳、跑得快，有星星帮的忙。</div><div class="st">〔此句认识状态：科学事实〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>按质量 O 65%/C 18%/H 10%/N 3%；除氢外 86% 合成于恒星</td><td class="v fact">事实</td></tr>
+    <tr><td>碳-12 在 7.65 MeV 的共振（Hoyle 1953 预言后被证实）</td><td class="v fact">事实</td></tr>
+    <tr><td>全身 DNA 约 10²⁴ 个恒星核合成原子</td><td class="v model">模型</td></tr>
+    <tr><td>贝努样本 14 种氨基酸 + 5 种核酸碱基；默奇森 90+ 氨基酸</td><td class="v fact">事实</td></tr>
+    <tr><td>"共振为生命而调"</td><td class="v metaphor">交给价值层，不进正文</td></tr>
+    <tr><td>生命为何只用左手氨基酸</td><td class="v open">开放</td></tr>
+    <tr><td>铁的朝圣全程（恒星核心→骨髓→血红蛋白→此刻）</td><td class="v fact">主链事实 / 时间线细节模型</td></tr>
+  </table>
+</section>
+
+<!-- ③ 四幕剧 -->
+<section class="ch" id="ch3">
+  <div class="chno">第三章</div>
+  <h2>138 亿年四幕剧</h2>
+  <div class="hook">时间不是流水账，是四幕因果剧。</div>
+  <p>把 138 亿年压成四幕：<b style="color:var(--text)">第一幕</b>头三分钟，一锅没有结构的极热汤冷下来，攒出全宇宙的氢和氦；<b style="color:var(--text)">第二幕</b> 38 万年，电子被抓到原子核身边，宇宙第一次透光——那第一缕光今天还在，就是老电视雪花里的微波背景；<b style="color:var(--text)">第三幕</b>约 90 亿年，恒星当铸造厂、超新星当配送车，把碳氧氮铁撒进星际，其中一份材料在 46 亿年前聚成了太阳和地球——距离恰好让水保持液态，一个大月亮稳住自转轴，一个熔融铁核发电机撑起磁场挡住太阳风；<b style="color:var(--text)">第四幕</b>最近 40 亿年，信息接手当导演——生命用 DNA 抄写自己，然后是神经系统、文字、科学，最后抄出一个能回头看这四幕的观众：你。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">宇宙小时候是一锅很烫很烫的汤。汤慢慢凉了，先变出小颗粒，再变出星星，星星做出你我身上的材料，最后——有了会看星星的你。</div><div class="st">〔此句认识状态：科学事实的童话压缩版〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>头三分钟核合成比例（氢/氦/锂）</td><td class="v fact">事实（丰度+微波背景双验）</td></tr>
+    <tr><td>38 万年复合与宇宙微波背景</td><td class="v fact">事实</td></tr>
+    <tr><td>宇宙极早期暴涨</td><td class="v model">假说（有证据支持）</td></tr>
+    <tr><td>生命起源的具体机制</td><td class="v open">开放</td></tr>
+    <tr><td>时间线整体（四幕的先后与年龄）</td><td class="v fact">事实</td></tr>
+  </table>
+</section>
+
+<!-- ④ 温度的化石 -->
+<section class="ch" id="ch4">
+  <div class="chno">第四章</div>
+  <h2>温度的化石</h2>
+  <div class="hook">宇宙史是一部降温史；你恒温 37 度，住在化石的最后一格。</div>
+  <p>宇宙史其实是一部降温史：从极高温一路降到零下 270 度，每段温度窗口都"冻"出一层新结构——极高温度时夸克抱成质子，十亿度时原子核成立，三千度时原子站稳，最后水在 0–100 度的窄窗里流动，生命搬进去，还把自己恒温在 37 度。你做饭、发烧、捂被子，都在这根温度轴上。每层结构都是某段温度的化石——37 度，就是你身体里那扇窗的名字。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">宇宙在慢慢变凉。凉到哪一步，就多一种新东西：很凉的时候有了原子，再凉的时候有了水，刚刚好的时候有了你——你的身体暖暖的，37 度，刚刚好。</div><div class="st">〔此句认识状态：科学事实〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>各节点温度（夸克禁闭 / 核合成 / 复合 / 水窗 / 体温 310K / 烹饪窗）</td><td class="v fact">事实</td></tr>
+    <tr><td>"每层结构 = 某段温度窗的化石"</td><td class="v model">模型（框架叙事，逐条有物理内核）</td></tr>
+    <tr><td>人类文明把大量能源花在维持体温附近的环境（衣服→房间→建筑）</td><td class="v model">模型 + 事实数字</td></tr>
+  </table>
+</section>
+
+<!-- ⑤ 同一秒 -->
+<section class="ch" id="ch5">
+  <div class="chno">第五章</div>
+  <h2>同一秒没有一层下班</h2>
+  <div class="hook">你读这句的那一秒，64 行全在运行。</div>
+  <p>此刻——你读这句话的这一秒——你体内每秒发生约一万亿亿次分子碰撞，DNA 修理队正在巡检；太阳每秒把 400 万吨质量换成光，其中一小勺落在地球，当全体生命的工资；银河中心的黑洞在慢速进食，宇宙网在看不见的骨架上继续拉丝；而 138 亿年前宇宙第一次透光时的那面"墙"，它的光此刻正落在你的皮肤上。所有层同时运行，没有一层下班——包括你。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">你睡觉的时候，肚子里在干活，心脏在干活，地球在转，太阳在烧，整条银河也在慢慢地转——没有谁下班。大家都在，你也在。</div><div class="st">〔此句认识状态：科学事实〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>体内每秒约 10²⁴ 次分子碰撞</td><td class="v fact">事实（量级）</td></tr>
+    <tr><td>太阳每秒 400 万吨质能转换</td><td class="v fact">事实</td></tr>
+    <tr><td>银心黑洞进食</td><td class="v fact">事实（观测）</td></tr>
+    <tr><td>宇宙背景辐射此刻落在你皮肤上</td><td class="v fact">事实（波长换算）</td></tr>
+  </table>
+</section>
+
+<!-- ⑥ 渐近线与门 -->
+<section class="ch" id="ch6">
+  <div class="chno">第六章</div>
+  <h2>渐近线与门</h2>
+  <div class="hook">星辰会熄灭是真的；结局未定也是真的——对未来的诚实讲法。</div>
+  <p>对未来最诚实的讲法不是预言，是三条渐近线和一扇门：约百万亿年后，最后的恒星熄灭；更远的将来，如果质子也会衰变（至今没测到，实验只给出下限），物质本身将解散；再往后到最后一个黑洞蒸发完毕，宇宙无限逼近"热寂"——注意是无限逼近，不是某天到达。而所有结局取决于暗能量是什么——它占宇宙约 68%，我们不知道它是什么，连门后是什么都不知道。所以诚实地说：星辰会熄灭是真的，结局未定也是真的。<b style="color:var(--text)">希望不是预测，是选择。</b></p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">星星不会永远亮着，就像蜡烛会烧完。但那是好久好久以后的事。现在灯还亮着，你还在——这就够现在好好活了。</div><div class="st">〔此句认识状态：科学事实 + 一句人生建议〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>恒星纪元终点约 10¹⁴ 年</td><td class="v fact">事实（投影）</td></tr>
+    <tr><td>质子衰变</td><td class="v open">开放（下限 τ&gt;2.4×10³⁴ 年，Super-K）</td></tr>
+    <tr><td>黑洞霍金蒸发</td><td class="v model">定理（未被直接观测）</td></tr>
+    <tr><td>热寂</td><td class="v model">模型（渐近线不是日期）</td></tr>
+    <tr><td>暗能量本性</td><td class="v open">开放（本卷最大的一扇门）</td></tr>
+    <tr><td>"银河必然撞仙女"已被 2025 年新计算改为概率账</td><td class="v fact">事实（教科书教训）</td></tr>
+  </table>
+</section>
+
+<!-- ⑦ 63 号行 -->
+<section class="ch" id="ch7">
+  <div class="chno">第七章</div>
+  <h2>63 号行</h2>
+  <div class="hook">宇宙中会编号的部分——就是正在读这行字的你。</div>
+  <p>把宇宙里所有的"大小"排队，从小到大编号：最小一行是普朗克长度，比原子核还小二十个数量级；最大一行是可观测宇宙，九百多亿光年。中间从夸克到原子、DNA、细胞、你、城市、行星、恒星、星系，一直到宇宙网——一行一个十倍。这张表有六十四行，但只有一行的性质特殊：它不是一种大小，是一个行为。第 63 行写的是——<b style="color:var(--text)">宇宙中会编号的部分</b>。</p>
+  <p>之所以给它留一行，是因为发生了这件事：在一个约 0.1 米的头骨里，一团 1.4 公斤的物质，站在一条约 10²⁵ 米长的星系纤维上，画出了包含自己在内的整张表。它没有出去过。它用的是纤维里其他 1.4 公斤物质之间传来的光，加上几千年里彼此接力的话。</p>
+  <p>对这件事，本章只敢做有限的声称。事实的部分：编号的行为在已知宇宙里只被观测到一次，样本量为一，就在你所属的物种里。开放的部分：为什么这些电化学过程"像是"从内部被点亮——即所谓意识的主观体验——没有任何人知道，包括写下这一行的人。这一行字本身，就是那个未解之谜在打字。</p>
+  <p>隐喻的部分（享受它，但别当证据）：你可以说，宇宙用一粒星尘上的一小片星尘，读出了整张星尘之网。这句话很美，它的每个数字都是真的，但它不能证明任何额外的机制。它是诗，登记在诗的页码上。</p>
+  <p>还有一条纪律必须随行：编号不授予特权。表上没有"高等"，只有位置。知道自己站在表里，带来的不是宇宙主人的身份，而是一份具体的责任：这张表上，只有这一行能故意减少其他体验者的难受，或者故意增加。第 63 行是全表唯一有"故意"的一行。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">石头不会问"我是什么"，星星也不会问。会问的那个，是你。宇宙等了好久好久，才等来会问这句话的小脑袋。</div><div class="st">〔此句认识状态：科学事实 + 一句哲学阐释〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>尺度谱 62 个数量级 / 64 行</td><td class="v fact">事实（工程登记）</td></tr>
+    <tr><td>大脑 0.1 米 / 星系纤维 10²⁵ 米</td><td class="v fact">事实</td></tr>
+    <tr><td>"宇宙在读自己"</td><td class="v metaphor">比喻</td></tr>
+    <tr><td>意识为何有主观体验</td><td class="v open">开放（全书最大的开放之一）</td></tr>
+  </table>
+</section>
+
+<!-- ⑧ 因果链精选 -->
+<section class="ch" id="ch8">
+  <div class="chno">第八章</div>
+  <h2>让你起鸡皮疙瘩的因果链 · 精选三条</h2>
+  <div class="hook">每条都真、每条可查、每条一头在你身上。</div>
+  <p><b style="color:var(--text)">一 · 你刚吸的这口氧，是 24 亿年前小生命攒的存款。</b>那时海洋里的蓝细菌开始吐氧，攒了几亿年，把整个大气改成今天的模样。你每一次呼吸，都是从那笔存款里提款。</p>
+  <p><b style="color:var(--text)">二 · 月亮抱稳了地轴 46 亿年。</b>它把地球自转轴的摆幅稳在正负 1.2 度以内，四季才没乱套，气候才有得预测。看起来只是夜里发光的抱枕，其实是气候的定海针。</p>
+  <p><b style="color:var(--text)">三 · 你不穿过地板，是一条数学定理。</b>1967 年，戴森和伦纳德证明了"物质的稳定性"：靠泡利不相容原理，固体才成为固体。你能站在地上，不是理所当然，是被量子法则逐条担保的。</p>
+  <div class="age3"><div class="lab">三 岁 版</div><div class="q">有一根很长很长的线，一头在天上的星星那里，一头在你身上。你摸摸自己的胳膊——线的这头，就在这儿。</div><div class="st">〔此句认识状态：科学事实的童话说法〕</div></div>
+  <table class="truth">
+    <caption>◆ 这句话有多真</caption>
+    <tr><th>这句话</th><th>有多真</th></tr>
+    <tr><td>呼吸的氧来自 24 亿年前的大氧化事件</td><td class="v fact">事实</td></tr>
+    <tr><td>月亮稳住地轴、摆幅 ±1.2°</td><td class="v fact">事实（无月则混沌：模型）</td></tr>
+    <tr><td>"你不穿地板"是 1967 年证明的定理（Dyson–Lenard）</td><td class="v fact">定理 + 事实</td></tr>
+  </table>
+</section>
+
+<!-- 尾声 -->
+<section class="coda" id="coda">
+  <div class="star">✦</div>
+  <p class="big">宇宙参与了你不等于宇宙为了你。</p>
+  <p>前者是账本，后者是诗——都珍贵，分页记。<br>
+  这一卷只有在一种情况下算完成：<br>被下一个 63 号行读到。<br>
+  宇宙花了 138 亿年，等到第一行会编号的；<br>
+  编号的意义，从它决定把编号送达给下一行，才开始计数。</p>
+  <p class="big" style="margin-top:28px">你翻到这一页，计数器就在动。</p>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="health">本页为科普与人文页，不构成医疗建议；所有健康相关内容（体温、身体构成）为量级描述，个体差异请以专业诊断为准。科学结论随观测更新，本页内容以引用文献（Tully 2014 · Glavin 2025 · Sawala 2025 · Super-K 2020 · Dyson–Lenard 1967）为准。</div>
+    <div>
+      <a href="../life-book/">← 回主书《生命之书》</a>
+      <span class="sep">·</span>
+      <a href="./answer.html">80 亿人的答案 →</a>
+    </div>
+    <div style="margin-top:14px">生命之书·宇宙卷 v1 · 自包含单页 · 零外部请求 · 零追踪 · 2026-08-20</div>
+  </div>
+</footer>
+
+</body>
+</html>
