@@ -13,7 +13,7 @@
    同时提前挂 js 类：渐显样式只在 JS 可用时生效，无 JS 一律静态全显。 */
 (function(){try{
   document.documentElement.classList.add('js');
-  if(localStorage.getItem('answer-theme')==='day'){
+  if(localStorage.getItem('lb-theme')==='day'){
     document.documentElement.classList.remove('night');
     document.documentElement.classList.add('day');
   }
@@ -433,7 +433,7 @@ function applyTheme(t,save){
   root.classList.toggle('day',!night);
   themeBtn.textContent=night?'日':'夜';
   themeBtn.setAttribute('aria-label',night?'切换到日间模式':'切换到夜间模式');
-  if(save){ try{ localStorage.setItem('answer-theme',t); }catch(e){} }
+  if(save){ try{ localStorage.setItem('lb-theme',t); }catch(e){} }
 }
 applyTheme(root.classList.contains('night')?'night':'day',false);
 themeBtn.addEventListener('click',function(){
@@ -478,5 +478,11 @@ if(/[?&]selftest=1/.test(location.search)){
 }
 })();
 </script>
+
+<div style="text-align:center;padding:2rem 0;font-size:0.9em;opacity:0.7;">
+  <a href="../life-book/" style="color:inherit;text-decoration:underline;margin:0 1rem;">📖 读完整的书</a>
+  <a href="./healing.html" style="color:inherit;text-decoration:underline;margin:0 1rem;">🌍 此刻与你同在</a>
+  <a href="./love.html" style="color:inherit;text-decoration:underline;margin:0 1rem;">❤️ 点亮一颗心</a>
+</div>
 </body>
 </html>
