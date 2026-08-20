@@ -187,6 +187,18 @@
     text-shadow:0 0 28px var(--gold-glow);
   }
 
+  /* ---- 回声：历代人说过的话（克制·静金） ---- */
+  .echo .kicker{margin-bottom:2.6rem}
+  .echo-q{
+    font-size:clamp(1.08rem,2.8vw,1.34rem);line-height:2;
+    text-align:center;color:var(--body-c);
+    letter-spacing:.04em;margin:0 auto 1.9rem;max-width:30em;
+  }
+  .echo-q .echo-by{
+    display:block;font-size:.72em;color:var(--text-2);
+    letter-spacing:.2em;margin-top:.35em;font-style:normal;
+  }
+
   /* ---- 跋与页脚 ---- */
   .colo{
     font-style:italic;font-size:14px;line-height:2.15;
@@ -347,6 +359,19 @@
   </div>
 </section>
 
+<!-- 回声 -->
+<section class="verse echo" aria-label="回声·历代人说过的话">
+  <div class="v-in">
+    <p class="kicker">回声 · 这些话，人类其实说过很多次</p>
+    <blockquote class="echo-q">疼的时候，把裂痕对着光——因为伤口是光照进来的地方。<span class="echo-by">—— 莱昂纳德·科恩，转引自一本五年摘抄本</span></blockquote>
+    <blockquote class="echo-q">黑夜给了我黑色的眼睛，我却用它来寻找光明。<span class="echo-by">—— 顾城</span></blockquote>
+    <blockquote class="echo-q">每人都是一座孤岛，却有汪洋大海将彼此相连。<span class="echo-by">—— 摘抄本</span></blockquote>
+    <blockquote class="echo-q">当世界上最后一个人忘记你，那才是真正的死亡。<span class="echo-by">—— 摘抄本</span></blockquote>
+    <blockquote class="echo-q">当你点亮别人，你也会感受到温暖。<span class="echo-by">—— 摘抄本</span></blockquote>
+    <blockquote class="echo-q">如若没有炬火，我便做那唯一的光。<span class="echo-by">—— 鲁迅</span></blockquote>
+  </div>
+</section>
+
 <!-- 跋 -->
 <section class="verse colophon" aria-label="跋">
   <div class="v-in">
@@ -464,9 +489,10 @@ rbtn.addEventListener('click',function(){
 if(/[?&]selftest=1/.test(location.search)){
   var R=[];
   function ck(name,ok){ R.push({name:name,ok:!!ok}); }
-  ck('sections=11',doc.querySelectorAll('.verse').length===11);
-  ck('six-kickers',doc.querySelectorAll('.kicker').length===6);
-  ck('finale-3-lines',doc.querySelectorAll('.final').length===3);
+    ck('sections=12',doc.querySelectorAll('.verse').length===12);
+    ck('six-kickers',doc.querySelectorAll('.kicker').length===7);
+    ck('finale-3-lines',doc.querySelectorAll('.final').length===3);
+    ck('echo-6-quotes',doc.querySelectorAll('.echo-q').length===6);
   ck('sky-canvas-ready',!!canvas&&canvas.width>0&&canvas.height>0);
   ck('theme-persist-ok',(function(){
     try{ localStorage.setItem('answer-theme-st','1'); localStorage.removeItem('answer-theme-st'); return true; }
