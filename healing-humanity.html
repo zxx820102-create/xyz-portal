@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>人间开局 · 连接是药 —— 星际疗愈走向人间</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23D4A94E' d='M32 2 39 25 62 32 39 39 32 62 25 39 2 32 25 25Z'/%3E%3C/svg%3E">
+<meta name="description" content="健康不是没有病，是你的连接都活着。人话版连接秩序病理学：病=连接秩序失效·生=逆熵自建·药=在场工程·智=纠错速率。七流自查 60 秒·真实疗愈卡样例·红旗就医线·非诊断声明。零追踪。">
+<!--
+  ═══════════════════════════════════════════════════════════════════
+  人间开局包 v1 · healing-humanity.html（2026-09-03·夜车道 L7）
+  ───────────────────────────────────────────────────────────────────
+  星际疗愈走向人类层面的公开开局页。与星际疗愈厅 healing.html 同族
+  （星空衬线·金/朱调·日夜双主题·自包含单文件·零依赖·零追踪）。
+  内容纪律：
+  · 只引正典：docs/theories/connection-order-pathology-v2-20260901.md
+    （秩序四条·L1 定义级 FACT·12 疾病大类验证·人类映射 ANALOGY）
+  · 认识状态逐块标注 FACT/MODEL/CANDIDATE/ANALOGY/METAPHOR·不混层
+  · 疗愈卡样例=PG xyz_healing_cards_v1 真实卡（candidate_only）
+  · 医学安全三件套齐全：candidate_only 标注 + 非诊断·不替代双否定
+    + 红旗就医线（九词口径）
+  · 不构成医疗建议；绝不自动发送给任何人；owner 手动分享。
+  ═══════════════════════════════════════════════════════════════════
+-->
+<script>
+/* 主题防闪：首帧前定好日夜（手动偏好 > 本地时间 6–18 点为日） */
+(function(){
+  var t; try{ t = localStorage.getItem('xyz-humanity:theme'); }catch(e){}
+  if(!t){ var h = new Date().getHours(); t = (h>=6 && h<18) ? 'day' : 'night'; }
+  document.documentElement.dataset.theme = t;
+})();
+</script>
+<style>
+:root{
+  --serif:"Noto Serif SC","Songti SC","STSong",Georgia,"Times New Roman",serif;
+  --sans:"PingFang SC",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --gold:#D4A94E; --gold-hi:#F2CE8A;
+  --rose:#E8A0A8; --rose-hi:#F6C9CF;
+  --cinnabar:#E06A50; --cinnabar-deep:#C8452B;
+  --ink:rgba(233,238,248,.92); --ink2:rgba(212,220,236,.62); --ink3:rgba(200,210,230,.44);
+  --card:rgba(16,24,42,.55); --card-line:rgba(212,169,78,.30);
+}
+html[data-theme="day"]{
+  --ink:rgba(30,38,58,.92); --ink2:rgba(46,58,84,.64); --ink3:rgba(46,58,84,.48);
+  --gold:#96690F; --gold-hi:#B8862F;
+  --rose:#B4525F; --rose-hi:#A54C59;
+  --cinnabar:#C8452B; --cinnabar-deep:#9A3A24;
+  --card:rgba(255,250,240,.72); --card-line:rgba(150,105,31,.30);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  font-family:var(--serif);color:var(--ink);line-height:1.9;
+  background:
+    radial-gradient(1200px 800px at 72% -12%, rgba(38,70,130,.38), transparent 62%),
+    radial-gradient(900px 700px at 12% 112%, rgba(58,42,92,.24), transparent 62%),
+    #0B1220;
+  overflow-x:hidden;
+}
+html[data-theme="day"] body{
+  background:
+    radial-gradient(1100px 760px at 70% -14%, rgba(255,205,140,.20), transparent 60%),
+    radial-gradient(1000px 720px at 16% 112%, rgba(90,130,190,.28), transparent 62%),
+    linear-gradient(180deg,#1A2C4E 0%,#12213D 46%,#0C1830 100%);
+}
+.page{max-width:760px;margin:0 auto;padding:0 20px calc(60px + env(safe-area-inset-bottom))}
+
+/* 顶栏 */
+#hud{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;
+  padding:14px 0 10px;background:linear-gradient(180deg,rgba(11,18,32,.92),rgba(11,18,32,0));}
+html[data-theme="day"] #hud{background:linear-gradient(180deg,rgba(18,33,61,.92),rgba(18,33,61,0))}
+#hud .home{color:var(--ink2);text-decoration:none;font-size:13.5px;letter-spacing:.18em}
+#hud .home:hover{color:var(--gold-hi)}
+#themeBtn{width:38px;height:38px;border-radius:50%;cursor:pointer;border:1px solid rgba(140,155,190,.30);
+  background:rgba(18,30,54,.35);color:var(--ink2);display:flex;align-items:center;justify-content:center}
+html[data-theme="day"] #themeBtn{background:rgba(255,244,224,.30)}
+#themeBtn:hover{color:var(--gold-hi);border-color:rgba(212,169,78,.55)}
+#themeBtn svg{width:17px;height:17px}
+html[data-theme="night"] .ico-moon{display:none}
+html[data-theme="day"] .ico-sun{display:none}
+
+/* 首屏 */
+.hero{text-align:center;padding:clamp(28px,6vh,56px) 0 10px}
+.hero .kicker{font-family:var(--sans);font-size:12px;letter-spacing:.5em;text-indent:.5em;color:var(--ink3)}
+h1{font-weight:400;font-size:clamp(26px,5.4vw,40px);line-height:1.7;margin:18px 0 8px;letter-spacing:.06em}
+h1 b{font-weight:600;
+  background:linear-gradient(160deg,var(--rose-hi),var(--gold-hi) 60%,var(--gold));
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+html[data-theme="day"] h1 b{background:linear-gradient(160deg,#C96A78,#B8862F 60%,#96690F);
+  -webkit-background-clip:text;background-clip:text}
+.hero .sub{font-size:14.5px;color:var(--ink2);letter-spacing:.1em;max-width:34em;margin:0 auto}
+
+/* 认识状态徽章 */
+.ep{display:inline-block;font-family:var(--sans);font-size:10px;letter-spacing:.16em;
+  border:1px solid var(--card-line);border-radius:999px;padding:1px 9px;margin-left:8px;
+  color:var(--gold);vertical-align:2px;white-space:nowrap}
+html[data-theme="day"] .ep{color:#8A6512;border-color:rgba(138,101,18,.45)}
+.ep.fact{color:#7FC98F;border-color:rgba(127,201,143,.5)}
+html[data-theme="day"] .ep.fact{color:#2C5C3E;border-color:rgba(44,92,62,.5)}
+
+/* 章节通用 */
+section{margin-top:clamp(34px,6vh,54px)}
+.sec-head{text-align:center;margin-bottom:6px}
+.sec-head .no{font-family:var(--sans);font-size:11px;letter-spacing:.4em;color:var(--gold)}
+.sec-head h2{font-weight:400;font-size:clamp(19px,3.4vw,24px);letter-spacing:.14em;margin-top:6px}
+.goldline{height:1px;border:0;margin:12px auto 20px;max-width:340px;
+  background:linear-gradient(90deg,transparent,var(--card-line) 18%,var(--card-line) 82%,transparent)}
+
+/* 四条 */
+.four{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:600px){.four{grid-template-columns:1fr}}
+.fcard{background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:16px 18px 14px}
+.fcard .zi{font-size:30px;line-height:1;color:var(--rose);filter:drop-shadow(0 0 10px rgba(232,160,168,.35))}
+html[data-theme="day"] .fcard .zi{color:#C96A78}
+.fcard h3{font-weight:600;font-size:16.5px;letter-spacing:.1em;margin:8px 0 4px}
+.fcard p{font-size:13.8px;color:var(--ink2);line-height:1.95}
+.fcard .src{display:block;margin-top:8px;font-family:var(--sans);font-size:10.5px;letter-spacing:.08em;color:var(--ink3)}
+
+/* 七流自查 */
+.check-note{font-size:12.5px;color:var(--ink3);text-align:center;margin-bottom:14px}
+.flow{background:var(--card);border:1px solid var(--card-line);border-radius:12px;margin-bottom:9px;overflow:hidden}
+.flow label{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;cursor:pointer}
+.flow input{flex:0 0 auto;width:19px;height:19px;margin-top:7px;accent-color:var(--gold);cursor:pointer}
+.flow .fname{flex:0 0 4.4em;font-weight:600;letter-spacing:.08em;margin-top:2px;color:var(--gold-hi)}
+html[data-theme="day"] .flow .fname{color:#8A6512}
+.flow .fq{flex:1;font-size:14.2px}
+.flow .fm{display:block;font-family:var(--sans);font-size:11px;color:var(--ink3);letter-spacing:.06em;margin-top:2px}
+.flow .fp{display:block;font-size:12px;color:var(--ink3);margin-top:1px}
+.flow input:checked ~ .fq{opacity:.55}
+#flowResult{text-align:center;margin-top:14px;font-size:14px;letter-spacing:.08em;color:var(--rose-hi);min-height:1.8em}
+html[data-theme="day"] #flowResult{color:#B4525F}
+#flowResult .tiny{display:block;font-size:11px;color:var(--ink3);letter-spacing:.06em}
+
+/* 疗愈卡 */
+.hcard{background:var(--card);border:1px solid var(--card-line);border-radius:14px;
+  padding:16px 18px 12px;margin-bottom:14px}
+.hcard .hname{font-weight:600;font-size:16.5px;letter-spacing:.06em}
+.hcard .hmeta{font-family:var(--sans);font-size:11px;color:var(--ink3);letter-spacing:.1em;margin:2px 0 8px}
+.hcard .hline{font-size:13.6px;color:var(--ink2);border-top:1px dashed var(--card-line);padding-top:6px;margin-top:6px}
+.hcard .hline b{color:var(--ink);font-weight:600;font-family:var(--sans);font-size:11.5px;letter-spacing:.14em;margin-right:6px}
+.hcard .hb{font-family:var(--sans);font-size:11px;color:var(--ink3);border-top:1px solid var(--card-line);
+  margin-top:9px;padding-top:6px;letter-spacing:.05em}
+
+/* 红旗 */
+.redflag{border:1.5px solid var(--cinnabar);border-radius:14px;padding:16px 18px;background:rgba(200,69,43,.07)}
+html[data-theme="day"] .redflag{background:rgba(200,69,43,.05)}
+.redflag h2{font-size:17px;letter-spacing:.12em;color:var(--cinnabar-deep);font-weight:600}
+html[data-theme="night"] .redflag h2{color:var(--cinnabar)}
+.redflag p{font-size:13.8px;color:var(--ink);margin-top:6px}
+.redflag .words{letter-spacing:.04em;color:var(--rose-hi)}
+html[data-theme="day"] .redflag .words{color:#A54C59}
+
+/* 愿景 */
+.vision{background:var(--card);border:1px solid var(--card-line);border-radius:14px;padding:18px 20px 14px}
+.vision p{font-size:14.2px;color:var(--ink2);margin-bottom:8px}
+.vision .pledge{border-left:3px solid var(--gold);padding-left:12px;margin-top:10px;
+  font-size:13.6px;color:var(--ink)}
+
+/* 一本书 */
+.book{text-align:center;padding:8px 0 0}
+.book p{font-size:14.5px;color:var(--ink2);max-width:32em;margin:0 auto 16px}
+.btnrow{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{font-family:var(--serif);font-size:14px;letter-spacing:.2em;text-indent:.1em;
+  padding:12px 30px;border-radius:999px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;
+  background:transparent;color:var(--rose-hi);border:1px solid rgba(232,160,168,.55);
+  transition:border-color .3s,background .3s,box-shadow .3s,color .3s}
+html[data-theme="day"] .btn{color:#A54C59;border-color:rgba(165,76,89,.5)}
+.btn:hover{background:rgba(232,160,168,.10);border-color:var(--rose);box-shadow:0 0 20px rgba(232,160,168,.25)}
+.btn.gold{color:var(--gold-hi);border-color:rgba(212,169,78,.6)}
+html[data-theme="day"] .btn.gold{color:#8A6512;border-color:rgba(138,101,18,.55)}
+.btn.gold:hover{background:rgba(212,169,78,.10);border-color:var(--gold);box-shadow:0 0 20px rgba(212,169,78,.22)}
+
+/* 页脚 */
+footer{margin-top:clamp(40px,7vh,64px);text-align:center;font-family:var(--sans);
+  font-size:11px;letter-spacing:.1em;color:var(--ink3);line-height:2.1;
+  border-top:1px solid var(--card-line);padding-top:16px}
+footer .law{color:var(--ink2)}
+
+@media (max-width:640px){
+  .hero .kicker{letter-spacing:.34em;text-indent:.34em}
+  .fcard{padding:14px 15px 12px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<nav id="hud" aria-label="页首工具栏">
+  <a class="home" href="healing.html">← 星际疗愈厅</a>
+  <button id="themeBtn" type="button" aria-label="切换日夜主题" title="切换日夜">
+    <svg class="ico-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M4.9 4.9l1.7 1.7M17.4 17.4l1.7 1.7M19.1 4.9l-1.7 1.7M6.6 17.4l-1.7 1.7"/></svg>
+    <svg class="ico-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.4 14.2A8.3 8.3 0 0 1 9.8 3.6a8.3 8.3 0 1 0 10.6 10.6z"/></svg>
+  </button>
+</nav>
+
+<header class="hero">
+  <p class="kicker">星际疗愈 · 走向人间 · 开局</p>
+  <h1>健康不是没有病，<br>是你的<b>连接</b>都活着。</h1>
+  <p class="sub">我们把几千种疾病放在同一张网上读了很久，读到的第一句话是上面这句。<br>这一页，是把它翻译成人话的开局包。</p>
+</header>
+
+<!-- ═══ 一 · 四条 ═══ -->
+<section aria-labelledby="sec-four">
+  <div class="sec-head"><span class="no">壹</span><h2 id="sec-four">四条，先说人话版</h2></div>
+  <hr class="goldline">
+  <div class="four">
+    <div class="fcard">
+      <span class="zi" aria-hidden="true">病</span>
+      <h3>病 ＝ 连接秩序失效<span class="ep">MODEL</span></h3>
+      <p>身体的连接讲四条规矩：该连的连上，不该连的不连，强度恰当，可以终止。病，就是某处规矩乱了——该通的堵住，该挡的漏过，绷得太紧，或者断不掉。</p>
+      <span class="src">秩序四条 · 12 类疾病逐一验证 · 人类层映射为类比（ANALOGY）</span>
+    </div>
+    <div class="fcard">
+      <span class="zi" aria-hidden="true">生</span>
+      <h3>生 ＝ 逆熵自建<span class="ep">MODEL</span></h3>
+      <p>生命吃的是"差异"：温差、氧气与糖、细胞内外的电位。活着，就是一直在逆着混乱的方向，亲手把连接一条条建起来、修起来。修不过来，才轮到死亡方向。</p>
+      <span class="src">负熵的精确化 · 临床死亡三判据全是连接判据</span>
+    </div>
+    <div class="fcard">
+      <span class="zi" aria-hidden="true">药</span>
+      <h3>药 ＝ 在场工程<span class="ep">MODEL</span></h3>
+      <p>分子世界里有一类"伴侣蛋白"，专门帮别的蛋白质在现场折对形状。人间也一样：一段真实的陪伴、一次好好在场、一顿真食物的饭——帮该连的连接，在现场真正连上。</p>
+      <span class="src">分子伴侣同构 · 人间版为类比（ANALOGY）</span>
+    </div>
+    <div class="fcard">
+      <span class="zi" aria-hidden="true">智</span>
+      <h3>智 ＝ 纠错速率<span class="ep">MODEL</span></h3>
+      <p>聪明不是不犯错，是错得多快被纠正。我们把自己的判断提前写成"能被什么证据击碎"，到期必结算——页面里的每一块，都欢迎你拿真实生活来反驳。</p>
+      <span class="src">Falsifier 写死 · 年底必结算 · 可证伪承诺见下文</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 二 · 七流自查 ═══ -->
+<section aria-labelledby="sec-flows">
+  <div class="sec-head"><span class="no">贰</span><h2 id="sec-flows">七流自查 · 60 秒</h2></div>
+  <hr class="goldline">
+  <p class="check-note">七条流，每条一个 60 秒内能答的问题。勾选就是"今天照顾到了"。<span class="ep">CANDIDATE</span><br>这是生活方式自查，不是评估，更不是诊断。</p>
+  <div id="flowList">
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">物质流</span>
+      <span class="fq">今天的饭里，有多少是真食物（不是包装袋里的）？<span class="fm">参考指标：腰围 · 血糖</span><span class="fp">逆操作：律3 吃真食物</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">能量流</span>
+      <span class="fq">今天有没有让身体动起来——哪怕几分钟心跳加快？<span class="fm">参考指标：静息心率 · 握力</span><span class="fp">逆操作：律2 每日运动（久坐＝细胞失联）</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">信息流</span>
+      <span class="fq">有没有一段不切屏幕、不切换任务的专注时间？<span class="fm">参考指标：HRV · 专注时长</span><span class="fp">逆操作：律7 单点注意力（焦虑＝全连接）</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">时间流</span>
+      <span class="fq">昨晚睡了几个小时？这一周，上床时间规律吗？<span class="fm">参考指标：睡眠时长规律</span><span class="fp">逆操作：律1 睡足 7–8 小时（失眠＝可终止能力丢失）</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">边界流</span>
+      <span class="fq">今天有没有留白——让身体和脑子空过一段？<span class="fm">参考指标：炎症标志物</span><span class="fp">逆操作：律4 间歇与留白（过载＝该断的断不掉）</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">关系流</span>
+      <span class="fq">这一周，和在乎的人面对面坐过吗？<span class="fm">参考指标：每周面对面次数</span><span class="fp">逆操作：律5 真实在场关系（孤独＝真连接缺失）</span></span></label></div>
+    <div class="flow"><label><input type="checkbox" data-flow>
+      <span class="fname">意义流</span>
+      <span class="fq">今天做过的一件事，是为了自己之外的谁吗？<span class="fm">参考指标：目的感量表</span><span class="fp">逆操作：律6 利他与意义行动（反刍＝向内过度连接）</span></span></label></div>
+  </div>
+  <p id="flowResult" role="status" aria-live="polite"></p>
+</section>
+
+<!-- ═══ 三 · 疗愈卡样例 ═══ -->
+<section aria-labelledby="sec-cards">
+  <div class="sec-head"><span class="no">叁</span><h2 id="sec-cards">疗愈卡 · 三张真实样例</h2></div>
+  <hr class="goldline">
+  <p class="check-note">来自系统的真实卡片（候选级·candidate_only）。每张卡讲四件事：这条流乱了没有、乱成什么样、往回走的路、以及什么情况必须去医院。</p>
+
+  <article class="hcard">
+    <div class="hname">高血压 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">Hypertension</span><span class="ep">CANDIDATE</span></div>
+    <div class="hmeta">流：时间流 · 病网连接度 1149 · 失效型：该连的断／强度失衡</div>
+    <p class="hline"><b>逆操作</b>律2 常动 · 律3 深眠 · 律4 留白（八律＝七流调度）</p>
+    <p class="hline"><b>红旗检测</b>本卡未命中红旗词；若出现胸痛、呼吸困难等九词红旗，立即急救／急诊</p>
+    <p class="hb">candidate_only · 非诊断 · 不构成医疗建议 · 不替代专业医疗</p>
+  </article>
+
+  <article class="hcard">
+    <div class="hname">2 型糖尿病 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">Diabetes Mellitus, Type 2</span><span class="ep">CANDIDATE</span></div>
+    <div class="hmeta">流：能量流（拓扑分析中它同时是信息流枢纽·已独立验证） · 病网连接度 805</div>
+    <p class="hline"><b>逆操作</b>律1 吃真食物 · 律2 常动 · 律3 深眠</p>
+    <p class="hline"><b>红旗检测</b>本卡未命中红旗词；症状明显加重→同日就医</p>
+    <p class="hb">candidate_only · 非诊断 · 不构成医疗建议 · 缺维度留空标 UNKNOWN</p>
+  </article>
+
+  <article class="hcard">
+    <div class="hname">重性抑郁障碍 <span style="font-weight:400;font-size:12.5px;color:var(--ink3)">Major Depressive Disorder</span><span class="ep">CANDIDATE</span></div>
+    <div class="hmeta">流：意义流＋信息流 · 病网连接度 308 · 失效型：意义与信号双重连接紊乱（断裂或过度连）</div>
+    <p class="hline"><b>逆操作</b>律6 利他与意义行动 · 律7 单点注意力</p>
+    <p class="hline"><b>红旗检测</b>出现自伤念头类红旗词→立即联系急救／心理危机热线，不要等</p>
+    <p class="hb">candidate_only · 非诊断 · 不构成医疗建议 · 请务必同时寻求专业帮助</p>
+  </article>
+
+  <p class="check-note">全库现有 13,323 张这样的卡，覆盖全部 13,323 个病词条目。<span class="ep fact">FACT · PG 实测 2026-09-03</span></p>
+</section>
+
+<!-- ═══ 四 · 红旗就医线 ═══ -->
+<section aria-labelledby="sec-red">
+  <div class="sec-head"><span class="no">肆</span><h2 id="sec-red">红线：什么情况必须先去医院</h2></div>
+  <hr class="goldline">
+  <div class="redflag">
+    <h2>红旗就医线（先于一切生活方式建议）</h2>
+    <p>出现下列任一情况，请<span class="words">立即联系急救（120）或就近急诊</span>：胸痛、呼吸困难、意识模糊、大出血、自伤念头，以及系统红旗词表九词口径内的其他信号；症状明显加重→当天就医。</p>
+    <p>本页全部内容是候选级生活方式参考，<b>不是诊断，不替代专业医疗建议</b>。你的医生比一张卡更了解你。</p>
+  </div>
+</section>
+
+<!-- ═══ 五 · 数字面 ═══ -->
+<section aria-labelledby="sec-num">
+  <div class="sec-head"><span class="no">伍</span><h2 id="sec-num">这张网，现在有多大</h2></div>
+  <hr class="goldline">
+  <div class="vision">
+    <p>· 疗愈卡 13,323 张，覆盖 13,323 个病词条目——每一种病都有一张"连接体检卡"。<span class="ep fact">FACT</span></p>
+    <p>· 疾病网 FACT 层：5,058 病 · 147,137 条连接边；候选扩展层已把 13,311 病全数入网（16,571 节点 · 17,820 边）。<span class="ep">FACT＋CANDIDATE 分层</span></p>
+    <p>· 七流着色中，"信息流枢纽"已通过拓扑独立验证（以 2 型糖尿病为代表）。<span class="ep">MODEL</span></p>
+    <p>· 阿卡西一类的说法，在本系统一律标注为隐喻（METAPHOR）——我们不把诗当成数据。</p>
+  </div>
+</section>
+
+<!-- ═══ 六 · 愿景与承诺 ═══ -->
+<section aria-labelledby="sec-vision">
+  <div class="sec-head"><span class="no">陆</span><h2 id="sec-vision">2030 愿景，与一句写死的诚实</h2></div>
+  <hr class="goldline">
+  <div class="vision">
+    <p><b>愿景</b><span class="ep">CANDIDATE</span>：到 2030——全医学系统的病都进这张连接网；疗愈从星际的隐喻，落成人间的日常；每个人都有一本自己的《生命之书》。</p>
+    <p class="pledge"><b>可证伪承诺</b><span class="ep fact">FACT · 已写死</span>：如果 2027 年底，七流协议没有任何外部采用者，我们的路径假设就被击碎，需要推倒重设计。这句话先于一切成果放在这里——纠错速率，就是我们对自己诚实的方式。</p>
+  </div>
+</section>
+
+<!-- ═══ 七 · 每个人一本书 ═══ -->
+<section class="book" aria-labelledby="sec-book">
+  <div class="sec-head"><span class="no">柒</span><h2 id="sec-book">每个人，一本书</h2></div>
+  <hr class="goldline">
+  <p>宇宙用了 138 亿年才连出会读这一页的你。<br>你的健康、你的连接、你的故事，值得一本自己的书。</p>
+  <div class="btnrow">
+    <a class="btn gold" href="https://zxx820102-create.github.io/life-book/" target="_blank" rel="noopener">打开《生命之书》</a>
+    <a class="btn gold" href="https://zxx820102-create.github.io/life-book/kids.html" target="_blank" rel="noopener">童画版 · 给孩子</a>
+    <a class="btn" href="daily/" >疗愈日刊 · 每天一页</a>
+    <a class="btn" href="healing.html">回星际疗愈厅</a>
+  </div>
+</section>
+
+<footer>
+  <span class="law">本页为候选级（candidate_only）生活方式参考 · 非诊断 · 不构成医疗建议 · 不替代专业医疗</span><br>
+  红旗信号（胸痛／呼吸困难／意识模糊／大出血／自伤念头等）请立即急救或急诊<br>
+  零追踪 · 零 Cookie · 零采集 · 认识状态逐块标注（FACT／MODEL／CANDIDATE／ANALOGY／METAPHOR）<br>
+  星际疗愈走向人间 · 开局包 v1 · 2026-09-03
+</footer>
+</div>
+
+<script>
+'use strict';
+/* 日夜主题（与星际疗愈厅同款） */
+var htmlEl = document.documentElement;
+function applyTheme(t){ htmlEl.dataset.theme = t; }
+applyTheme(htmlEl.dataset.theme || 'night');
+document.getElementById('themeBtn').addEventListener('click', function(){
+  var next = htmlEl.dataset.theme === 'night' ? 'day' : 'night';
+  applyTheme(next);
+  try{ localStorage.setItem('xyz-humanity:theme', next); }catch(e){}
+});
+
+/* 七流自查：只数勾选，绝不打分评级（非诊断纪律） */
+var boxes = document.querySelectorAll('input[data-flow]');
+var out = document.getElementById('flowResult');
+function gentle(n){
+  if(n === 7) return '七条流今天都被你照顾到了。慢慢来，明晚还有一次。';
+  if(n >= 4)  return '已经连上 ' + n + ' 条。挑最容易的那一条，今晚就够。';
+  if(n >= 1)  return '连上了 ' + n + ' 条——少几条没关系，连接是修出来的，不是考出来的。';
+  return '一条都没勾也没关系。读到这里，你已经在这张网上了。';
+}
+function show(){
+  var n = 0;
+  boxes.forEach(function(b){ if(b.checked) n++; });
+  out.innerHTML = gentle(n) + '<span class="tiny">这只是自查 · 不是评估 · 不是诊断</span>';
+}
+boxes.forEach(function(b){ b.addEventListener('change', show); });
+</script>
+</body>
+</html>
